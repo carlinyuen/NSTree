@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2222AE93180F494F0016C8DA /* NSTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2222AE92180F494F0016C8DA /* NSTree.m */; };
 		22771A12180F3FB800143CE7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A11180F3FB800143CE7 /* Foundation.framework */; };
 		22771A14180F3FB800143CE7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A13180F3FB800143CE7 /* CoreGraphics.framework */; };
 		22771A16180F3FB800143CE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
@@ -19,7 +20,6 @@
 		22771A2D180F3FB900143CE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
 		22771A35180F3FB900143CE7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 22771A33180F3FB900143CE7 /* InfoPlist.strings */; };
 		22771A37180F3FB900143CE7 /* NSTreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22771A36180F3FB900143CE7 /* NSTreeTests.m */; };
-		22771A42180F407600143CE7 /* NSTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 22771A41180F407600143CE7 /* NSTree.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,24 +33,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		22771A0E180F3FB800143CE7 /* NSTree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSTree.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2222AE91180F494F0016C8DA /* NSTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSTree.h; path = ../../NSTree/NSTree.h; sourceTree = "<group>"; };
+		2222AE92180F494F0016C8DA /* NSTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTree.m; path = ../../NSTree/NSTree.m; sourceTree = "<group>"; };
+		22771A0E180F3FB800143CE7 /* NSTreeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSTreeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22771A11180F3FB800143CE7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		22771A13180F3FB800143CE7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		22771A15180F3FB800143CE7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		22771A19180F3FB800143CE7 /* NSTree-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTree-Info.plist"; sourceTree = "<group>"; };
+		22771A19180F3FB800143CE7 /* NSTreeExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTreeExample-Info.plist"; sourceTree = "<group>"; };
 		22771A1B180F3FB800143CE7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		22771A1D180F3FB800143CE7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		22771A1F180F3FB800143CE7 /* NSTree-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTree-Prefix.pch"; sourceTree = "<group>"; };
+		22771A1F180F3FB800143CE7 /* NSTreeExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTreeExample-Prefix.pch"; sourceTree = "<group>"; };
 		22771A20180F3FB800143CE7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		22771A21180F3FB800143CE7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		22771A23180F3FB800143CE7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		22771A29180F3FB900143CE7 /* NSTreeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NSTreeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		22771A29180F3FB900143CE7 /* NSTreeExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NSTreeExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22771A2A180F3FB900143CE7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		22771A32180F3FB900143CE7 /* NSTreeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTreeTests-Info.plist"; sourceTree = "<group>"; };
+		22771A32180F3FB900143CE7 /* NSTreeExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTreeExampleTests-Info.plist"; sourceTree = "<group>"; };
 		22771A34180F3FB900143CE7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		22771A36180F3FB900143CE7 /* NSTreeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSTreeTests.m; sourceTree = "<group>"; };
-		22771A40180F407600143CE7 /* NSTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSTree.h; path = NSTree/NSTree.h; sourceTree = "<group>"; };
-		22771A41180F407600143CE7 /* NSTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTree.m; path = NSTree/NSTree.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +80,7 @@
 		22771A05180F3FB800143CE7 = {
 			isa = PBXGroup;
 			children = (
-				22771A17180F3FB800143CE7 /* NSTree */,
+				22771A17180F3FB800143CE7 /* NSTreeExample */,
 				22771A30180F3FB900143CE7 /* NSTreeTests */,
 				22771A10180F3FB800143CE7 /* Frameworks */,
 				22771A0F180F3FB800143CE7 /* Products */,
@@ -90,8 +90,8 @@
 		22771A0F180F3FB800143CE7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				22771A0E180F3FB800143CE7 /* NSTree.app */,
-				22771A29180F3FB900143CE7 /* NSTreeTests.xctest */,
+				22771A0E180F3FB800143CE7 /* NSTreeExample.app */,
+				22771A29180F3FB900143CE7 /* NSTreeExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,7 +107,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		22771A17180F3FB800143CE7 /* NSTree */ = {
+		22771A17180F3FB800143CE7 /* NSTreeExample */ = {
 			isa = PBXGroup;
 			children = (
 				22771A20180F3FB800143CE7 /* AppDelegate.h */,
@@ -116,16 +116,17 @@
 				22771A18180F3FB800143CE7 /* Supporting Files */,
 				22771A43180F407C00143CE7 /* NSTree */,
 			);
+			name = NSTreeExample;
 			path = NSTree;
 			sourceTree = "<group>";
 		};
 		22771A18180F3FB800143CE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				22771A19180F3FB800143CE7 /* NSTree-Info.plist */,
+				22771A19180F3FB800143CE7 /* NSTreeExample-Info.plist */,
 				22771A1A180F3FB800143CE7 /* InfoPlist.strings */,
 				22771A1D180F3FB800143CE7 /* main.m */,
-				22771A1F180F3FB800143CE7 /* NSTree-Prefix.pch */,
+				22771A1F180F3FB800143CE7 /* NSTreeExample-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -142,7 +143,7 @@
 		22771A31180F3FB900143CE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				22771A32180F3FB900143CE7 /* NSTreeTests-Info.plist */,
+				22771A32180F3FB900143CE7 /* NSTreeExampleTests-Info.plist */,
 				22771A33180F3FB900143CE7 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -151,8 +152,8 @@
 		22771A43180F407C00143CE7 /* NSTree */ = {
 			isa = PBXGroup;
 			children = (
-				22771A40180F407600143CE7 /* NSTree.h */,
-				22771A41180F407600143CE7 /* NSTree.m */,
+				2222AE91180F494F0016C8DA /* NSTree.h */,
+				2222AE92180F494F0016C8DA /* NSTree.m */,
 			);
 			name = NSTree;
 			sourceTree = "<group>";
@@ -160,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		22771A0D180F3FB800143CE7 /* NSTree */ = {
+		22771A0D180F3FB800143CE7 /* NSTreeExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 22771A3A180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTree" */;
+			buildConfigurationList = 22771A3A180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeExample" */;
 			buildPhases = (
 				22771A0A180F3FB800143CE7 /* Sources */,
 				22771A0B180F3FB800143CE7 /* Frameworks */,
@@ -172,14 +173,14 @@
 			);
 			dependencies = (
 			);
-			name = NSTree;
+			name = NSTreeExample;
 			productName = NSTree;
-			productReference = 22771A0E180F3FB800143CE7 /* NSTree.app */;
+			productReference = 22771A0E180F3FB800143CE7 /* NSTreeExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		22771A28180F3FB900143CE7 /* NSTreeTests */ = {
+		22771A28180F3FB900143CE7 /* NSTreeExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 22771A3D180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeTests" */;
+			buildConfigurationList = 22771A3D180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeExampleTests" */;
 			buildPhases = (
 				22771A25180F3FB900143CE7 /* Sources */,
 				22771A26180F3FB900143CE7 /* Frameworks */,
@@ -190,9 +191,9 @@
 			dependencies = (
 				22771A2F180F3FB900143CE7 /* PBXTargetDependency */,
 			);
-			name = NSTreeTests;
+			name = NSTreeExampleTests;
 			productName = NSTreeTests;
-			productReference = 22771A29180F3FB900143CE7 /* NSTreeTests.xctest */;
+			productReference = 22771A29180F3FB900143CE7 /* NSTreeExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -209,7 +210,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 22771A09180F3FB800143CE7 /* Build configuration list for PBXProject "NSTree" */;
+			buildConfigurationList = 22771A09180F3FB800143CE7 /* Build configuration list for PBXProject "NSTreeExample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -221,8 +222,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				22771A0D180F3FB800143CE7 /* NSTree */,
-				22771A28180F3FB900143CE7 /* NSTreeTests */,
+				22771A0D180F3FB800143CE7 /* NSTreeExample */,
+				22771A28180F3FB900143CE7 /* NSTreeExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -254,7 +255,7 @@
 			files = (
 				22771A22180F3FB800143CE7 /* AppDelegate.m in Sources */,
 				22771A1E180F3FB800143CE7 /* main.m in Sources */,
-				22771A42180F407600143CE7 /* NSTree.m in Sources */,
+				2222AE93180F494F0016C8DA /* NSTree.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,7 +272,7 @@
 /* Begin PBXTargetDependency section */
 		22771A2F180F3FB900143CE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 22771A0D180F3FB800143CE7 /* NSTree */;
+			target = 22771A0D180F3FB800143CE7 /* NSTreeExample */;
 			targetProxy = 22771A2E180F3FB900143CE7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -374,9 +375,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NSTree/NSTree-Prefix.pch";
-				INFOPLIST_FILE = "NSTree/NSTree-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "NSTree/NSTreeExample-Prefix.pch";
+				INFOPLIST_FILE = "NSTree/NSTreeExample-Info.plist";
+				PRODUCT_NAME = NSTreeExample;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -387,9 +388,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NSTree/NSTree-Prefix.pch";
-				INFOPLIST_FILE = "NSTree/NSTree-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "NSTree/NSTreeExample-Prefix.pch";
+				INFOPLIST_FILE = "NSTree/NSTreeExample-Info.plist";
+				PRODUCT_NAME = NSTreeExample;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -410,8 +411,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "NSTreeTests/NSTreeTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "NSTreeTests/NSTreeExampleTests-Info.plist";
+				PRODUCT_NAME = NSTreeExampleTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -429,8 +430,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NSTree/NSTree-Prefix.pch";
-				INFOPLIST_FILE = "NSTreeTests/NSTreeTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "NSTreeTests/NSTreeExampleTests-Info.plist";
+				PRODUCT_NAME = NSTreeExampleTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -439,7 +440,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		22771A09180F3FB800143CE7 /* Build configuration list for PBXProject "NSTree" */ = {
+		22771A09180F3FB800143CE7 /* Build configuration list for PBXProject "NSTreeExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				22771A38180F3FB900143CE7 /* Debug */,
@@ -448,21 +449,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		22771A3A180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTree" */ = {
+		22771A3A180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				22771A3B180F3FB900143CE7 /* Debug */,
 				22771A3C180F3FB900143CE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		22771A3D180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeTests" */ = {
+		22771A3D180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				22771A3E180F3FB900143CE7 /* Debug */,
 				22771A3F180F3FB900143CE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
