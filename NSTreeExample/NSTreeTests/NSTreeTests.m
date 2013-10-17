@@ -35,4 +35,22 @@
     XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
 }
 
+- (void)testAdd
+{
+    XCTAssertTrue([self.tree addObject:[NSNumber numberWithInt:1]], @"Failed to add");
+}
+
+- (void)testSearch
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:[NSNumber numberWithInt:i]];
+    }
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:5]], @"Couldn't find number 5");
+}
+
+- (void)testRemove
+{
+    
+}
+
 @end
