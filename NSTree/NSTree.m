@@ -36,8 +36,10 @@
     return self;
 }
 
-
-#pragma mark - NSCopying
+- (NSString *)description 
+{
+    return [[self.data valueForKey:@"description"] componentsJoinedByString:@""];
+}
 
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -115,7 +117,8 @@
         return false;
     }
     
-    return [self removeObject:object fromNode:self.root];
+    return [self removeObject:object 
+        fromNode:[self getNodeThatContains:object inBranch:self.root]];
 }
 
 /** @brief Search for object in tree, returns false if not found */
@@ -207,60 +210,36 @@
     return true; 
 }
 
-- (void)rebalanceNode:(NSTreeNode *)node
-{
-    // If node is past capacity, need to split
-    if (node.data.count > self.nodeCapacity)
-    {
-        // Create right node to be efficient about removing from arrays
-        NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
-        int middle = node.data.count / 2; 
-        id object = node.data[middle];
-        
-        // Iterate through data & children and move into new nodes
-        for (int i = middle + 1; i < node.data.count; ++i) {
-            [newRightNode.data addObject:node.data[i]];
-        }
-        for (int i = middle + 1; i < node.children.count; ++i) {
-            [node.children[i] setParent:newRightNode];
-            [newRightNode.children addObject:node.children[i]];
-        } 
-        
-        // Remove old items from left node
-        [node.data removeObjectsInRange:NSMakeRange(middle + 1, node.data.count-1)];
-        [node.children removeObjectsInRange:NSMakeRange(middle + 1, node.children.count-1)]; 
-        
-        // Add to parent, if exists
-        if (node.parent) {
-            [self addObject:object withChild:newRightNode toNode:node.parent];
-        }
-        else    // Root node, need to create new root
-        {
-            NSTreeNode *newRootNode = [NSTreeNode new];
-            
-            // Set current node's new parent, add as child to new parent
-            node.parent = newRootNode;
-            [newRootNode.children addObject:node];
-            
-            // Add data and new right branch to new parent
-            [self addObject:object withChild:newRightNode toNode:newRootNode];
-            
-            // Set new root
-            self.root = newRootNode;
-        }
-    }
-    
-    // If node is below min capacity (and not the root), need to join
-    else if (node != self.root && node.data.count < self.nodeMinimum)
-    {
-    }
-}
-
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
     if (!object || !node) {
         return false;
     }
+    
+    // If leaf node, simple remove
+    if (!node.children.count) 
+    {
+        if ([node.data containsObject:object]) {
+            [node.data removeObject:object];
+            [self rebalanceNode:node];
+        } 
+        else {    // This shouldn't happen
+            NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
+            return false;
+        }
+    }
+    else    // Deal with replacing separator
+    {
+        int index = [node.data indexOfObject:object 
+                               inSortedRange:NSMakeRange(0, node.data.count-1) 
+                                     options:NSBinarySearchingFirstEqual 
+                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                 return [obj1 compare:obj2];
+                             }];
+        
+    }
+    
+    self.count--;
     
     return false; 
 }
@@ -350,6 +329,55 @@
     }
     
     return node;
+}
+
+- (void)rebalanceNode:(NSTreeNode *)node
+{
+    // If node is past capacity, need to split
+    if (node.data.count > self.nodeCapacity)
+    {
+        // Create right node to be efficient about removing from arrays
+        NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
+        int middle = node.data.count / 2; 
+        id object = node.data[middle];
+        
+        // Iterate through data & children and move into new nodes
+        for (int i = middle + 1; i < node.data.count; ++i) {
+            [newRightNode.data addObject:node.data[i]];
+        }
+        for (int i = middle + 1; i < node.children.count; ++i) {
+            [node.children[i] setParent:newRightNode];
+            [newRightNode.children addObject:node.children[i]];
+        } 
+        
+        // Remove old items from left node
+        [node.data removeObjectsInRange:NSMakeRange(middle + 1, node.data.count-1)];
+        [node.children removeObjectsInRange:NSMakeRange(middle + 1, node.children.count-1)]; 
+        
+        // Add to parent, if exists
+        if (node.parent) {
+            [self addObject:object withChild:newRightNode toNode:node.parent];
+        }
+        else    // Root node, need to create new root
+        {
+            NSTreeNode *newRootNode = [NSTreeNode new];
+            
+            // Set current node's new parent, add as child to new parent
+            node.parent = newRootNode;
+            [newRootNode.children addObject:node];
+            
+            // Add data and new right branch to new parent
+            [self addObject:object withChild:newRightNode toNode:newRootNode];
+            
+            // Set new root
+            self.root = newRootNode;
+        }
+    }
+    
+    // If node is below min capacity (and not the root), need to join
+    else if (node != self.root && node.data.count < self.nodeMinimum)
+    {
+    }
 }
 
 
