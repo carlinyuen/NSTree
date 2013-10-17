@@ -20,9 +20,10 @@
 
 @end
 
+typedef void(^NSTreeTraversalBlock)(NSTreeNode *node, id data);
+
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
     @property (nonatomic, strong, readonly) NSTreeNode *root;
-    @property (nonatomic, assign, readonly) int count;
 
     /** @brief Create tree with a certain number of allowable children */
     - (id)initWithNodeCapacity:(int)nodeCapacity;
@@ -45,7 +46,13 @@
     /** @brief Returns maximum element, or nil if none */
     - (id)maximum;
 
+    /** @brief Returns number of elements in tree */
+    - (int)count;
+
     /** @brief Returns object at index, or nil if none / out of bounds */
     - (id)objectAtIndex:(int)index;
+
+    /** @brief Traverse the tree in sorted order while executing block on every element */
+    - (void)traverse:(NSTreeTraversalBlock)block extraData:(id)data;
 
 @end

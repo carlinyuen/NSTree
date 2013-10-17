@@ -60,7 +60,6 @@
 
 @interface NSTree()
     @property (nonatomic, strong, readwrite) NSTreeNode *root;
-    @property (nonatomic, assign, readwrite) int count;
     @property (nonatomic, assign) int nodeCapacity;
     @property (nonatomic, assign) int nodeMinimum;
 @end
@@ -78,7 +77,6 @@
         _nodeCapacity = DEFAULT_NODE_CAPACITY;
         _nodeMinimum = _nodeCapacity / 2;
         _root = [NSTreeNode new];
-        _count = 0;
     }
     return self;
 }
@@ -91,7 +89,6 @@
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
         _root = [NSTreeNode new]; 
-        _count = 0; 
     }
     return self;
 }
@@ -113,7 +110,7 @@
 /** @brief Remove object from tree, returns false if not in tree */
 - (bool)removeObject:(id)object
 {
-    if (!object || self.count <= 0) {
+    if (!object || self.root.data.count <= 0) {
         return false;
     }
     
@@ -124,7 +121,7 @@
 /** @brief Search for object in tree, returns false if not found */
 - (bool)containsObject:(id)object
 {
-    if (!object || self.count <= 0) {
+    if (!object || self.root.data.count <= 0) {
         return false;
     }
     
@@ -134,13 +131,13 @@
 /** @brief Returns true if tree is empty */
 - (bool)isEmpty
 {
-    return (self.count == 0);
+    return (self.root.data.count == 0);
 }
 
 /** @brief Returns minimum element, or nil if none */
 - (id)minimum
 {
-    if (self.count) {
+    if (self.root.data.count) {
         return [[[self getLeftMostNode] data] objectAtIndex:0];
     }
     
@@ -150,22 +147,47 @@
 /** @brief Returns maximum element, or nil if none */
 - (id)maximum
 {
-    if (self.count) {
+    if (self.root.data.count) {
         return [[[self getRightMostNode] data] objectAtIndex:0]; 
     }
     
     return nil;
 }
 
+/** @brief Returns number of elements in tree */
+- (int)count
+{
+    static NSString *KEY_COUNT = @"total";
+    
+    if (self.root.data.count) {
+        NSDictionary *data = @{
+            KEY_COUNT: [NSNumber numberWithInt:0]
+        };
+        [self traverse:^(NSTreeNode *node, id data) {
+            [data setObject:[NSNumber 
+                numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
+                     forKey:KEY_COUNT];
+        } extraData:data];
+        return [data[KEY_COUNT] intValue];
+    }
+    
+    return 0;
+}
+
 /** @brief Returns object at index, or nil if none / out of bounds */
 - (id)objectAtIndex:(int)index
 {
-    if (index < 0 || index >= self.count || self.count <= 0) {
+    if (index < 0) {
         return nil;
     }
    
     // TODO
     return nil;
+}
+
+/** @brief Traverse the tree in sorted order while executing block on every element */
+- (void)traverse:(NSTreeTraversalBlock)block extraData:(id)data
+{
 }
 
 
@@ -204,24 +226,24 @@
         [self rebalanceNode:node];
     } 
     
-    // Update count
-    self.count++;
-    
     return true; 
 }
 
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
-    if (!object || !node) {
+    if (!object || !node || node.data.count <= 0) {
         return false;
     }
     
     // If leaf node, simple remove
     if (!node.children.count) 
     {
-        if ([node.data containsObject:object]) {
+        if ([node.data containsObject:object]) 
+        {
             [node.data removeObject:object];
-            [self rebalanceNode:node];
+            
+            // Rebalance as needed
+            [self rebalanceNode:node];  
         } 
         else {    // This shouldn't happen
             NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
@@ -237,10 +259,15 @@
                                  return [obj1 compare:obj2];
                              }];
         
+        // Replace with largest value from left child
+        NSTreeNode *leftChild = node.children[index];
+        [node.data replaceObjectAtIndex:index 
+            withObject:leftChild.data[leftChild.data.count-1]];
+        
+        // Tell child to remove the replaced object
+        
     }
-    
-    self.count--;
-    
+   
     return false; 
 }
 
