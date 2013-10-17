@@ -8,37 +8,13 @@
 
 #import "AppDelegate.h"
 
-#import "NSTree.h"
-
 @implementation AppDelegate
-
-- (NSTree *)createTree
-{
-    NSTree *tree = [NSTree new];
-
-    return tree;
-}
-
-- (void)playWithTree:(NSTree *)tree
-{
-
-}
-
-
-#pragma mark - App Lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
-
-
-    // Do stuff
-    NSTree *tree = [self createTree];
-    [self playWithTree:tree];
-
-
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -20,6 +20,8 @@
 		22771A2D180F3FB900143CE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
 		22771A35180F3FB900143CE7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 22771A33180F3FB900143CE7 /* InfoPlist.strings */; };
 		22771A37180F3FB900143CE7 /* NSTreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22771A36180F3FB900143CE7 /* NSTreeTests.m */; };
+		22BA6425180F6B5000FCF578 /* NSTree.h in Sources */ = {isa = PBXBuildFile; fileRef = 2222AE91180F494F0016C8DA /* NSTree.h */; };
+		22BA6426180F6B5000FCF578 /* NSTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2222AE92180F494F0016C8DA /* NSTree.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -263,6 +265,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22BA6425180F6B5000FCF578 /* NSTree.h in Sources */,
+				22BA6426180F6B5000FCF578 /* NSTree.m in Sources */,
 				22771A37180F3FB900143CE7 /* NSTreeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,14 +403,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTree.app/NSTree";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NSTree/NSTree-Prefix.pch";
+				GCC_PREFIX_HEADER = "NSTree/NSTreeExample-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -422,14 +426,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTree.app/NSTree";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NSTree/NSTree-Prefix.pch";
+				GCC_PREFIX_HEADER = "NSTree/NSTreeExample-Prefix.pch";
 				INFOPLIST_FILE = "NSTreeTests/NSTreeExampleTests-Info.plist";
 				PRODUCT_NAME = NSTreeExampleTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";

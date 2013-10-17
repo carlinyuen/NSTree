@@ -31,6 +31,7 @@
 
 @interface NSTree()
     @property (nonatomic, assign) int nodeCapacity;
+    @property (nonatomic, assign) int nodeMinimum;
     @property (nonatomic, strong, readwrite) NSTreeNode *root;
 @end
 
@@ -45,6 +46,7 @@
     self = [super init];
     if (self) {
         _nodeCapacity = DEFAULT_NODE_CAPACITY;
+        _nodeMinimum = _nodeCapacity / 2;
         _root = [NSTreeNode new];
     }
     return self;
@@ -55,7 +57,8 @@
 {
     self = [super init];
     if (self) {
-        _nodeCapacity = nodeCapacity;
+        _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
+        _nodeMinimum = _nodeCapacity / 2; 
         _root = [NSTreeNode new]; 
     }
     return self;
@@ -102,17 +105,34 @@
     if (!object || !node) {
         return false;
     }
-    
+   
+    // Add object
     if (node.data.count) 
     {
-        int index = [node.data indexOfObject:object inSortedRange:NSMakeRange(0, node.data.count-1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id o1, id o2) {
-        }];
-        return true;
+        // If node has fewer than capacity, can add
+        int index = [node.data indexOfObject:object 
+                               inSortedRange:NSMakeRange(0, node.data.count-1) 
+                                     options:NSBinarySearchingInsertionIndex 
+                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                 return [obj1 compare:obj2];
+                             }];
+        
+        if (index >= 0 && index < node.data.count) {
+            if ([node.data[index] isEqual:object]) {
+                
+            }
+            else {
+            }
+        }
+        
     } 
     else {
         [node.data addObject:object];
-        return true;
     }
+    
+    // Rebalance
+    
+    return true; 
 }
 
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
@@ -126,9 +146,34 @@
 
 - (bool)containsObject:(id)object inNode:(NSTreeNode *)node
 {
-    if (!object || !node) {
+    if (!object || !node || !node.data.count) {
         return false;
     }
+    
+    // Search for item in node data
+    int index = [node.data indexOfObject:object 
+                           inSortedRange:NSMakeRange(0, node.data.count-1) 
+                                 options:NSBinarySearchingInsertionIndex 
+                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                             return [obj1 compare:obj2];
+                         }];
+    
+    // If within bounds of data (note the <= count due to subtree indexing)
+    if (index >= 0 && index <= node.data.count) 
+    {
+        // Check if item is equal at index 
+        if ([node.data[index] isEqual:object]) {
+            return true;
+        }
+        
+        // If subtree doesn't exist at that index
+        if (index >= node.children.count) {
+            return false;
+        }
+        
+        // Need to search subtree
+        return [self containsObject:object inNode:node.children[index]];
+    } 
     
     return false;
 }

@@ -8,8 +8,10 @@
 
 #import <XCTest/XCTest.h>
 
-@interface NSTreeTests : XCTestCase
+#import "NSTree.h"
 
+@interface NSTreeTests : XCTestCase
+    @property (nonatomic, strong) NSTree *tree;
 @end
 
 @implementation NSTreeTests
@@ -18,6 +20,8 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    self.tree = [[NSTree alloc] initWithNodeCapacity:2];
 }
 
 - (void)tearDown
