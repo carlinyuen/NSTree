@@ -279,12 +279,36 @@
                              }];
         [node.data insertObject:object atIndex:index];
         
-        // Add child if exists, need to add behind data
-        if (child) {
+        // Add child if exists, need to add right after data insertion
+        if (child) 
+        {
             if (index+1 > node.children.count) {
                 NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
             }
+            
+            // Insert & change parent pointer
             [node.children insertObject:child atIndex:index+1];
+            child.parent = node;
+            
+            // Switch up sibling pointers
+            NSTreeNode *sibling = node.children[index];
+            if (sibling) {
+                child.next = sibling.next;
+                child.previous = sibling;
+                sibling.next = child;
+            } 
+            else    // This shouldn't happen, but check other side
+            {
+                NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
+                if (node.children.count < index+2) {
+                    sibling = node.children[index+2];
+                    if (sibling) {
+                        child.previous = sibling.previous;
+                        child.next = sibling;
+                        sibling.previous = child;
+                    }
+                }
+            }
         }
         
         // Rebalance as needed
@@ -446,6 +470,11 @@
         // Remove old items from left node
         [node.data removeObjectsInRange:NSMakeRange(middle + 1, node.data.count-1)];
         [node.children removeObjectsInRange:NSMakeRange(middle + 1, node.children.count-1)]; 
+        
+        // Change sibling pointers
+        newRightNode.next = node.next;
+        newRightNode.previous = node;
+        node.next = newRightNode;
         
         // Add to parent, if exists
         if (node.parent) {
