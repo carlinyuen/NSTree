@@ -9,11 +9,23 @@
 #import <Foundation/Foundation.h>
 
 @interface NSTreeNode : NSObject
-@property (nonatomic, strong) NSArray *data;
-@property (nonatomic, strong) NSArray *children;
+    @property (nonatomic, strong) NSMutableArray *data;
+    @property (nonatomic, strong) NSMutableArray *children;
 @end
 
 @interface NSTree : NSObject
-@property (nonatomic, weak) NSTreeNode *root;
-- (id)initWithCapacity:(int)nodeCapacity;
+    @property (nonatomic, strong, readonly) NSTreeNode *root;
+
+    /** @brief Create tree with a certain number of allowable children */
+    - (id)initWithNodeCapacity:(int)nodeCapacity;
+
+    /** @brief Add object to tree, true if successful */
+    - (bool)addObject:(id)object;
+
+    /** @brief Remove object from tree, returns false if not in tree */
+    - (bool)removeObject:(id)object;
+
+    /** @brief Search for object in tree, returns false if not found */
+    - (bool)containsObject:(id)object;
+
 @end
