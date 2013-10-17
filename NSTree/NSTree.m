@@ -188,6 +188,7 @@
 /** @brief Traverse the tree in sorted order while executing block on every element */
 - (void)traverse:(NSTreeTraversalBlock)block extraData:(id)data
 {
+    // TODO
 }
 
 
@@ -423,18 +424,19 @@
         // since these values are not otherwise used by the protocol.
         // If your class was mutable, you may choose to use an internal variable that is updated when the class is mutated.
         // state->mutationsPtr MUST NOT be NULL.
-        state->mutationsPtr = &state->extra[0];
+        state->mutationsPtr = 0;
+        state->extra[0] = [self count];
     }
     // Now we provide items, which we track with state->state, and determine if we have finished iterating.
-    if (state->state < self.count)
+    if (state->state < state->extra[0])
     {
         // Set state->itemsPtr to the provided buffer.
         // Alternate implementations may set state->itemsPtr to an internal C array of objects.
-        // state->itemsPtr MUST NOT be NULL.
+        // state->itemsPtr MUST NOT be NULL
         state->itemsPtr = stackbuf;
         // Fill in the stack array, either until we've provided all items from the list
         // or until we've provided as many items as the stack based buffer will hold.
-        while((state->state < self.count) && (count < len))
+        while((state->state < state->extra[0]) && (count < len))
         {
             // For this sample, we generate the contents on the fly.
             // A real implementation would likely just be copying objects from internal storage.
@@ -458,7 +460,6 @@
     
     if (copy) {
         [copy setRoot:[self.root copyWithZone:zone]];
-        [copy setCount:self.count];
         [copy setNodeCapacity:self.nodeCapacity]; 
         [copy setNodeMinimum:self.nodeMinimum]; 
     }
