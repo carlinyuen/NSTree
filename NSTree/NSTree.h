@@ -18,6 +18,12 @@
     /** @brief Initialize with parent node */
     - (id)initWithParent:(NSTreeNode *)parent;
 
+    /** @brief Get index of node in children array */
+    - (NSUInteger)indexOfChildNode:(NSTreeNode *)child;
+
+    /** @brief Get index of object in data array */
+    - (NSUInteger)indexOfDataObject:(id)object;
+
 @end
 
 typedef enum {

@@ -36,6 +36,28 @@
     return self;
 }
 
+/** @brief Get index of node in children array */
+- (NSUInteger)indexOfChildNode:(NSTreeNode *)child
+{
+    return [self.children indexOfObject:child 
+                          inSortedRange:NSMakeRange(0, self.children.count - 1) 
+                                options:NSBinarySearchingFirstEqual
+                        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                            return [obj1 compare:obj2];
+                        }];
+}
+
+/** @brief Get index of object in data array */
+- (NSUInteger)indexOfDataObject:(id)object
+{
+    return [self.data indexOfObject:object 
+                      inSortedRange:NSMakeRange(0, self.data.count - 1) 
+                            options:NSBinarySearchingFirstEqual
+                    usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                        return [obj1 compare:obj2];
+                    }];
+}
+
 - (NSString *)description 
 {
     return [[self.data valueForKey:@"description"] componentsJoinedByString:@""];
@@ -343,12 +365,11 @@
     }
     else    // Deal with replacing separator
     {
-        int index = [node.data indexOfObject:object 
-                               inSortedRange:NSMakeRange(0, node.data.count-1) 
-                                     options:NSBinarySearchingFirstEqual 
-                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                 return [obj1 compare:obj2];
-                             }];
+        int index = [node indexOfDataObject:object];
+        if (index == NSNotFound) {
+            NSLog(@"Warning! Could not find index of object for removal: %@", object);
+            return false;
+        }
         
         // Replace with largest value from left child
         NSTreeNode *leftChild = node.children[index];
@@ -499,9 +520,47 @@
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
+        // If right sibling has more than min elements, rotate left
+        if (node.next && node.next.data.count > self.nodeMinimum) {
+            [self rotateNode:node toRight:false];
+        }
     }
 }
 
+- (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
+{
+    // Can't rotate if no node, no sibling when rotating, or no data in sibling
+    if (!node || !node.parent || !node.parent.data.count
+        || (!direction && (!node.next || !node.next.data.count)) 
+        || (direction && (!node.previous || !node.previous.data.count))) {
+        return;
+    }
+    
+    // Get index of node in children array of parent
+    int indexOfChild = [node.parent indexOfChildNode:node];
+    if (indexOfChild == NSNotFound) {
+        NSLog(@"Warning! Could not find index of child in parent: %@", node);
+        return;
+    }
+    
+    // Insert parent data that is next to the node
+    int indexOfParentData = indexOfChild - direction;
+    int indexOfInsert = (direction ? 0 : node.data.count);
+    [node.data insertObject:node.parent.data[indexOfParentData] 
+                    atIndex:indexOfInsert];
+    
+    // Replace parent data with data from sibling
+    NSTreeNode *sibling = (direction ? node.previous : node.next);
+    int indexOfRemove = (direction ? sibling.data.count - 1 : 0); 
+    [node.parent.data replaceObjectAtIndex:indexOfParentData 
+                                withObject:sibling.data[indexOfRemove]];
+    
+    // Also move corresponding child of sibling to node if needed
+    if (sibling.children.count) {
+        [node.children insertObject:sibling.children[indexOfRemove] 
+                            atIndex:indexOfInsert];
+    }
+}
 
 #pragma mark - NSFastEnumeration
 
