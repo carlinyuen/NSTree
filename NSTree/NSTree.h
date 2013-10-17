@@ -9,8 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @interface NSTreeNode : NSObject<NSCopying>
+    @property (nonatomic, weak) NSTreeNode *parent;
+    @property (nonatomic, weak) NSTreeNode *previous;
+    @property (nonatomic, weak) NSTreeNode *next;
     @property (nonatomic, strong) NSMutableArray *data;
     @property (nonatomic, strong) NSMutableArray *children;
+
+    /** @brief Initialize with parent node */
+    - (id)initWithParent:(NSTreeNode *)parent;
+
 @end
 
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
@@ -31,5 +38,14 @@
 
     /** @brief Returns true if tree is empty */
     - (bool)isEmpty;
+
+    /** @brief Returns minimum element, or nil if none */
+    - (id)minimum;
+
+    /** @brief Returns maximum element, or nil if none */
+    - (id)maximum;
+
+    /** @brief Returns object at index, or nil if none / out of bounds */
+    - (id)objectAtIndex:(int)index;
 
 @end

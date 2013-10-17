@@ -24,6 +24,19 @@
     return self;
 }
 
+/** @brief Initialize with parent node */
+- (id)initWithParent:(NSTreeNode *)parent
+{
+    self = [super init];
+    if (self) {
+        _parent = parent;
+        _data = [NSMutableArray new];
+        _children = [NSMutableArray new];  
+    }
+    return self;
+}
+
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
@@ -91,13 +104,14 @@
         return false;
     }
     
-    return [self addObject:object toNode:self.root];
+    return [self addObject:object withChild:nil
+        toNode:[self getLeafNodeForObject:object inNode:self.root]];
 }
 
 /** @brief Remove object from tree, returns false if not in tree */
 - (bool)removeObject:(id)object
 {
-    if (!object) {
+    if (!object || self.count <= 0) {
         return false;
     }
     
@@ -107,11 +121,11 @@
 /** @brief Search for object in tree, returns false if not found */
 - (bool)containsObject:(id)object
 {
-    if (!object) {
+    if (!object || self.count <= 0) {
         return false;
     }
     
-    return [self containsObject:object inNode:self.root]; 
+    return ([self getNodeThatContains:object inBranch:self.root] != nil); 
 }
 
 /** @brief Returns true if tree is empty */
@@ -120,45 +134,126 @@
     return (self.count == 0);
 }
 
+/** @brief Returns minimum element, or nil if none */
+- (id)minimum
+{
+    if (self.count) {
+        return [[[self getLeftMostNode] data] objectAtIndex:0];
+    }
+    
+    return nil;
+}
+
+/** @brief Returns maximum element, or nil if none */
+- (id)maximum
+{
+    if (self.count) {
+        return [[[self getRightMostNode] data] objectAtIndex:0]; 
+    }
+    
+    return nil;
+}
+
+/** @brief Returns object at index, or nil if none / out of bounds */
+- (id)objectAtIndex:(int)index
+{
+    if (index < 0 || index >= self.count || self.count <= 0) {
+        return nil;
+    }
+   
+    // TODO
+    return nil;
+}
+
 
 #pragma mark - Tree Methods
 
-- (bool)addObject:(id)object toNode:(NSTreeNode *)node
+- (bool)addObject:(id)object withChild:(NSTreeNode *)child toNode:(NSTreeNode *)node
 {
     if (!object || !node) {
         return false;
     }
    
-    // Add object
-    if (node.data.count) 
+    // Simple add if empty
+    if (!node.data.count) {
+        [node.data addObject:object]; 
+    }
+    else    // Do some math
     {
-        // If node has fewer than capacity, can add
+        // Find index where we should put it, and add it
         int index = [node.data indexOfObject:object 
                                inSortedRange:NSMakeRange(0, node.data.count-1) 
                                      options:NSBinarySearchingInsertionIndex 
                              usingComparator:^NSComparisonResult(id obj1, id obj2) {
                                  return [obj1 compare:obj2];
                              }];
+        [node.data insertObject:object atIndex:index];
         
-        if (index >= 0 && index < node.data.count) {
-            if ([node.data[index] isEqual:object]) {
-                
+        // Add child if exists, need to add behind data
+        if (child) {
+            if (index+1 > node.children.count) {
+                NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
             }
-            else {
-            }
+            [node.children insertObject:child atIndex:index+1];
         }
         
+        // Rebalance as needed
+        [self rebalanceNode:node];
     } 
-    else {
-        [node.data addObject:object];
-    }
     
     // Update count
     self.count++;
     
-    // Rebalance
-    
     return true; 
+}
+
+- (void)rebalanceNode:(NSTreeNode *)node
+{
+    // If node is past capacity, need to split
+    if (node.data.count > self.nodeCapacity)
+    {
+        // Create right node to be efficient about removing from arrays
+        NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
+        int middle = node.data.count / 2; 
+        id object = node.data[middle];
+        
+        // Iterate through data & children and move into new nodes
+        for (int i = middle + 1; i < node.data.count; ++i) {
+            [newRightNode.data addObject:node.data[i]];
+        }
+        for (int i = middle + 1; i < node.children.count; ++i) {
+            [node.children[i] setParent:newRightNode];
+            [newRightNode.children addObject:node.children[i]];
+        } 
+        
+        // Remove old items from left node
+        [node.data removeObjectsInRange:NSMakeRange(middle + 1, node.data.count-1)];
+        [node.children removeObjectsInRange:NSMakeRange(middle + 1, node.children.count-1)]; 
+        
+        // Add to parent, if exists
+        if (node.parent) {
+            [self addObject:object withChild:newRightNode toNode:node.parent];
+        }
+        else    // Root node, need to create new root
+        {
+            NSTreeNode *newRootNode = [NSTreeNode new];
+            
+            // Set current node's new parent, add as child to new parent
+            node.parent = newRootNode;
+            [newRootNode.children addObject:node];
+            
+            // Add data and new right branch to new parent
+            [self addObject:object withChild:newRightNode toNode:newRootNode];
+            
+            // Set new root
+            self.root = newRootNode;
+        }
+    }
+    
+    // If node is below min capacity (and not the root), need to join
+    else if (node != self.root && node.data.count < self.nodeMinimum)
+    {
+    }
 }
 
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
@@ -170,10 +265,10 @@
     return false; 
 }
 
-- (bool)containsObject:(id)object inNode:(NSTreeNode *)node
+- (NSTreeNode *)getNodeThatContains:(id)object inBranch:(NSTreeNode *)node
 {
     if (!object || !node || !node.data.count) {
-        return false;
+        return nil;
     }
     
     // Search for item in node data
@@ -189,19 +284,72 @@
     {
         // Check if item is equal at index 
         if ([node.data[index] isEqual:object]) {
-            return true;
+            return node;
         }
         
         // If subtree doesn't exist at that index
         if (index >= node.children.count) {
-            return false;
+            return nil;
         }
         
         // Need to search subtree
-        return [self containsObject:object inNode:node.children[index]];
+        return [self getNodeThatContains:object inBranch:node.children[index]];
     } 
     
-    return false;
+    return nil;
+}
+
+- (NSTreeNode *)getLeafNodeForObject:(id)object inNode:(NSTreeNode *)node
+{
+    if (!object || !node) {
+        return nil;
+    }
+    
+    // If there are children, go farther down
+    if (node.children.count)
+    {
+        // Search for item in node data
+        int index = [node.data indexOfObject:object 
+                               inSortedRange:NSMakeRange(0, node.data.count-1) 
+                                     options:NSBinarySearchingInsertionIndex 
+                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                 return [obj1 compare:obj2];
+                             }];
+        
+        // If within bounds of children
+        if (index >= 0 && index < node.children.count) {
+            return [self getLeafNodeForObject:object 
+                                       inNode:node.children[index]];  
+        } else {
+            NSLog(@"Warning: could not find leaf node for object: %@", object);
+            return nil;     // This shouldn't happen!
+        }
+    }
+    else {  // Found the node
+        return node;
+    }
+}
+
+- (NSTreeNode *)getLeftMostNode
+{
+    NSTreeNode *node = self.root;
+    
+    while (node.children.count) {
+        node = node.children[0];
+    }
+    
+    return node;
+}
+
+- (NSTreeNode *)getRightMostNode
+{
+    NSTreeNode *node = self.root;
+    
+    while (node.children.count) {
+        node = node.children[node.children.count-1];
+    }
+    
+    return node;
 }
 
 
