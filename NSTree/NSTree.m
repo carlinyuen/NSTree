@@ -245,6 +245,8 @@
             
             // Rebalance as needed
             [self rebalanceNode:node];  
+            
+            return true;
         } 
         else {    // This shouldn't happen
             NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
@@ -262,14 +264,13 @@
         
         // Replace with largest value from left child
         NSTreeNode *leftChild = node.children[index];
+        id replacementObject = leftChild.data[leftChild.data.count-1];
         [node.data replaceObjectAtIndex:index 
-            withObject:leftChild.data[leftChild.data.count-1]];
+            withObject:replacementObject];
         
         // Tell child to remove the replaced object
-        
+        return [self removeObject:replacementObject fromNode:leftChild];
     }
-   
-    return false; 
 }
 
 - (NSTreeNode *)getNodeThatContains:(id)object inBranch:(NSTreeNode *)node
