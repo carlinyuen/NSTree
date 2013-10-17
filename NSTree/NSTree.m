@@ -188,9 +188,39 @@
 /** @brief Traverse the tree in sorted order while executing block on every element */
 - (void)traverse:(NSTreeTraverseBlock)block extraData:(id)data onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
 {
+    // Return condition
+    if (!root) {
+        return;
+    }
+    
     // If Breadth First traversal
     if (algo == NSTreeTraverseAlgorithmBreadthFirst)
     {
+        // Go through data
+        for (int i = 0; i < root.data.count; ++i) {
+            block(root.data[i], data);
+        } 
+        
+        // Go to next sibling node, or next level's leftmost node
+        if (root.next) {
+            [self traverse:block extraData:data onTree:root.next withAlgorithm:algo]; 
+        } 
+        else  // Find next level's leftmost node
+        {
+            // Go to leftmost node in current level
+            NSTreeNode *node = root;
+            while (node.previous) {
+                node = node.previous;   
+            }
+            
+            // Start traversal on it's leftmost child
+            if (node.children.count) {
+                [self traverse:block extraData:data onTree:node.children[0] withAlgorithm:algo];  
+            } else {
+                NSLog(@"End of Breadth First Traversal");
+                return;
+            }
+        }
     }
     else    // Depth First traversal
     {
