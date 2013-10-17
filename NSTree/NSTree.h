@@ -20,7 +20,21 @@
 
 @end
 
-typedef void(^NSTreeTraversalBlock)(NSTreeNode *node, id data);
+typedef enum {
+    /** Traverses data in sorted order */
+    NSTreeTraverseAlgorithmInorder,
+    
+    /** Traverses node data first, then its branches in order */ 
+    NSTreeTraverseAlgorithmPreorder, 
+    
+    /** Traverses node branches first, then its data */  
+    NSTreeTraverseAlgorithmPostorder, 
+    
+    /** Traverses tree one level at a time, in order */   
+    NSTreeTraverseAlgorithmBreadthFirst, 
+} NSTreeTraverseAlgorithm;
+
+typedef void(^NSTreeTraverseBlock)(NSTreeNode *node, id data);
 
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
     @property (nonatomic, strong, readonly) NSTreeNode *root;
@@ -53,6 +67,9 @@ typedef void(^NSTreeTraversalBlock)(NSTreeNode *node, id data);
     - (id)objectAtIndex:(int)index;
 
     /** @brief Traverse the tree in sorted order while executing block on every element */
-    - (void)traverse:(NSTreeTraversalBlock)block extraData:(id)data;
+- (void)traverse:(NSTreeTraverseBlock)block 
+       extraData:(id)data 
+          onTree:(NSTreeNode *)root 
+   withAlgorithm:(NSTreeTraverseAlgorithm)algo;
 
 @end

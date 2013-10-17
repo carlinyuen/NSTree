@@ -167,7 +167,7 @@
             [data setObject:[NSNumber 
                 numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
                      forKey:KEY_COUNT];
-        } extraData:data];
+        } extraData:data onTree:self.root withAlgorithm:NSTreeTraverseAlgorithmInorder];
         return [data[KEY_COUNT] intValue];
     }
     
@@ -186,9 +186,43 @@
 }
 
 /** @brief Traverse the tree in sorted order while executing block on every element */
-- (void)traverse:(NSTreeTraversalBlock)block extraData:(id)data
+- (void)traverse:(NSTreeTraverseBlock)block extraData:(id)data onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
 {
-    // TODO
+    // If Breadth First traversal
+    if (algo == NSTreeTraverseAlgorithmBreadthFirst)
+    {
+    }
+    else    // Depth First traversal
+    {
+        if (algo == NSTreeTraverseAlgorithmPostorder) 
+        {
+            for (int i = 0; i < root.children.count; ++i) {
+                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo];
+            }
+        }
+      
+        // Process data, note the <= count for subtree traversal
+        for (int i = 0; i <= root.data.count; ++i)
+        {
+            // Process subtrees in order
+            if (algo == NSTreeTraverseAlgorithmInorder 
+                && i < root.children.count) {
+                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo]; 
+            }
+            
+            // Process data in order
+            if (i < root.data.count) {
+                block(root.data[i], data);
+            }
+        }
+      
+        if (algo == NSTreeTraverseAlgorithmPreorder) 
+        {
+            for (int i = 0; i < root.children.count; ++i) {
+                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo];
+            }
+        }
+    }
 }
 
 
