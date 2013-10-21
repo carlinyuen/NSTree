@@ -600,6 +600,7 @@ typedef enum {
             state->state++;
             count++;
             
+            // If we reach end of data array, hop to next node
             if (i >= currentNode.data.count) {
                 currentNode = currentNode.next; 
                 i = 0;
