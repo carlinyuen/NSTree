@@ -84,6 +84,7 @@
     @property (nonatomic, strong, readwrite) NSTreeNode *root;
     @property (nonatomic, assign) int nodeCapacity;
     @property (nonatomic, assign) int nodeMinimum;
+    @property (nonatomic, assign, readwrite) int count;
 @end
 
 
@@ -125,8 +126,12 @@
         return false;
     }
     
-    return [self addObject:object withChild:nil
-        toNode:[self getLeafNodeForObject:object inNode:self.root]];
+    if ([self addObject:object withChild:nil toNode:
+         [self getLeafNodeForObject:object inNode:self.root]]) {
+        self.count++;
+        return true;
+    }
+    return false;
 }
 
 /** @brief Remove object from tree, returns false if not in tree */
@@ -136,8 +141,12 @@
         return false;
     }
     
-    return [self removeObject:object 
-        fromNode:[self getNodeThatContains:object inBranch:self.root]];
+    if ([self removeObject:object fromNode:
+         [self getNodeThatContains:object inBranch:self.root]]) {
+        self.count--;
+        return true;
+    }
+    return false;
 }
 
 /** @brief Search for object in tree, returns false if not found */
@@ -286,56 +295,49 @@
         return false;
     }
    
-    // Simple add if empty
-    if (!node.data.count) {
-        [node.data addObject:object]; 
-    }
-    else    // Do some math
+    // Find index where we should put it, and add it
+    int index = [node.data indexOfObject:object 
+                           inSortedRange:NSMakeRange(0, node.data.count-1) 
+                                 options:NSBinarySearchingInsertionIndex 
+                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                             return [obj1 compare:obj2];
+                         }];
+    [node.data insertObject:object atIndex:index];
+    
+    // Add child if exists, need to add right after data insertion
+    if (child) 
     {
-        // Find index where we should put it, and add it
-        int index = [node.data indexOfObject:object 
-                               inSortedRange:NSMakeRange(0, node.data.count-1) 
-                                     options:NSBinarySearchingInsertionIndex 
-                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                 return [obj1 compare:obj2];
-                             }];
-        [node.data insertObject:object atIndex:index];
+        if (index+1 > node.children.count) {
+            NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
+        }
         
-        // Add child if exists, need to add right after data insertion
-        if (child) 
+        // Insert & change parent pointer
+        [node.children insertObject:child atIndex:index+1];
+        child.parent = node;
+        
+        // Switch up sibling pointers
+        NSTreeNode *sibling = node.children[index];
+        if (sibling) {
+            child.next = sibling.next;
+            child.previous = sibling;
+            sibling.next = child;
+        } 
+        else    // This shouldn't happen, but check other side
         {
-            if (index+1 > node.children.count) {
-                NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
-            }
-            
-            // Insert & change parent pointer
-            [node.children insertObject:child atIndex:index+1];
-            child.parent = node;
-            
-            // Switch up sibling pointers
-            NSTreeNode *sibling = node.children[index];
-            if (sibling) {
-                child.next = sibling.next;
-                child.previous = sibling;
-                sibling.next = child;
-            } 
-            else    // This shouldn't happen, but check other side
-            {
-                NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
-                if (node.children.count < index+2) {
-                    sibling = node.children[index+2];
-                    if (sibling) {
-                        child.previous = sibling.previous;
-                        child.next = sibling;
-                        sibling.previous = child;
-                    }
+            NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
+            if (node.children.count < index+2) {
+                sibling = node.children[index+2];
+                if (sibling) {
+                    child.previous = sibling.previous;
+                    child.next = sibling;
+                    sibling.previous = child;
                 }
             }
         }
-        
-        // Rebalance as needed
-        [self rebalanceNode:node];
-    } 
+    }
+    
+    // Rebalance as needed
+    [self rebalanceNode:node];
     
     return true; 
 }
@@ -564,40 +566,52 @@
 
 #pragma mark - NSFastEnumeration
 
-// TODO
+typedef enum {
+    NSTreeFastEnumerationStateMutations,
+    NSTreeFastEnumerationStateCurrentNode,  
+    NSTreeFastEnumerationStateCurrentNodeIndex
+} NSTreeFastEnumerationState;
+
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id *)stackbuf count:(NSUInteger)len
 {
-    NSUInteger count = 0;
-    // This is the initialization condition, so we'll do one-time setup here.
-    // Ensure that you never set state->state back to 0, or use another method to detect initialization
-    // (such as using one of the values of state->extra).
+    // First-time setup
     if (state->state == 0)
     {
-        // We are not tracking mutations, so we'll set state->mutationsPtr to point into one of our extra values,
-        // since these values are not otherwise used by the protocol.
-        // If your class was mutable, you may choose to use an internal variable that is updated when the class is mutated.
-        // state->mutationsPtr MUST NOT be NULL.
-        state->mutationsPtr = 0;
-        state->extra[0] = [self count];
+        state->mutationsPtr = &state->extra[NSTreeFastEnumerationStateMutations];
+        state->extra[NSTreeFastEnumerationStateCurrentNode] 
+            = (unsigned long)[self getLeftMostNode];
+        state->extra[NSTreeFastEnumerationStateCurrentNodeIndex] = 0;
     }
-    // Now we provide items, which we track with state->state, and determine if we have finished iterating.
-    if (state->state < state->extra[0])
+   
+    // Get current node
+    NSTreeNode *currentNode = (__bridge NSTreeNode *)((void *)state->extra[NSTreeFastEnumerationStateCurrentNode]);   
+    
+    // Loop as long as currentNode exists
+    if (currentNode)
     {
-        // Set state->itemsPtr to the provided buffer.
-        // Alternate implementations may set state->itemsPtr to an internal C array of objects.
-        // state->itemsPtr MUST NOT be NULL
-        state->itemsPtr = stackbuf;
-        // Fill in the stack array, either until we've provided all items from the list
-        // or until we've provided as many items as the stack based buffer will hold.
-        while((state->state < state->extra[0]) && (count < len))
+        // Keep track of # items returned, index for iterating
+        NSUInteger i = state->extra[NSTreeFastEnumerationStateCurrentNodeIndex]; 
+        NSUInteger count = 0; 
+        
+        // Get current node, iterate and fill stackbuf
+        while ((currentNode != nil) && (count < len))
         {
-            // For this sample, we generate the contents on the fly.
-            // A real implementation would likely just be copying objects from internal storage.
-            stackbuf[count] = [NSNumber numberWithInt:state->state];
+            stackbuf[count] = currentNode.data[i++];
             state->state++;
             count++;
+            
+            if (i >= currentNode.data.count) {
+                currentNode = currentNode.next; 
+                i = 0;
+            }
         }
         
+        // Store state back for next loop
+        state->extra[NSTreeFastEnumerationStateCurrentNode] = (unsigned long)currentNode;
+        state->extra[NSTreeFastEnumerationStateCurrentNodeIndex] = i;
+        
+        // Set items returned to stackbuf, return count of items
+        state->itemsPtr = stackbuf; 
         return count;
     }
     
