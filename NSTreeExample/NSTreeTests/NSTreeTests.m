@@ -61,6 +61,7 @@
     }
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
     XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:6]], @"Shouldn't have found number 6");  
+    XCTAssertEqual(self.tree.count, 2, @"Count is not 2"); 
 }
 
 - (void)testRemoveOne
@@ -79,5 +80,20 @@
     XCTAssertNil([self.tree minimum], @"Min is not nil");
     XCTAssertNil([self.tree maximum], @"Max is not nil");  
 }
+
+- (void)testSearchAndRemoveInTwoLevels
+{
+    for (int i = 1; i <= NODE_CAPACITY; ++i) {
+        [self.tree addObject:[NSNumber numberWithInt:i]];
+    }
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
+    XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:6]], @"Shouldn't have found number 6");  
+    XCTAssertEqual(self.tree.count, 2, @"Count is not 2"); 
+    XCTAssertTrue([self.tree removeObject:[NSNumber numberWithInt:1]], @"Failed to remove 1"); 
+    XCTAssertEqual(self.tree.count, 1, @"Count is not 1");  
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2"); 
+    XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:1]], @"Shouldn't find number 1"); 
+}
+
 
 @end

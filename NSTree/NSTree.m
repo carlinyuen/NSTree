@@ -473,8 +473,8 @@
 
 - (void)rebalanceNode:(NSTreeNode *)node
 {
-    // If node is past capacity, need to split
-    if (node.data.count > self.nodeCapacity)
+    // If node is at capacity, need to split
+    if (node.data.count >= self.nodeCapacity)
     {
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
