@@ -10,6 +10,8 @@
 
 #import "NSTree.h"
 
+#define NODE_CAPACITY 2
+
 @interface NSTreeTests : XCTestCase
     @property (nonatomic, strong) NSTree *tree;
 @end
@@ -21,7 +23,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    self.tree = [[NSTree alloc] initWithNodeCapacity:2];
+    self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY];
 }
 
 - (void)tearDown
@@ -45,12 +47,18 @@
     XCTAssertNotNil([self.tree maximum], @"Max is nil");  
 }
 
-- (void)testSearch
+- (void)testSearchInRoot
 {
-    for (int i = 1; i <= 10; ++i) {
+    [self.tree addObject:[NSNumber numberWithInt:5]];
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:5]], @"Couldn't find number 5");
+}
+
+- (void)testSearchInTwoLevels
+{
+    for (int i = 1; i <= NODE_CAPACITY; ++i) {
         [self.tree addObject:[NSNumber numberWithInt:i]];
     }
-    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:5]], @"Couldn't find number 5");
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
 }
 
 - (void)testRemoveOne
