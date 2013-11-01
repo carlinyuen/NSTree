@@ -60,7 +60,7 @@
 
 - (NSString *)printTree
 {
-    return [self printTreeNode:self indent:0];
+    return [self printTreeNode:self indent:1];
 }
 
 - (NSString *)printTreeNode:(NSTreeNode *)node indent:(int)indent
@@ -72,8 +72,8 @@
     }
     
     // Build string
-    NSMutableString *string = [[self description] mutableCopy];
-    for (NSTreeNode *child in self.children) {
+    NSMutableString *string = [[node description] mutableCopy];
+    for (NSTreeNode *child in node.children) {
         [string appendString:[NSString stringWithFormat:@"\n%@%@", 
             padding, [self printTreeNode:child indent:indent + 1]]];
     }
@@ -501,14 +501,14 @@
     if (node.data.count >= self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
-        NSLog(@"Tree Before: %@", [node printTree]);
- 
+        NSLog(@"Tree Before: \n%@", [node printTree]);
+
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
         int middle = node.data.count / 2; 
         int startIndex = middle + 1;    // Index to move items from
         id object = node.data[middle];
-        
+
         // Iterate through data & children and move into new nodes
         for (int i = startIndex; i < node.data.count; ++i) {
             [newRightNode.data addObject:node.data[i]];
@@ -517,17 +517,17 @@
             [node.children[i] setParent:newRightNode];
             [newRightNode.children addObject:node.children[i]];
         } 
-        
+
         // Remove old items from left node
         [node.data removeObjectsInRange:
             NSMakeRange(startIndex, node.data.count - startIndex)];
-        
+
         // Only remove if has children
         if (node.children.count) {
             [node.children removeObjectsInRange:
                 NSMakeRange(startIndex, node.children.count - startIndex)]; 
         }
-        
+
         // Change sibling pointers
         newRightNode.next = node.next;
         newRightNode.previous = node;
@@ -551,30 +551,32 @@
             // Set new root
             self.root = newRootNode;
         }
-        
-        NSLog(@"Tree After: %@", [node.parent printTree]); 
+
+        NSLog(@"Tree After: \n%@", [node.parent printTree]); 
     }
-    
+
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
         NSLog(@"Rebalance Node with Min Capacity: %@", node); 
-        NSLog(@"Tree Before: %@", [node printTree]);  
+        NSLog(@"Tree Before: \n%@", [node printTree]);  
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.data.count > self.nodeMinimum) {
             [self rotateNode:node toRight:false];
         }
-        
+
         // If left sibling has more than min elements, rotate right
         else if (node.previous && node.previous.data.count > self.nodeMinimum) {
             [self rotateNode:node toRight:true]; 
         }
-        
+
         // Otherwise, need to merge sibling with node
         else {
             [self mergeSiblingWithNode:node];
         }
+
+        NSLog(@"Tree After: \n%@", [node printTree]);   
     }
 }
 
