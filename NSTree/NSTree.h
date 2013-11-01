@@ -23,6 +23,9 @@
 
     /** @brief Get index of object in data array */
     - (NSUInteger)indexOfDataObject:(id)object;
+    
+    /** @brief Print entire tree */
+    - (NSString *)printTree;
 
 @end
 

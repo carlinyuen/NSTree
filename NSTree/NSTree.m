@@ -58,9 +58,32 @@
                     }];
 }
 
+- (NSString *)printTree
+{
+    return [self printTreeNode:self indent:0];
+}
+
+- (NSString *)printTreeNode:(NSTreeNode *)node indent:(int)indent
+{
+    // Build indent
+    NSMutableString *padding = [NSMutableString new];
+    for (int i = 0; i < indent; ++i) {
+        [padding appendString:@"\t"];
+    }
+    
+    // Build string
+    NSMutableString *string = [[self description] mutableCopy];
+    for (NSTreeNode *child in self.children) {
+        [string appendString:[NSString stringWithFormat:@"\n%@%@", 
+            padding, [self printTreeNode:child indent:indent + 1]]];
+    }
+    
+    return string;
+}
+
 - (NSString *)description 
 {
-    return [[self.data valueForKey:@"description"] componentsJoinedByString:@""];
+    return [[self.data valueForKey:@"description"] componentsJoinedByString:@", "];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -179,7 +202,8 @@
 - (id)maximum
 {
     if (self.root.data.count) {
-        return [[[self getRightMostNode] data] objectAtIndex:0]; 
+        NSArray *data = [[self getRightMostNode] data];
+        return [data objectAtIndex:data.count - 1]; 
     }
     
     return nil;
@@ -476,6 +500,9 @@
     // If node is at capacity, need to split
     if (node.data.count >= self.nodeCapacity)
     {
+        NSLog(@"Rebalance Node with Max Capacity: %@", node);
+        NSLog(@"Tree Before: %@", [node printTree]);
+ 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
         int middle = node.data.count / 2; 
@@ -524,14 +551,29 @@
             // Set new root
             self.root = newRootNode;
         }
+        
+        NSLog(@"Tree After: %@", [node.parent printTree]); 
     }
     
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
+        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
+        NSLog(@"Tree Before: %@", [node printTree]);  
+           
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.data.count > self.nodeMinimum) {
             [self rotateNode:node toRight:false];
+        }
+        
+        // If left sibling has more than min elements, rotate right
+        else if (node.previous && node.previous.data.count > self.nodeMinimum) {
+            [self rotateNode:node toRight:true]; 
+        }
+        
+        // Otherwise, need to merge sibling with node
+        else {
+            [self mergeSiblingWithNode:node];
         }
     }
 }
@@ -570,6 +612,12 @@
                             atIndex:indexOfInsert];
     }
 }
+
+- (void)mergeSiblingWithNode:(NSTreeNode *)node
+{
+    // TODO
+}
+
 
 #pragma mark - NSFastEnumeration
 
