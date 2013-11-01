@@ -39,6 +39,14 @@
     XCTAssertNil([self.tree maximum], @"Max is not nil"); 
 }
 
+- (void)testAddNil
+{
+    XCTAssertFalse([self.tree addObject:nil], @"Added nil");
+    XCTAssertEqual(self.tree.count, 0, @"Count is not 0");
+    XCTAssertNil([self.tree minimum], @"Min is not nil");
+    XCTAssertNil([self.tree maximum], @"Max is not nil");  
+}
+
 - (void)testAddOne
 {
     XCTAssertTrue([self.tree addObject:[NSNumber numberWithInt:1]], @"Failed to add");
@@ -93,6 +101,21 @@
     XCTAssertEqual(self.tree.count, 1, @"Count is not 1");  
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2"); 
     XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:1]], @"Shouldn't find number 1"); 
+}
+
+- (void)testAddMany
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:[NSNumber numberWithInt:i]];
+    }
+    XCTAssertEqual(self.tree.count, 10, @"Count is not 10");   
+    
+    NSNumber *min = [self.tree minimum];
+    NSNumber *max = [self.tree maximum]; 
+    XCTAssertNotNil(min, @"Min is nil");
+    XCTAssertNotNil(max, @"Max is nil");   
+    XCTAssertEqual(min, [NSNumber numberWithInteger:1], @"Min is not 1");
+    XCTAssertEqual(max, [NSNumber numberWithInteger:10], @"Max is not 10"); 
 }
 
 
