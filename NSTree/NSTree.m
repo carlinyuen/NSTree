@@ -402,7 +402,7 @@
     if (index >= 0 && index <= node.data.count) 
     {
         // Check if item is equal at index 
-        if ([node.data[index] isEqual:object]) {
+        if (index < node.data.count && [node.data[index] isEqual:object]) {
             return node;
         }
         
