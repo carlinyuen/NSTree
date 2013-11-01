@@ -68,7 +68,7 @@ typedef void(^NSTreeTraverseBlock)(NSTreeNode *node, id data);
     - (id)maximum;
 
     /** @brief Returns number of elements in tree */
-    - (int)count;
+    - (int)trueCount;
 
     /** @brief Returns object at index, or nil if none / out of bounds */
     - (id)objectAtIndex:(int)index;

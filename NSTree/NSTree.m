@@ -40,7 +40,7 @@
 - (NSUInteger)indexOfChildNode:(NSTreeNode *)child
 {
     return [self.children indexOfObject:child 
-                          inSortedRange:NSMakeRange(0, self.children.count - 1) 
+                          inSortedRange:NSMakeRange(0, self.children.count) 
                                 options:NSBinarySearchingFirstEqual
                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
                             return [obj1 compare:obj2];
@@ -51,7 +51,7 @@
 - (NSUInteger)indexOfDataObject:(id)object
 {
     return [self.data indexOfObject:object 
-                      inSortedRange:NSMakeRange(0, self.data.count - 1) 
+                      inSortedRange:NSMakeRange(0, self.data.count) 
                             options:NSBinarySearchingFirstEqual
                     usingComparator:^NSComparisonResult(id obj1, id obj2) {
                         return [obj1 compare:obj2];
@@ -186,7 +186,7 @@
 }
 
 /** @brief Returns number of elements in tree */
-- (int)count
+- (int)trueCount
 {
     static NSString *KEY_COUNT = @"total";
     
@@ -297,7 +297,7 @@
    
     // Find index where we should put it, and add it
     int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count-1) 
+                           inSortedRange:NSMakeRange(0, node.data.count) 
                                  options:NSBinarySearchingInsertionIndex 
                          usingComparator:^NSComparisonResult(id obj1, id obj2) {
                              return [obj1 compare:obj2];
@@ -392,7 +392,7 @@
     
     // Search for item in node data
     int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count-1) 
+                           inSortedRange:NSMakeRange(0, node.data.count) 
                                  options:NSBinarySearchingInsertionIndex 
                          usingComparator:^NSComparisonResult(id obj1, id obj2) {
                              return [obj1 compare:obj2];
@@ -429,7 +429,7 @@
     {
         // Search for item in node data
         int index = [node.data indexOfObject:object 
-                               inSortedRange:NSMakeRange(0, node.data.count-1) 
+                               inSortedRange:NSMakeRange(0, node.data.count) 
                                      options:NSBinarySearchingInsertionIndex 
                              usingComparator:^NSComparisonResult(id obj1, id obj2) {
                                  return [obj1 compare:obj2];
@@ -479,20 +479,27 @@
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
         int middle = node.data.count / 2; 
+        int startIndex = middle + 1;    // Index to move items from
         id object = node.data[middle];
         
         // Iterate through data & children and move into new nodes
-        for (int i = middle + 1; i < node.data.count; ++i) {
+        for (int i = startIndex; i < node.data.count; ++i) {
             [newRightNode.data addObject:node.data[i]];
         }
-        for (int i = middle + 1; i < node.children.count; ++i) {
+        for (int i = startIndex; i < node.children.count; ++i) {
             [node.children[i] setParent:newRightNode];
             [newRightNode.children addObject:node.children[i]];
         } 
         
         // Remove old items from left node
-        [node.data removeObjectsInRange:NSMakeRange(middle + 1, node.data.count-1)];
-        [node.children removeObjectsInRange:NSMakeRange(middle + 1, node.children.count-1)]; 
+        [node.data removeObjectsInRange:
+            NSMakeRange(startIndex, node.data.count - startIndex)];
+        
+        // Only remove if has children
+        if (node.children.count) {
+            [node.children removeObjectsInRange:
+                NSMakeRange(startIndex, node.children.count - startIndex)]; 
+        }
         
         // Change sibling pointers
         newRightNode.next = node.next;

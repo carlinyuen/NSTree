@@ -30,14 +30,19 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testCleanStatus
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    XCTAssertEqual(self.tree.count, 0, @"Count is not zero");
+    XCTAssertNil([self.tree minimum], @"Min is not nil");
+    XCTAssertNil([self.tree maximum], @"Max is not nil"); 
 }
 
-- (void)testAdd
+- (void)testAddOne
 {
     XCTAssertTrue([self.tree addObject:[NSNumber numberWithInt:1]], @"Failed to add");
+    XCTAssertEqual(self.tree.count, 1, @"Count is not 1");
+    XCTAssertNotNil([self.tree minimum], @"Min is nil");
+    XCTAssertNotNil([self.tree maximum], @"Max is nil");  
 }
 
 - (void)testSearch
@@ -48,9 +53,21 @@
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:5]], @"Couldn't find number 5");
 }
 
-- (void)testRemove
+- (void)testRemoveOne
 {
-    
+    [self.tree addObject:[NSNumber numberWithInt:1]];
+    XCTAssertTrue([self.tree removeObject:[NSNumber numberWithInt:1]], @"Failed to remove");
+    XCTAssertEqual(self.tree.count, 0, @"Count is not zero");
+    XCTAssertNil([self.tree minimum], @"Min is not nil");
+    XCTAssertNil([self.tree maximum], @"Max is not nil");  
+}
+
+- (void)testRemoveWhenEmpty
+{
+    XCTAssertFalse([self.tree removeObject:[NSNumber numberWithInt:1]], @"Remove worked even when empty");
+    XCTAssertEqual(self.tree.count, 0, @"Count is not zero");
+    XCTAssertNil([self.tree minimum], @"Min is not nil");
+    XCTAssertNil([self.tree maximum], @"Max is not nil");  
 }
 
 @end
