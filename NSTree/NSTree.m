@@ -81,7 +81,7 @@
 #pragma mark - NSTree
 
 @interface NSTree()
-    @property (nonatomic, strong, readwrite) NSTreeNode *root;
+    @property (nonatomic, strong) NSTreeNode *root;
     @property (nonatomic, assign) int nodeCapacity;
     @property (nonatomic, assign) int nodeMinimum;
     @property (nonatomic, assign, readwrite) int count;

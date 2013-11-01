@@ -38,12 +38,12 @@ typedef enum {
     
     /** Traverses tree one level at a time, in order */   
     NSTreeTraverseAlgorithmBreadthFirst, 
+    
 } NSTreeTraverseAlgorithm;
 
 typedef void(^NSTreeTraverseBlock)(NSTreeNode *node, id data);
 
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
-    @property (nonatomic, strong, readonly) NSTreeNode *root;
     @property (nonatomic, assign, readonly) int count;
 
     /** @brief Create tree with a certain number of allowable children */

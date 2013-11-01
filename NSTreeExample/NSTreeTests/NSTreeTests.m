@@ -51,6 +51,7 @@
 {
     [self.tree addObject:[NSNumber numberWithInt:5]];
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:5]], @"Couldn't find number 5");
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Shouldn't have found number 2"); 
 }
 
 - (void)testSearchInTwoLevels
@@ -59,6 +60,7 @@
         [self.tree addObject:[NSNumber numberWithInt:i]];
     }
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
+    XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:6]], @"Shouldn't have found number 6");  
 }
 
 - (void)testRemoveOne
