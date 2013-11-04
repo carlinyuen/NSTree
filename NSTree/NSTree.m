@@ -198,7 +198,12 @@
 - (id)minimum
 {
     if (self.root.data.count) {
-        return [[[self getLeftMostNode] data] objectAtIndex:0];
+        NSTreeNode *node = [self getLeftMostNode];
+        if (node.data && node.data.count) {
+            return [node.data objectAtIndex:0];
+        } else {
+            NSLog(@"Warning! Non-root node with empty data!");
+        }
     }
     
     return nil;
@@ -602,16 +607,18 @@
         NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
-        if (node.next && node.next.data.count >= self.nodeMinimum) {
+        if (node.next && node.next.parent == node.parent
+            && node.next.data.count > self.nodeMinimum) {
             [self rotateNode:node toRight:false];
         }
 
         // If left sibling has more than min elements, rotate right
-        else if (node.previous && node.previous.data.count >= self.nodeMinimum) {
+        else if (node.previous && node.previous.parent == node.parent
+            && node.previous.data.count > self.nodeMinimum) {
             [self rotateNode:node toRight:true]; 
         }
 
-        // Otherwise, need to merge sibling with node
+        // Otherwise, need to merge node with one of its siblings
         else {
             [self mergeSiblingWithNode:node];
         }
@@ -624,10 +631,15 @@
 {
     NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
 
-    // Can't rotate if no node, no sibling when rotating, or no data in sibling
+    // Can't rotate if no node, no siblings in direction to rotate, 
+    //  or no data in sibling, or siblings not from same parent
     if (!node || !node.parent || !node.parent.data.count
-        || (!direction && (!node.next || !node.next.data.count)) 
-        || (direction && (!node.previous || !node.previous.data.count))) {
+        || (!direction && (!node.next 
+            || node.next.parent != node.parent 
+            || !node.next.data.count)) 
+        || (direction && (!node.previous
+            || node.previous.parent != node.parent 
+            || !node.previous.data.count))) {
         return;
     }
     
@@ -660,6 +672,28 @@
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
     // TODO
+    NSLog(@"Merge");
+    
+    // Sanity checks: need siblings or node to exist
+    if (!node || (!node.previous && !node.next)) {
+        NSLog(@"Warning! Merge called on node with no siblings!");
+        return;
+    }
+    
+    // Merge with right node if possible
+    if (node.next)
+    {
+    }
+    
+    // If we can't merge with right node, merge left
+    else if (node.previous)
+    {
+    }
+    
+    // This shouldn't happen
+    else {
+        NSLog(@"Warning! Reached end of merge with no siblings!");
+    }
 }
 
 
