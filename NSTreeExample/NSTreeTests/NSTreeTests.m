@@ -69,7 +69,7 @@
     }
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
     XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:6]], @"Shouldn't have found number 6");  
-    XCTAssertEqual(self.tree.count, 2, @"Count is not 2"); 
+    XCTAssertEqual(self.tree.count, NODE_CAPACITY, @"Count is not at node capacity"); 
 }
 
 - (void)testTrueCount
