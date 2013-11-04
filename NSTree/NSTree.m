@@ -8,7 +8,7 @@
 
 #import "NSTree.h"
 
-#define DEFAULT_NODE_CAPACITY 2
+#define DEFAULT_NODE_CAPACITY 3 // Must be > 2, or can't split branches properly
 
 #pragma mark - NSTreeNode
 
@@ -139,6 +139,12 @@
     return self;
 }
 
+/** @brief Description when printed using NSLog */
+- (NSString *)description 
+{
+    return [self printTree];    // Print whole tree
+}
+
 
 #pragma mark - Public Methods
 
@@ -215,18 +221,35 @@
     static NSString *KEY_COUNT = @"total";
     
     if (self.root.data.count) {
-        NSDictionary *data = @{
+        NSDictionary *extra = @{
             KEY_COUNT: [NSNumber numberWithInt:0]
         };
-        [self traverse:^(NSTreeNode *node, id data) {
-            [data setObject:[NSNumber 
-                numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
-                     forKey:KEY_COUNT];
-        } extraData:data onTree:self.root withAlgorithm:NSTreeTraverseAlgorithmInorder];
-        return [data[KEY_COUNT] intValue];
+        [self traverse:^(NSTreeNode *node, id data, id extra) {
+                [data setObject:[NSNumber 
+                    numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
+                         forKey:KEY_COUNT];
+            } extraData:extra onTree:self.root 
+            withAlgorithm:NSTreeTraverseAlgorithmInorder];
+        return [extra[KEY_COUNT] intValue];
     }
     
     return 0;
+}
+
+/** @brief Returns printout of the tree */
+- (NSString *)printTree
+{
+    NSMutableString *result = [NSMutableString new];
+    [self traverse:^(NSTreeNode *node, id data, id extra) {
+            NSMutableString *padding = [NSMutableString new];
+            for (NSTreeNode *parent = node.parent; parent; parent = parent.parent) {
+                [padding appendString:@"\t"];
+            }
+            [extra appendString:[NSString stringWithFormat:@"%@%@\n", padding, data]];
+        } extraData:result onTree:self.root 
+        withAlgorithm:NSTreeTraverseAlgorithmInorder];
+    
+    return result;
 }
 
 /** @brief Returns object at index, or nil if none / out of bounds */
@@ -241,7 +264,7 @@
 }
 
 /** @brief Traverse the tree in sorted order while executing block on every element */
-- (void)traverse:(NSTreeTraverseBlock)block extraData:(id)data onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
+- (void)traverse:(NSTreeTraverseBlock)block extraData:(id)extra onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
 {
     // Return condition
     if (!root) {
@@ -253,12 +276,12 @@
     {
         // Go through data
         for (int i = 0; i < root.data.count; ++i) {
-            block(root.data[i], data);
+            block(root, root.data[i], extra);
         } 
         
         // Go to next sibling node, or next level's leftmost node
         if (root.next) {
-            [self traverse:block extraData:data onTree:root.next withAlgorithm:algo]; 
+            [self traverse:block extraData:extra onTree:root.next withAlgorithm:algo]; 
         } 
         else  // Find next level's leftmost node
         {
@@ -270,7 +293,7 @@
             
             // Start traversal on it's leftmost child
             if (node.children.count) {
-                [self traverse:block extraData:data onTree:node.children[0] withAlgorithm:algo];  
+                [self traverse:block extraData:extra onTree:node.children[0] withAlgorithm:algo];  
             } else {
                 NSLog(@"End of Breadth First Traversal");
                 return;
@@ -282,7 +305,7 @@
         if (algo == NSTreeTraverseAlgorithmPostorder) 
         {
             for (int i = 0; i < root.children.count; ++i) {
-                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo];
+                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo];
             }
         }
       
@@ -292,19 +315,19 @@
             // Process subtrees in order
             if (algo == NSTreeTraverseAlgorithmInorder 
                 && i < root.children.count) {
-                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo]; 
+                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo]; 
             }
             
             // Process data in order
             if (i < root.data.count) {
-                block(root.data[i], data);
+                block(root, root.data[i], extra);
             }
         }
       
         if (algo == NSTreeTraverseAlgorithmPreorder) 
         {
             for (int i = 0; i < root.children.count; ++i) {
-                [self traverse:block extraData:data onTree:root.children[i] withAlgorithm:algo];
+                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo];
             }
         }
     }
@@ -501,31 +524,31 @@
     if (node.data.count >= self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
-        NSLog(@"Tree Before: \n%@", [node printTree]);
+        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
-        int middle = node.data.count / 2; 
-        int startIndex = middle + 1;    // Index to move items from
+        int middle = node.data.count / 2;
+        int childIndex = ceil(node.data.count / 2.0); 
         id object = node.data[middle];
 
         // Iterate through data & children and move into new nodes
-        for (int i = startIndex; i < node.data.count; ++i) {
+        for (int i = middle + 1; i < node.data.count; ++i) {
             [newRightNode.data addObject:node.data[i]];
         }
-        for (int i = startIndex; i < node.children.count; ++i) {
+        for (int i = childIndex + 1; i < node.children.count; ++i) {
             [node.children[i] setParent:newRightNode];
             [newRightNode.children addObject:node.children[i]];
         } 
 
         // Remove old items from left node
         [node.data removeObjectsInRange:
-            NSMakeRange(startIndex, node.data.count - startIndex)];
+            NSMakeRange(middle, node.data.count - middle)];
 
         // Only remove if has children
         if (node.children.count) {
             [node.children removeObjectsInRange:
-                NSMakeRange(startIndex, node.children.count - startIndex)]; 
+                NSMakeRange(childIndex, node.children.count - childIndex)]; 
         }
 
         // Change sibling pointers
@@ -552,14 +575,14 @@
             self.root = newRootNode;
         }
 
-        NSLog(@"Tree After: \n%@", [node.parent printTree]); 
+        NSLog(@"Tree After: \n%@", [self printTree]); 
     }
 
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
         NSLog(@"Rebalance Node with Min Capacity: %@", node); 
-        NSLog(@"Tree Before: \n%@", [node printTree]);  
+        NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.data.count > self.nodeMinimum) {
@@ -576,7 +599,7 @@
             [self mergeSiblingWithNode:node];
         }
 
-        NSLog(@"Tree After: \n%@", [node printTree]);   
+        NSLog(@"Tree After: \n%@", [self printTree]);   
     }
 }
 

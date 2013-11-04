@@ -10,7 +10,7 @@
 
 #import "NSTree.h"
 
-#define NODE_CAPACITY 2
+#define NODE_CAPACITY 3
 
 @interface NSTreeTests : XCTestCase
     @property (nonatomic, strong) NSTree *tree;
@@ -70,6 +70,18 @@
     XCTAssertTrue([self.tree containsObject:[NSNumber numberWithInt:2]], @"Couldn't find number 2");
     XCTAssertFalse([self.tree containsObject:[NSNumber numberWithInt:6]], @"Shouldn't have found number 6");  
     XCTAssertEqual(self.tree.count, 2, @"Count is not 2"); 
+}
+
+- (void)testTrueCount
+{
+    [self.tree addObject:[NSNumber numberWithInt:1]];
+    XCTAssertEqual([self.tree trueCount], 1, @"Count is not 1");  
+    XCTAssertEqual([self.tree trueCount], self.tree.count, @"trueCount != count");     
+    
+    [self.tree addObject:[NSNumber numberWithInt:2]];
+    [self.tree addObject:[NSNumber numberWithInt:3]]; 
+    XCTAssertEqual([self.tree trueCount], 3, @"Count is not 3");   
+    XCTAssertEqual([self.tree trueCount], self.tree.count, @"trueCount != count");    
 }
 
 - (void)testRemoveOne
