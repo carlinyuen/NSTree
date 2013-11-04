@@ -221,13 +221,12 @@
     static NSString *KEY_COUNT = @"total";
     
     if (self.root.data.count) {
-        NSDictionary *extra = @{
+        NSMutableDictionary *extra = [@{
             KEY_COUNT: [NSNumber numberWithInt:0]
-        };
+        } mutableCopy];
         [self traverse:^bool(NSTreeNode *node, id data, id extra) {
-                [data setObject:[NSNumber 
-                    numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
-                         forKey:KEY_COUNT];
+                extra[KEY_COUNT] = [NSNumber
+                    numberWithInteger:[extra[KEY_COUNT] intValue] + 1];
                 return true;
             } extraData:extra onTree:self.root 
             withAlgorithm:NSTreeTraverseAlgorithmInorder];

@@ -82,6 +82,11 @@
     [self.tree addObject:[NSNumber numberWithInt:3]]; 
     XCTAssertEqual([self.tree trueCount], 3, @"Count is not 3");   
     XCTAssertEqual([self.tree trueCount], self.tree.count, @"trueCount != count");    
+    
+    [self.tree addObject:[NSNumber numberWithInt:4]];
+    [self.tree addObject:[NSNumber numberWithInt:5]]; 
+    XCTAssertEqual([self.tree trueCount], 5, @"Count is not 5");   
+    XCTAssertEqual([self.tree trueCount], self.tree.count, @"trueCount != count"); 
 }
 
 - (void)testRemoveOne
