@@ -602,12 +602,12 @@
         NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
-        if (node.next && node.next.data.count > self.nodeMinimum) {
+        if (node.next && node.next.data.count >= self.nodeMinimum) {
             [self rotateNode:node toRight:false];
         }
 
         // If left sibling has more than min elements, rotate right
-        else if (node.previous && node.previous.data.count > self.nodeMinimum) {
+        else if (node.previous && node.previous.data.count >= self.nodeMinimum) {
             [self rotateNode:node toRight:true]; 
         }
 
@@ -622,6 +622,8 @@
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
 {
+    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
+
     // Can't rotate if no node, no sibling when rotating, or no data in sibling
     if (!node || !node.parent || !node.parent.data.count
         || (!direction && (!node.next || !node.next.data.count)) 

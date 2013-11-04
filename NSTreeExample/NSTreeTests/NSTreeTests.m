@@ -142,6 +142,21 @@
     }
     
     XCTAssertTrue([self.tree removeObject:@1], @"Could not remove 1");
+    NSNumber *min = [self.tree minimum];
+    XCTAssertNotNil(min, @"Min is nil");
+    XCTAssertEqual(min, @2, @"Min is not 2");
+    
+    XCTAssertTrue([self.tree removeObject:@4], @"Could not remove 4"); 
+    XCTAssertFalse([self.tree containsObject:@4], @"Shouldn't find number 4");  
+    
+    XCTAssertFalse([self.tree removeObject:@4], @"Should not be able to remove 4");  
+    
+    XCTAssertTrue([self.tree removeObject:@8], @"Could not remove 8");  
+    XCTAssertTrue([self.tree removeObject:@6], @"Could not remove 6");   
+    XCTAssertTrue([self.tree removeObject:@9], @"Could not remove 9");   
+    
+    XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count");
+    XCTAssertEqual(self.tree.count, 5, @"Count != 5");
 }
 
 
