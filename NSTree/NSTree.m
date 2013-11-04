@@ -139,6 +139,20 @@
     return self;
 }
 
+/** @brief Create tree with a certain number of allowable children using the given array of objects as its base data */
+- (id)initWithNodeCapacity:(int)nodeCapacity withObjects:(NSArray *)data
+{
+    self = [super init];
+    if (self) {
+        _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
+        _nodeMinimum = _nodeCapacity / 2; 
+        _root = [NSTreeNode new]; 
+        
+        // TODO
+    }
+    return self;
+}
+
 /** @brief Description when printed using NSLog */
 - (NSString *)description 
 {
@@ -572,7 +586,7 @@
             [node.children removeObjectsInRange:
                 NSMakeRange(childIndex, node.children.count - childIndex)]; 
         }
-
+        
         // Change sibling pointers
         newRightNode.next = node.next;
         newRightNode.previous = node;
@@ -680,19 +694,61 @@
         return;
     }
     
+    // Setup for merge
+    NSTreeNode *leftNode, *rightNode, *parent;
+    
     // Merge with right node if possible
-    if (node.next)
+    if (node.next && node.next.parent == node.parent)
     {
+        leftNode = node;
+        rightNode = node.next;
     }
-    
     // If we can't merge with right node, merge left
-    else if (node.previous)
+    else if (node.previous && node.previous.parent == node.parent)
     {
+        leftNode = node.previous;
+        rightNode = node;
     }
-    
     // This shouldn't happen
     else {
         NSLog(@"Warning! Reached end of merge with no siblings!");
+        return;
+    }
+    
+    // Find index of separator object in parent
+    parent = leftNode.parent;
+    int index = [parent indexOfChildNode:leftNode];
+    
+    // Transfer data & children over from parent / right node
+    [leftNode.data addObject:parent.data[index]];
+    for (int i = 0; i < rightNode.data.count; ++i) {
+        [leftNode.data addObject:rightNode.data[i]];
+    } 
+    for (int i = 0; i < rightNode.children.count; ++i) {
+        [leftNode.children addObject:rightNode.children[i]];
+    }
+    
+    // Clean up parent / right node
+    [parent.data removeObjectAtIndex:index];
+    [parent.children removeObjectAtIndex:index + 1];
+    leftNode.next = rightNode.next;
+    if (rightNode.next) {
+        rightNode.next.previous = leftNode;
+    }
+    rightNode.previous = rightNode.parent = nil;
+    
+    // Rebalance parent if needed
+    if (parent.data.count < self.nodeMinimum)
+    {
+        // If parent is empty root, make leftNode new root
+        if (parent == self.root && parent.data.count == 0)
+        {
+            parent.previous = parent.next = parent.parent = nil;
+            self.root = leftNode;
+        }
+        else {
+            [self rebalanceNode:parent];
+        }
     }
 }
 
