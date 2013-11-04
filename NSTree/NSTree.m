@@ -550,20 +550,20 @@
         int childIndex = ceil(node.data.count / 2.0); 
         id object = node.data[middle];
 
-        // Iterate through data & children and move into new nodes
+        // Iterate through data & children from middle + 1 and add to new node
         for (int i = middle + 1; i < node.data.count; ++i) {
             [newRightNode.data addObject:node.data[i]];
         }
-        for (int i = childIndex + 1; i < node.children.count; ++i) {
+        for (int i = childIndex; i < node.children.count; ++i) {
             [node.children[i] setParent:newRightNode];
             [newRightNode.children addObject:node.children[i]];
         } 
 
-        // Remove old items from left node
+        // Remove old items from left node, including middle item
         [node.data removeObjectsInRange:
             NSMakeRange(middle, node.data.count - middle)];
 
-        // Only remove if has children
+        // Remove old children from left node if exists, including middle
         if (node.children.count) {
             [node.children removeObjectsInRange:
                 NSMakeRange(childIndex, node.children.count - childIndex)]; 
