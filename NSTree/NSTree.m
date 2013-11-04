@@ -224,10 +224,11 @@
         NSDictionary *extra = @{
             KEY_COUNT: [NSNumber numberWithInt:0]
         };
-        [self traverse:^(NSTreeNode *node, id data, id extra) {
+        [self traverse:^bool(NSTreeNode *node, id data, id extra) {
                 [data setObject:[NSNumber 
                     numberWithInt:node.data.count + [data[KEY_COUNT] intValue]] 
                          forKey:KEY_COUNT];
+                return true;
             } extraData:extra onTree:self.root 
             withAlgorithm:NSTreeTraverseAlgorithmInorder];
         return [extra[KEY_COUNT] intValue];
@@ -240,12 +241,13 @@
 - (NSString *)printTree
 {
     NSMutableString *result = [NSMutableString new];
-    [self traverse:^(NSTreeNode *node, id data, id extra) {
+    [self traverse:^bool(NSTreeNode *node, id data, id extra) {
             NSMutableString *padding = [NSMutableString new];
             for (NSTreeNode *parent = node.parent; parent; parent = parent.parent) {
                 [padding appendString:@"\t"];
             }
             [extra appendString:[NSString stringWithFormat:@"%@%@\n", padding, data]];
+            return true;
         } extraData:result onTree:self.root 
         withAlgorithm:NSTreeTraverseAlgorithmInorder];
     
@@ -264,11 +266,11 @@
 }
 
 /** @brief Traverse the tree in sorted order while executing block on every element */
-- (void)traverse:(NSTreeTraverseBlock)block extraData:(id)extra onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
+- (bool)traverse:(NSTreeTraverseBlock)block extraData:(id)extra onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
 {
     // Return condition
     if (!root) {
-        return;
+        return true;
     }
     
     // If Breadth First traversal
@@ -276,12 +278,16 @@
     {
         // Go through data
         for (int i = 0; i < root.data.count; ++i) {
-            block(root, root.data[i], extra);
+            if (!block(root, root.data[i], extra)) {
+                return false;   // If block cuts traversal short
+            }
         } 
         
         // Go to next sibling node, or next level's leftmost node
         if (root.next) {
-            [self traverse:block extraData:extra onTree:root.next withAlgorithm:algo]; 
+            if (![self traverse:block extraData:extra onTree:root.next withAlgorithm:algo]) {
+                return false;   // If block cuts traversal short 
+            }
         } 
         else  // Find next level's leftmost node
         {
@@ -293,10 +299,12 @@
             
             // Start traversal on it's leftmost child
             if (node.children.count) {
-                [self traverse:block extraData:extra onTree:node.children[0] withAlgorithm:algo];  
+                if (![self traverse:block extraData:extra onTree:node.children[0] withAlgorithm:algo]) {
+                    return false;   // Traversal cut short
+                }
             } else {
                 NSLog(@"End of Breadth First Traversal");
-                return;
+                return true;
             }
         }
     }
@@ -305,7 +313,9 @@
         if (algo == NSTreeTraverseAlgorithmPostorder) 
         {
             for (int i = 0; i < root.children.count; ++i) {
-                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo];
+                if (![self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo]) {
+                    return false;   // Traversal cut short 
+                }
             }
         }
       
@@ -315,22 +325,30 @@
             // Process subtrees in order
             if (algo == NSTreeTraverseAlgorithmInorder 
                 && i < root.children.count) {
-                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo]; 
+                if (![self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo]) {
+                    return false;   // Traversal cut short  
+                }
             }
             
             // Process data in order
             if (i < root.data.count) {
-                block(root, root.data[i], extra);
+                if (!block(root, root.data[i], extra)) {
+                    return false;   // Traversal cut short   
+                }
             }
         }
       
         if (algo == NSTreeTraverseAlgorithmPreorder) 
         {
             for (int i = 0; i < root.children.count; ++i) {
-                [self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo];
+                if (![self traverse:block extraData:extra onTree:root.children[i] withAlgorithm:algo]) {
+                    return false;   // Traversal cut short    
+                }
             }
         }
     }
+    
+    return true;    // Made it through traversal
 }
 
 

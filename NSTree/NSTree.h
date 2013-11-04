@@ -44,7 +44,13 @@ typedef enum {
     
 } NSTreeTraverseAlgorithm;
 
-typedef void(^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
+/** @brief Traversal block for calling a function on data as we traverse through the tree.
+    @param node Node on which the data currently resides
+    @param data Object data stored in tree that we are traversing over
+    @param extra Extra object data passed by user in the call to the traverse: method, this is useful for doing things like aggregate calculations.
+    @return bool TRUE to continue traversing, FALSE to stop.
+*/
+typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
 
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
     @property (nonatomic, assign, readonly) int count;
@@ -79,10 +85,16 @@ typedef void(^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
     /** @brief Returns object at index, or nil if none / out of bounds */
     - (id)objectAtIndex:(int)index;
 
-    /** @brief Traverse the tree in sorted order while executing block on every element */
-- (void)traverse:(NSTreeTraverseBlock)block 
-       extraData:(id)data 
-          onTree:(NSTreeNode *)root 
-   withAlgorithm:(NSTreeTraverseAlgorithm)algo;
+    /** @brief Traverse the tree in sorted order while executing block on every element
+        @param block Traversal block to be called on data as we traverse 
+        @param extra User defined object that will be passed to block to help do things like aggregate calculations.
+        @param root Tree to traverse starting at given node
+        @param algo Traversal algorithm: inorder, postorder, preorder, bfs
+        @return bool TRUE if traversed through entire tree, FALSE if cut short by traversal block
+    */
+    - (bool)traverse:(NSTreeTraverseBlock)block 
+           extraData:(id)extra 
+              onTree:(NSTreeNode *)root 
+       withAlgorithm:(NSTreeTraverseAlgorithm)algo;
 
 @end
