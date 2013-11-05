@@ -39,12 +39,21 @@
 /** @brief Get index of node in children array */
 - (NSUInteger)indexOfChildNode:(NSTreeNode *)child
 {
-    return [self.children indexOfObject:child 
-                          inSortedRange:NSMakeRange(0, self.children.count) 
-                                options:NSBinarySearchingFirstEqual
-                        usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                            return [obj1 compare:obj2];
-                        }];
+    return [self.children indexOfObject:child];
+    
+    // Binary search method
+//    [self.children indexOfObject:child 
+//                          inSortedRange:NSMakeRange(0, self.children.count) 
+//                                options:NSBinarySearchingFirstEqual
+//                        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+//                            NSTreeNode *n1 = (NSTreeNode *)obj1;
+//                            NSTreeNode *n2 = (NSTreeNode *)obj2; 
+//                            if (n1 == n2) {
+//                                return NSOrderedSame;
+//                            } else {
+//                                return [n1.data[0] compare:n2.data[0]];
+//                            } 
+//                        }];
 }
 
 /** @brief Get index of object in data array */
@@ -675,11 +684,21 @@
     int indexOfRemove = (direction ? sibling.data.count - 1 : 0); 
     [node.parent.data replaceObjectAtIndex:indexOfParentData 
                                 withObject:sibling.data[indexOfRemove]];
+    [sibling.data removeObjectAtIndex:indexOfRemove];
     
     // Also move corresponding child of sibling to node if needed
-    if (sibling.children.count) {
-        [node.children insertObject:sibling.children[indexOfRemove] 
-                            atIndex:indexOfInsert];
+    if (sibling.children.count) 
+    {
+        indexOfRemove += (direction ? 1 : 0);   // +1 if rotating right
+        NSTreeNode *child = sibling.children[indexOfRemove];
+        
+        // Move to node
+        indexOfInsert += (direction ? 0 : 1);   // +1 if rotating left
+        [node.children insertObject:child atIndex:indexOfInsert];
+        child.parent = node;    // Change parents, but siblings are the same 
+        
+        // Remove from sibling
+        [sibling.children removeObjectAtIndex:indexOfRemove];
     }
 }
 
@@ -735,7 +754,7 @@
     if (rightNode.next) {
         rightNode.next.previous = leftNode;
     }
-    rightNode.previous = rightNode.parent = nil;
+    rightNode.next = rightNode.previous = rightNode.parent = nil;
     
     // Rebalance parent if needed
     if (parent.data.count < self.nodeMinimum)
