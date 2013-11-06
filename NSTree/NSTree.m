@@ -753,6 +753,8 @@
         rightNode.next.previous = leftNode;
     }
     rightNode.next = rightNode.previous = rightNode.parent = nil;
+    [rightNode.children removeAllObjects];
+    [rightNode.data removeAllObjects]; 
     
     // Rebalance parent if needed
     if (parent.data.count < self.nodeMinimum)
@@ -761,6 +763,8 @@
         if (parent == self.root && parent.data.count == 0)
         {
             parent.previous = parent.next = parent.parent = nil;
+            [parent.children removeAllObjects];
+            leftNode.parent = nil; 
             self.root = leftNode;
         }
         else {
