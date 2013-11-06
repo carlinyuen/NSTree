@@ -221,7 +221,7 @@
 - (id)minimum
 {
     if (self.root.data.count) {
-        NSTreeNode *node = [self getLeftMostNode];
+        NSTreeNode *node = [self getLeftMostNode:self.root];
         if (node.data && node.data.count) {
             return [node.data objectAtIndex:0];
         } else {
@@ -236,7 +236,7 @@
 - (id)maximum
 {
     if (self.root.data.count) {
-        NSArray *data = [[self getRightMostNode] data];
+        NSArray *data = [[self getRightMostNode:self.root] data];
         return [data objectAtIndex:data.count - 1]; 
     }
     
@@ -465,14 +465,16 @@
             return false;
         }
         
-        // Replace with largest value from left child
-        NSTreeNode *leftChild = node.children[index];
-        id replacementObject = leftChild.data[leftChild.data.count-1];
-        [node.data replaceObjectAtIndex:index 
-            withObject:replacementObject];
+        // Replace with largest value from left subtree
+        NSTreeNode *child = [self getRightMostNode:node.children[index]];
+        id replacementObject = child.data[child.data.count - 1];
+        [node.data replaceObjectAtIndex:index withObject:replacementObject];
+        [child.data removeObjectAtIndex:child.data.count - 1];
         
-        // Tell child to remove the replaced object
-        return [self removeObject:replacementObject fromNode:leftChild];
+        // Rebalance child node if needed
+        [self rebalanceNode:child];
+        
+        return true;
     }
 }
 
@@ -541,10 +543,8 @@
     }
 }
 
-- (NSTreeNode *)getLeftMostNode
+- (NSTreeNode *)getLeftMostNode:(NSTreeNode *)node
 {
-    NSTreeNode *node = self.root;
-    
     while (node.children.count) {
         node = node.children[0];
     }
@@ -552,10 +552,8 @@
     return node;
 }
 
-- (NSTreeNode *)getRightMostNode
+- (NSTreeNode *)getRightMostNode:(NSTreeNode *)node
 {
-    NSTreeNode *node = self.root;
-    
     while (node.children.count) {
         node = node.children[node.children.count-1];
     }
@@ -787,7 +785,7 @@ typedef enum {
     {
         state->mutationsPtr = &state->extra[NSTreeFastEnumerationStateMutations];
         state->extra[NSTreeFastEnumerationStateCurrentNode] 
-            = (unsigned long)[self getLeftMostNode];
+            = (unsigned long)[self getLeftMostNode:self.root];
         state->extra[NSTreeFastEnumerationStateCurrentNodeIndex] = 0;
     }
    
