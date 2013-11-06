@@ -149,15 +149,13 @@
 }
 
 /** @brief Create tree with a certain number of allowable children using the given array of objects as its base data */
-- (id)initWithNodeCapacity:(int)nodeCapacity withObjects:(NSArray *)data
+- (id)initWithNodeCapacity:(int)nodeCapacity withSortedObjects:(NSArray *)data
 {
     self = [super init];
     if (self) {
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
-        _root = [NSTreeNode new]; 
-        
-        // TODO
+        _root = [self buildTreeWithData:data];
     }
     return self;
 }
@@ -166,6 +164,16 @@
 - (NSString *)description 
 {
     return [self printTree];    // Print whole tree
+}
+
+/** @brief Construct tree using given array of object data. 
+    @param data NSArray of objects, must be sorted. 
+    @return NSTreeNode * Root of data tree.
+*/
+- (NSTreeNode *)buildTreeWithData:(NSArray *)data
+{
+    // TODO
+    return nil;
 }
 
 
@@ -702,7 +710,6 @@
 
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
-    // TODO
     NSLog(@"Merge on node: %@", node);
     
     // Sanity checks: need siblings or node to exist

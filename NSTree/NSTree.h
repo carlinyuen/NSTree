@@ -58,8 +58,8 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
     /** @brief Create tree with a certain number of allowable children */
     - (id)initWithNodeCapacity:(int)nodeCapacity;
     
-    /** @brief Create tree with a certain number of allowable children using the given array of objects as its base data */
-    - (id)initWithNodeCapacity:(int)nodeCapacity withObjects:(NSArray *)data;
+    /** @brief Create tree with a certain number of allowable children using the given sorted array of objects as its base data */
+    - (id)initWithNodeCapacity:(int)nodeCapacity withSortedObjects:(NSArray *)data;
 
     /** @brief Add object to tree, true if successful */
     - (bool)addObject:(id)object;
