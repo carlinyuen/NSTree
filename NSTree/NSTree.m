@@ -580,8 +580,8 @@
             [newRightNode.data addObject:node.data[i]];
         }
         for (int i = childIndex; i < node.children.count; ++i) {
-            [node.children[i] setParent:newRightNode];
             [newRightNode.children addObject:node.children[i]];
+            [node.children[i] setParent:newRightNode]; 
         } 
 
         // Remove old items from left node, including middle item
@@ -703,7 +703,7 @@
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
     // TODO
-    NSLog(@"Merge");
+    NSLog(@"Merge on node: %@", node);
     
     // Sanity checks: need siblings or node to exist
     if (!node || (!node.previous && !node.next)) {
@@ -743,6 +743,7 @@
     } 
     for (int i = 0; i < rightNode.children.count; ++i) {
         [leftNode.children addObject:rightNode.children[i]];
+        [rightNode.children[i] setParent:leftNode]; 
     }
     
     // Clean up parent / right node
