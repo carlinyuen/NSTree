@@ -189,7 +189,7 @@
         }
         
         // Fill it with capacity + 1 data
-        for (int j = 0; j <= nodeCapacity; ++j, ++i) {
+        for (int j = 0; j < nodeCapacity; ++j, ++i) {
             [child.data addObject:data[i]];
         }
         
@@ -197,44 +197,52 @@
         [children addObject:child];
     }
     
-    // Create parents using children
-    prev = nil;
-    for (int i = 0; i < children.count; ++i)
+    // Build rest of tree from leaves
+    while (children.count > 1)
     {
-        // Create parent node, set pointers
-        parent = [NSTreeNode new];
-        if (prev) {
-            parent.previous = prev; 
-            prev.next = parent;
-        } else {
-            prev = parent;
-        }
+        // Setup for next level
+        parents = [NSMutableArray new]; 
+        prev = nil; 
         
-        // Fill it with data & children
-        for (int j = 0; j < nodeCapacity; ++j, ++i) 
+        // Create parents using children
+        for (int i = 0; i < children.count; ++i)
         {
+            // Create parent node, set pointers
+            parent = [NSTreeNode new];
+            if (prev) {
+                parent.previous = prev; 
+                prev.next = parent;
+            } else {
+                prev = parent;
+            }
+            
+            // Fill it with data & children
+            for (int j = 0; j < nodeCapacity; ++j, ++i) 
+            {
+                child = children[i];
+                int index = child.data.count - 1;
+                
+                // Add child
+                [parent.children addObject:child];
+                child.parent = parent;
+                
+                // Add data from end of child
+                [parent.data addObject:child.data[index]];
+                [child.data removeObjectAtIndex:index];
+            }
+            
+            // Add last child
             child = children[i];
-            int index = child.data.count - 1;
+            [parent.children addObject:child]; 
             
-            // Add child
-            [parent.children addObject:child];
-            child.parent = parent;
-            
-            // Add data from end of child
-            [parent.data addObject:child.data[index]];
-            [child.data removeObjectAtIndex:index];
+            // Add parent to array
+            [parents addObject:parent];
         }
         
-        // Add last child
-        child = children[i];
-        [parent.children addObject:child]; 
-        
-        // Add parent to array
-        [parents addObject:parent];
+        children = parents;
     }
-    
 
-    return nil;
+    return children[0];
 }
 
 
