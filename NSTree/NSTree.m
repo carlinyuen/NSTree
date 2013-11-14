@@ -156,6 +156,7 @@
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
         _root = [self buildTreeWithNodeCapacity:_nodeCapacity withSortedObjects:data];
+        _count = data.count;
     }
     return self;
 }
@@ -644,7 +645,7 @@
     if (node.data.count >= self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
-        NSLog(@"Tree Before: \n%@", [self printTree]);
+//        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
@@ -695,14 +696,14 @@
             self.root = newRootNode;
         }
 
-        NSLog(@"Tree After: \n%@", [self printTree]); 
+//        NSLog(@"Tree After: \n%@", [self printTree]); 
     }
 
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
         NSLog(@"Rebalance Node with Min Capacity: %@", node); 
-        NSLog(@"Tree Before: \n%@", [self printTree]);  
+//        NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.parent == node.parent
@@ -721,7 +722,7 @@
             [self mergeSiblingWithNode:node];
         }
 
-        NSLog(@"Tree After: \n%@", [self printTree]);   
+//        NSLog(@"Tree After: \n%@", [self printTree]);   
     }
 }
 

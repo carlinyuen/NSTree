@@ -133,6 +133,8 @@
     XCTAssertNotNil(max, @"Max is nil");   
     XCTAssertEqual(min, @1, @"Min is not 1");
     XCTAssertEqual(max, @10, @"Max is not 10"); 
+    
+    NSLog(@"TREE: \n%@", [self.tree printTree]); 
 }
 
 - (void)testRemoveMany
@@ -157,6 +159,22 @@
     
     XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count");
     XCTAssertEqual(self.tree.count, 5, @"Count != 5");
+}
+
+- (void)textBulkLoad
+{
+    NSMutableArray *data = [NSMutableArray new];
+    for (int i = 1; i <= 10; ++i) {
+        [data addObject:@(i)];
+    }
+    
+    self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:data];
+    
+    XCTAssertTrue(self.tree, @"Tree does not exist");
+    XCTAssertEqual(self.tree.count, data.count, @"Tree count not 10"); 
+    XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
+    
+    NSLog(@"TREE: \n%@", [self.tree printTree]);
 }
 
 
