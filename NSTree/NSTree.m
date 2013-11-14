@@ -190,7 +190,7 @@
         }
         
         // Fill it with capacity + 1 data
-        for (int j = 0; j < nodeCapacity; ++j, ++i) {
+        for (int j = 0; j < nodeCapacity && i < data.count; ++j, ++i) {
             [child.data addObject:data[i]];
         }
         
@@ -218,7 +218,7 @@
             }
             
             // Fill it with data & children
-            for (int j = 0; j < nodeCapacity; ++j, ++i) 
+            for (int j = 0; j < nodeCapacity && i < children.count; ++j, ++i) 
             {
                 child = children[i];
                 int index = child.data.count - 1;

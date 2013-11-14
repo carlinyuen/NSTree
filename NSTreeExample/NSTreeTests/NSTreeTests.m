@@ -161,7 +161,7 @@
     XCTAssertEqual(self.tree.count, 5, @"Count != 5");
 }
 
-- (void)textBulkLoad
+- (void)testBulkLoad
 {
     NSMutableArray *data = [NSMutableArray new];
     for (int i = 1; i <= 10; ++i) {
