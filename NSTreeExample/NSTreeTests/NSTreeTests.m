@@ -171,7 +171,7 @@
     self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:data];
     
     XCTAssertTrue(self.tree, @"Tree does not exist");
-    XCTAssertEqual(self.tree.count, data.count, @"Tree count not 10"); 
+    XCTAssertEqual(self.tree.count, (int)data.count, @"Tree count not 10"); 
     XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
     
     NSLog(@"TREE: \n%@", [self.tree printTree]);
