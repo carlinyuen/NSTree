@@ -203,7 +203,7 @@
     // Build rest of tree from leaves
     while (children.count > 1)
     {
-        NSLog(@"CHILDREN: \n%@", children);
+//        NSLog(@"CHILDREN: \n%@", children);
     
         // Setup for next level
         parents = [NSMutableArray new]; 
@@ -688,7 +688,7 @@
     // If node is at capacity, need to split
     if (node.data.count > self.nodeCapacity)
     {
-        NSLog(@"Rebalance Node with Max Capacity: %@", node);
+//        NSLog(@"Rebalance Node with Max Capacity: %@", node);
 //        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
@@ -741,7 +741,7 @@
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
-        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
+//        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
 //        NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
@@ -767,7 +767,7 @@
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
 {
-    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
+//    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
 
     // Can't rotate if no node, no siblings in direction to rotate, 
     //  or no data in sibling, or siblings not from same parent
@@ -819,7 +819,7 @@
 
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
-    NSLog(@"Merge on node: %@", node);
+//    NSLog(@"Merge on node: %@", node);
     
     // Sanity checks: need siblings or node to exist
     if (!node || (!node.previous && !node.next)) {
