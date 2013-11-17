@@ -684,16 +684,16 @@
     if (node.data.count > self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
-        NSLog(@"Tree Before: \n%@", [self printTree]);
+//        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
         int middle = node.data.count / 2;
-        int childIndex = ceil(node.data.count / 2.0); 
+        int childIndex = middle + 1;
         id object = node.data[middle];
 
         // Iterate through data & children from middle + 1 and add to new node
-        for (int i = middle + 1; i < node.data.count; ++i) {
+        for (int i = childIndex; i < node.data.count; ++i) {
             [newRightNode.data addObject:node.data[i]];
         }
         for (int i = childIndex; i < node.children.count; ++i) {
@@ -730,7 +730,7 @@
             self.root = newRootNode;
         }
 
-        NSLog(@"Tree After: \n%@", [self printTree]); 
+//        NSLog(@"Tree After: \n%@", [self printTree]); 
     }
 
     // If node is below min capacity (and not the root), need to join

@@ -151,7 +151,7 @@
     XCTAssertNotNil(min, @"Min is nil");
     XCTAssertNotNil(max, @"Max is nil");   
     XCTAssertEqual(min, @1, @"Min is not 1");
-    XCTAssertEqual(max, @(addAmount), @"Max is not 100"); 
+    XCTAssertEqual([max intValue], addAmount, @"Max is not 100"); 
     
     NSLog(@"TREE: \n%@", [self.tree printTree]); 
 }
