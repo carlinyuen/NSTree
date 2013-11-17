@@ -635,7 +635,7 @@
                     return false;   // Traversal cut short
                 }
             } else {
-                NSLog(@"End of Breadth First Traversal");
+//                NSLog(@"End of Breadth First Traversal");
                 return true;
             }
         }
