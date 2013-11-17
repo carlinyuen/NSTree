@@ -189,8 +189,10 @@
             prev = child;
         }
         
-        // Fill it with capacity + 1 data
-        for (int j = 0; j < nodeCapacity && i < data.count; ++j, ++i) {
+        // Fill it with max capacity + 1 data, except for last node
+        int fillCount = nodeCapacity 
+            + (data.count - i > nodeCapacity + 1 ? 1 : 0);
+        for (int j = 0; j < fillCount && i < data.count; ++j, ++i) {
             [child.data addObject:data[i]];
         }
         
@@ -206,7 +208,7 @@
         prev = nil; 
         
         // Create parents using children
-        for (int i = 0; i < children.count; ++i)
+        for (int i = 0; i < children.count - 1; ++i)
         {
             // Create parent node, set pointers
             parent = [NSTreeNode new];
@@ -218,14 +220,16 @@
             }
             
             // Fill it with data & children
-            for (int j = 0; j < nodeCapacity && i < children.count; ++j, ++i) 
+            int fillCount = nodeCapacity 
+                + (children.count - i > nodeCapacity + 1 ? 1 : 0); 
+            for (int j = 0; j < fillCount && i < children.count - 1; ++j, ++i) 
             {
-                child = children[i];
+                child = children[i];  
                 int index = child.data.count - 1;
-                
+                               
                 // Add child
                 [parent.children addObject:child];
-                child.parent = parent;
+                child.parent = parent; 
                 
                 // Add data from end of child
                 [parent.data addObject:child.data[index]];
@@ -234,7 +238,8 @@
             
             // Add last child
             child = children[i];
-            [parent.children addObject:child]; 
+            [parent.children addObject:child];
+            child.parent = parent;  
             
             // Add parent to array
             [parents addObject:parent];
@@ -642,7 +647,7 @@
 - (void)rebalanceNode:(NSTreeNode *)node
 {
     // If node is at capacity, need to split
-    if (node.data.count >= self.nodeCapacity)
+    if (node.data.count > self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
 //        NSLog(@"Tree Before: \n%@", [self printTree]);
