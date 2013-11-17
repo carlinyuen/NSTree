@@ -156,6 +156,22 @@
     NSLog(@"TREE: \n%@", [self.tree printTree]); 
 }
 
+- (void)testAdd1000000
+{
+    int addAmount = 1000000;
+    for (int i = 1; i <= addAmount; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    XCTAssertEqual(self.tree.count, addAmount, @"Count is not 1000000");   
+    
+    NSNumber *min = [self.tree minimum];
+    NSNumber *max = [self.tree maximum]; 
+    XCTAssertNotNil(min, @"Min is nil");
+    XCTAssertNotNil(max, @"Max is nil");   
+    XCTAssertEqual(min, @1, @"Min is not 1");
+    XCTAssertEqual([max intValue], addAmount, @"Max is not 1000000"); 
+}
+
 - (void)testRemoveMany
 {
     for (int i = 1; i <= 10; ++i) {
@@ -210,6 +226,19 @@
     XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
     
     NSLog(@"TREE: \n%@", [self.tree printTree]);
+}
+
+- (void)testBulkLoad1000000
+{
+    NSMutableArray *data = [NSMutableArray new];
+    for (int i = 1; i <= 1000000; ++i) {
+        [data addObject:@(i)];
+    }
+    
+    self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:data];
+    
+    XCTAssertEqual(self.tree.count, (int)data.count, @"Tree count != data count"); 
+    XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
 }
 
 - (void)testTraverseInorder
@@ -282,7 +311,7 @@
 
 - (void)testCache
 {
-    int addAmount = 10;
+    int addAmount = 100;
     for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
@@ -309,7 +338,7 @@
 
 - (void)testObjectAtIndex
 {
-    int addAmount = 10;
+    int addAmount = 100;
     for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
