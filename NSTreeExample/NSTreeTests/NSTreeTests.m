@@ -354,7 +354,7 @@
 
 - (void)testFastEnumeration
 {
-    int addAmount = 100;
+    int addAmount = 10;
     for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
