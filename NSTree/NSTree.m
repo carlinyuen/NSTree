@@ -119,8 +119,11 @@
     @property (nonatomic, assign, readwrite) int count;
     
     // Cache and flag for quick access
-    @property (nonatomic, assign) bool treeChanged; 
+    @property (nonatomic, assign, readwrite) bool cacheOutdated; 
     @property (nonatomic, strong) NSArray *cache;
+    
+    // Fast enumeration
+    @property (nonatomic, assign) bool fastEnumerating;  
 @end
 
 
@@ -135,7 +138,8 @@
     if (self) {
         _nodeCapacity = DEFAULT_NODE_CAPACITY;
         _nodeMinimum = _nodeCapacity / 2;
-        _treeChanged = false;
+        _cacheOutdated = false;
+        _fastEnumerating = false; 
         _root = [NSTreeNode new];
     }
     return self;
@@ -148,7 +152,8 @@
     if (self) {
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
-        _treeChanged = false; 
+        _cacheOutdated = false; 
+        _fastEnumerating = false; 
         _root = [NSTreeNode new]; 
     }
     return self;
@@ -161,7 +166,8 @@
     if (self) {
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
-        _treeChanged = false;  
+        _cacheOutdated = false;  
+        _fastEnumerating = false; 
         _root = [self buildTreeWithNodeCapacity:_nodeCapacity withSortedObjects:data];
         _count = data.count;
     }
@@ -276,7 +282,7 @@
     if ([self addObject:object withChild:nil toNode:
          [self getLeafNodeForObject:object inNode:self.root]]) {
         self.count++;
-        self.treeChanged = true;
+        self.cacheOutdated = true;
         return true;
     }
     return false;
@@ -292,7 +298,7 @@
     if ([self removeObject:object fromNode:
          [self getNodeThatContains:object inBranch:self.root]]) {
         self.count--;
-        self.treeChanged = true; 
+        self.cacheOutdated = true; 
         return true;
     }
     return false;
@@ -344,16 +350,21 @@
 - (NSArray *)toArray
 {
     // Check cache & rebuild if necessary
-    if (!self.cache || self.treeChanged) {
+    if (!self.cache || self.cacheOutdated) {
         [self rebuildCache];
     } 
     
     return self.cache;
 }
 
-/** @brief Rebuild cache for fast access, returns self for chaining */
-- (NSTree *)rebuildCache
+/** @brief Rebuild cache for fast access, returns false if cache could not be refreshed (probably due to someone iterating over it) */
+- (bool)rebuildCache
 {
+    // Don't rebuild cache if fast enumerating
+    if (self.fastEnumerating) {
+        return false;
+    }
+    
     NSMutableArray *storage = [NSMutableArray new];
     
     // Traverse and add data into array in order
@@ -367,9 +378,9 @@
     
     // Set cache, clear flag
     self.cache = storage;
-    self.treeChanged = false;
+    self.cacheOutdated = false;
     
-    return self;
+    return true;
 }
 
 /** @brief Returns number of elements in tree */
@@ -419,7 +430,7 @@
     }
    
     // Check cache & rebuild if necessary
-    if (!self.cache || self.treeChanged) {
+    if (!self.cache || self.cacheOutdated) {
         [self rebuildCache];
     } 
     
@@ -944,58 +955,41 @@
 
 #pragma mark - NSFastEnumeration
 
-typedef enum {
-    NSTreeFastEnumerationStateMutations,
-    NSTreeFastEnumerationStateCurrentNode,  
-    NSTreeFastEnumerationStateCurrentNodeIndex
-} NSTreeFastEnumerationState;
-
-// TODO: Proper fast enumeration
+/** @brief Implementing fast enumeration in a simple way, using our cache */
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id *)stackbuf count:(NSUInteger)len
 {
     // First-time setup
     if (state->state == 0)
     {
-        state->mutationsPtr = &state->extra[NSTreeFastEnumerationStateMutations];
-        state->extra[NSTreeFastEnumerationStateCurrentNode] 
-            = (unsigned long)[self getLeftMostNode:self.root];
-        state->extra[NSTreeFastEnumerationStateCurrentNodeIndex] = 0;
+        // Track when mutations happen
+        state->mutationsPtr = (unsigned long *)&_cacheOutdated;
+        
+        // Set flags
+        self.fastEnumerating = true;
     }
    
-    // Get current node
-    NSTreeNode *currentNode = (__bridge NSTreeNode *)((void *)state->extra[NSTreeFastEnumerationStateCurrentNode]);   
-    
-    // Loop as long as currentNode exists
-    if (currentNode)
+    // Loop as long as more data is available
+    if (state->state < self.count)
     {
         // Keep track of # items returned, index for iterating
-        NSUInteger i = state->extra[NSTreeFastEnumerationStateCurrentNodeIndex]; 
         NSUInteger count = 0; 
         
         // Get current node, iterate and fill stackbuf
-        while ((currentNode != nil) && (count < len))
+        while (state->state < self.count && (count < len))
         {
-            stackbuf[count] = currentNode.data[i++];
+            stackbuf[count] = [self objectAtIndex:state->state];
             state->state++;
             count++;
-            
-            // If we reach end of data array, hop to next node
-            if (i >= currentNode.data.count) {
-                currentNode = currentNode.next; 
-                i = 0;
-            }
         }
-        
-        // Store state back for next loop
-        state->extra[NSTreeFastEnumerationStateCurrentNode] = (unsigned long)currentNode;
-        state->extra[NSTreeFastEnumerationStateCurrentNodeIndex] = i;
         
         // Set items returned to stackbuf, return count of items
         state->itemsPtr = stackbuf; 
         return count;
     }
     
-    return 0;   // Done iterating
+    // Done iterating, clear enumerating flag and return 0
+    self.fastEnumerating = false;
+    return 0;
 }
 
 

@@ -156,20 +156,20 @@
     NSLog(@"TREE: \n%@", [self.tree printTree]); 
 }
 
-- (void)testAdd1000000
+- (void)testAdd10000
 {
-    int addAmount = 1000000;
+    int addAmount = 10000;
     for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
-    XCTAssertEqual(self.tree.count, addAmount, @"Count is not 1000000");   
+    XCTAssertEqual(self.tree.count, addAmount, @"Count is not 10000");   
     
     NSNumber *min = [self.tree minimum];
     NSNumber *max = [self.tree maximum]; 
     XCTAssertNotNil(min, @"Min is nil");
     XCTAssertNotNil(max, @"Max is nil");   
     XCTAssertEqual(min, @1, @"Min is not 1");
-    XCTAssertEqual([max intValue], addAmount, @"Max is not 1000000"); 
+    XCTAssertEqual([max intValue], addAmount, @"Max is not 10000"); 
 }
 
 - (void)testRemoveMany
@@ -349,6 +349,19 @@
         NSNumber *object = [self.tree objectAtIndex:i];
         XCTAssertNotNil(object, @"Object nil at index %i", i);
         XCTAssertEqual([object intValue], i + 1, @"Object not equal at index %i", i);
+    }
+}
+
+- (void)testFastEnumeration
+{
+    int addAmount = 100;
+    for (int i = 1; i <= addAmount; ++i) {
+        [self.tree addObject:@(i)];
+    }
+     
+    // Fast Enum
+    for (id object in self.tree) {
+        NSLog(@"Object: %@", object);
     }
 }
 
