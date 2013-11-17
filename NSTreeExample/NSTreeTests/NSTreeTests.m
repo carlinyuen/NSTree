@@ -354,7 +354,7 @@
 
 - (void)testFastEnumeration
 {
-    int addAmount = 10;
+    int addAmount = 100;
     for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
@@ -362,7 +362,6 @@
     // Fast Enum
     int i = 0;
     for (id object in self.tree) {
-        NSLog(@"%@", object);
         XCTAssertNotNil(object, @"Object nil in FE at index %i", i);
         XCTAssertEqual([object intValue], i + 1, @"Object not equal in FE at index %i", i); 
         i++;
