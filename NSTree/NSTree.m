@@ -203,12 +203,14 @@
     // Build rest of tree from leaves
     while (children.count > 1)
     {
+        NSLog(@"CHILDREN: \n%@", children);
+    
         // Setup for next level
         parents = [NSMutableArray new]; 
         prev = nil; 
         
         // Create parents using children
-        for (int i = 0; i < children.count - 1; ++i)
+        for (int i = 0; i < children.count - 1; )
         {
             // Create parent node, set pointers
             parent = [NSTreeNode new];
@@ -237,9 +239,12 @@
             }
             
             // Add last child
-            child = children[i];
-            [parent.children addObject:child];
-            child.parent = parent;  
+            if (i == children.count - 1)
+            {
+                child = children[i];
+                [parent.children addObject:child];
+                child.parent = parent;  
+            }
             
             // Add parent to array
             [parents addObject:parent];
