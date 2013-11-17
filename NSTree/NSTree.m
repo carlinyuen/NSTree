@@ -415,12 +415,12 @@
     // Add child if exists, need to add right after data insertion
     if (child) 
     {
-        if (index+1 > node.children.count) {
+        if (index + 1 > node.children.count) {
             NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
         }
         
         // Insert & change parent pointer
-        [node.children insertObject:child atIndex:index+1];
+        [node.children insertObject:child atIndex:index + 1];
         child.parent = node;
         
         // Switch up sibling pointers
@@ -433,8 +433,8 @@
         else    // This shouldn't happen, but check other side
         {
             NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
-            if (node.children.count < index+2) {
-                sibling = node.children[index+2];
+            if (node.children.count < index + 2) {
+                sibling = node.children[index + 2];
                 if (sibling) {
                     child.previous = sibling.previous;
                     child.next = sibling;
@@ -684,7 +684,7 @@
     if (node.data.count > self.nodeCapacity)
     {
         NSLog(@"Rebalance Node with Max Capacity: %@", node);
-//        NSLog(@"Tree Before: \n%@", [self printTree]);
+        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
@@ -711,11 +711,6 @@
                 NSMakeRange(childIndex, node.children.count - childIndex)]; 
         }
         
-        // Change sibling pointers
-        newRightNode.next = node.next;
-        newRightNode.previous = node;
-        node.next = newRightNode;
-        
         // Add to parent, if exists
         if (node.parent) {
             [self addObject:object withChild:newRightNode toNode:node.parent];
@@ -735,7 +730,7 @@
             self.root = newRootNode;
         }
 
-//        NSLog(@"Tree After: \n%@", [self printTree]); 
+        NSLog(@"Tree After: \n%@", [self printTree]); 
     }
 
     // If node is below min capacity (and not the root), need to join

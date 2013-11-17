@@ -271,10 +271,10 @@
     NSLog(@"Tree: \n%@", [self.tree printTree]);
     
     NSMutableArray *storage = [NSMutableArray new];
-//    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
-//        [(NSMutableArray *)extra addObject:data];
-//        return true;
-//    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmBreadthFirst];
+    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
+        [(NSMutableArray *)extra addObject:data];
+        return true;
+    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmBreadthFirst];
     
     XCTAssertEqual((int)storage.count, self.tree.count, @"Tree count != traverse count");
     NSLog(@"Traverse: %@", storage);
