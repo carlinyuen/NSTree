@@ -33,10 +33,10 @@ typedef enum {
     /** Traverses data in sorted order */
     NSTreeTraverseAlgorithmInorder,
     
-    /** Traverses node data first, then its branches in order */ 
+    /** Traverses node data first in order, then its branches in order */ 
     NSTreeTraverseAlgorithmPreorder, 
     
-    /** Traverses node branches first, then its data */  
+    /** Traverses node branches first in order, then its data */  
     NSTreeTraverseAlgorithmPostorder, 
     
     /** Traverses tree one level at a time, in order */   
@@ -91,13 +91,11 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
     /** @brief Traverse the tree in sorted order while executing block on every element
         @param block Traversal block to be called on data as we traverse 
         @param extra User defined object that will be passed to block to help do things like aggregate calculations.
-        @param root Tree to traverse starting at given node
         @param algo Traversal algorithm: inorder, postorder, preorder, bfs
         @return bool TRUE if traversed through entire tree, FALSE if cut short by traversal block
     */
     - (bool)traverse:(NSTreeTraverseBlock)block 
            extraData:(id)extra 
-              onTree:(NSTreeNode *)root 
        withAlgorithm:(NSTreeTraverseAlgorithm)algo;
 
 @end

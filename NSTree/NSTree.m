@@ -371,11 +371,228 @@
         return nil;
     }
    
-    // TODO
+    // TODO: Object at index
     return nil;
 }
 
-/** @brief Traverse the tree in sorted order while executing block on every element */
+/** @brief Traverse the tree in sorted order while executing block on every element
+    @param block Traversal block to be called on data as we traverse 
+    @param extra User defined object that will be passed to block to help do things like aggregate calculations.
+    @param algo Traversal algorithm: inorder, postorder, preorder, bfs
+    @return bool TRUE if traversed through entire tree, FALSE if cut short by traversal block
+*/
+- (bool)traverse:(NSTreeTraverseBlock)block 
+       extraData:(id)extra 
+   withAlgorithm:(NSTreeTraverseAlgorithm)algo
+{
+   return [self traverse:block extraData:extra onTree:self.root withAlgorithm:algo]; 
+}
+
+
+#pragma mark - Tree Methods
+
+/** @brief Adds an object to a node in sorted order, with an accompanying child branch if relevant.
+    @param object Object to be added.
+    @param child Child branch to add to node after the data is added.
+    @param node Node to add the data to.
+    @return bool True if adding is successful, false if error
+*/
+- (bool)addObject:(id)object withChild:(NSTreeNode *)child toNode:(NSTreeNode *)node
+{
+    if (!object || !node) {
+        return false;
+    }
+   
+    // Find index where we should put it, and add it
+    int index = [node.data indexOfObject:object 
+                           inSortedRange:NSMakeRange(0, node.data.count) 
+                                 options:NSBinarySearchingInsertionIndex 
+                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                             return [obj1 compare:obj2];
+                         }];
+    [node.data insertObject:object atIndex:index];
+    
+    // Add child if exists, need to add right after data insertion
+    if (child) 
+    {
+        if (index+1 > node.children.count) {
+            NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
+        }
+        
+        // Insert & change parent pointer
+        [node.children insertObject:child atIndex:index+1];
+        child.parent = node;
+        
+        // Switch up sibling pointers
+        NSTreeNode *sibling = node.children[index];
+        if (sibling) {
+            child.next = sibling.next;
+            child.previous = sibling;
+            sibling.next = child;
+        } 
+        else    // This shouldn't happen, but check other side
+        {
+            NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
+            if (node.children.count < index+2) {
+                sibling = node.children[index+2];
+                if (sibling) {
+                    child.previous = sibling.previous;
+                    child.next = sibling;
+                    sibling.previous = child;
+                }
+            }
+        }
+    }
+    
+    // Rebalance as needed
+    [self rebalanceNode:node];
+    
+    return true; 
+}
+
+/** @brief Removes an object from a node
+    @param object Object to be removed.
+    @param node Node to remove object from.
+    @return bool True if removed, false if not found or if there was an error.
+*/
+- (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
+{
+    if (!object || !node || node.data.count <= 0) {
+        return false;
+    }
+    
+    // If leaf node, simple remove
+    if (!node.children.count) 
+    {
+        if ([node.data containsObject:object]) 
+        {
+            [node.data removeObject:object];
+            
+            // Rebalance as needed
+            [self rebalanceNode:node];  
+            
+            return true;
+        } 
+        else {    // This shouldn't happen
+            NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
+            return false;
+        }
+    }
+    else    // Deal with replacing separator
+    {
+        int index = [node indexOfDataObject:object];
+        if (index == NSNotFound) {
+            NSLog(@"Warning! Could not find index of object for removal: %@", object);
+            return false;
+        }
+        
+        // Replace with largest value from left subtree
+        NSTreeNode *child = [self getRightMostNode:node.children[index]];
+        id replacementObject = child.data[child.data.count - 1];
+        [node.data replaceObjectAtIndex:index withObject:replacementObject];
+        [child.data removeObjectAtIndex:child.data.count - 1];
+        
+        // Rebalance child node if needed
+        [self rebalanceNode:child];
+        
+        return true;
+    }
+}
+
+/** @brief Returns the first node that contains the given object using standard comparison rules, starting from given node branch. */
+- (NSTreeNode *)getNodeThatContains:(id)object inBranch:(NSTreeNode *)node
+{
+    if (!object || !node || !node.data.count) {
+        return nil;
+    }
+    
+    // Search for item in node data
+    int index = [node.data indexOfObject:object 
+                           inSortedRange:NSMakeRange(0, node.data.count) 
+                                 options:NSBinarySearchingInsertionIndex 
+                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                             return [obj1 compare:obj2];
+                         }];
+    
+    // If within bounds of data (note the <= count due to subtree indexing)
+    if (index >= 0 && index <= node.data.count) 
+    {
+        // Check if item is equal at index 
+        if (index < node.data.count && [node.data[index] isEqual:object]) {
+            return node;
+        }
+        
+        // If subtree doesn't exist at that index
+        if (index >= node.children.count) {
+            return nil;
+        }
+        
+        // Need to search subtree
+        return [self getNodeThatContains:object inBranch:node.children[index]];
+    } 
+    
+    return nil;
+}
+
+/** @brief Searches for and returns the appropriate leaf node for an object to be inserted, starting from given node. */
+- (NSTreeNode *)getLeafNodeForObject:(id)object inNode:(NSTreeNode *)node
+{
+    if (!object || !node) {
+        return nil;
+    }
+    
+    // If there are children, go farther down
+    if (node.children.count)
+    {
+        // Search for item in node data
+        int index = [node.data indexOfObject:object 
+                               inSortedRange:NSMakeRange(0, node.data.count) 
+                                     options:NSBinarySearchingInsertionIndex 
+                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                 return [obj1 compare:obj2];
+                             }];
+        
+        // If within bounds of children
+        if (index >= 0 && index < node.children.count) {
+            return [self getLeafNodeForObject:object 
+                                       inNode:node.children[index]];  
+        } else {
+            NSLog(@"Warning: could not find leaf node for object: %@", object);
+            return nil;     // This shouldn't happen!
+        }
+    }
+    else {  // Found the node
+        return node;
+    }
+}
+
+/** @brief Returns left-most node in tree starting from given node */
+- (NSTreeNode *)getLeftMostNode:(NSTreeNode *)node
+{
+    while (node.children.count) {
+        node = node.children[0];
+    }
+    
+    return node;
+}
+
+/** @brief Returns right-most node in tree starting from given node */
+- (NSTreeNode *)getRightMostNode:(NSTreeNode *)node
+{
+    while (node.children.count) {
+        node = node.children[node.children.count-1];
+    }
+    
+    return node;
+}
+
+/** @brief Traverse the tree in sorted order while executing block on every element
+    @param block Traversal block to be called on data as we traverse 
+    @param extra User defined object that will be passed to block to help do things like aggregate calculations.
+    @param root Tree to traverse starting at given node
+    @param algo Traversal algorithm: inorder, postorder, preorder, bfs
+    @return bool TRUE if traversed through entire tree, FALSE if cut short by traversal block
+*/
 - (bool)traverse:(NSTreeTraverseBlock)block extraData:(id)extra onTree:(NSTreeNode *)root withAlgorithm:(NSTreeTraverseAlgorithm)algo
 {
     // Return condition
@@ -459,189 +676,6 @@
     }
     
     return true;    // Made it through traversal
-}
-
-
-#pragma mark - Tree Methods
-
-- (bool)addObject:(id)object withChild:(NSTreeNode *)child toNode:(NSTreeNode *)node
-{
-    if (!object || !node) {
-        return false;
-    }
-   
-    // Find index where we should put it, and add it
-    int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count) 
-                                 options:NSBinarySearchingInsertionIndex 
-                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                             return [obj1 compare:obj2];
-                         }];
-    [node.data insertObject:object atIndex:index];
-    
-    // Add child if exists, need to add right after data insertion
-    if (child) 
-    {
-        if (index+1 > node.children.count) {
-            NSLog(@"Warning! Adding child at index greater than children count for child: %@", child);
-        }
-        
-        // Insert & change parent pointer
-        [node.children insertObject:child atIndex:index+1];
-        child.parent = node;
-        
-        // Switch up sibling pointers
-        NSTreeNode *sibling = node.children[index];
-        if (sibling) {
-            child.next = sibling.next;
-            child.previous = sibling;
-            sibling.next = child;
-        } 
-        else    // This shouldn't happen, but check other side
-        {
-            NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
-            if (node.children.count < index+2) {
-                sibling = node.children[index+2];
-                if (sibling) {
-                    child.previous = sibling.previous;
-                    child.next = sibling;
-                    sibling.previous = child;
-                }
-            }
-        }
-    }
-    
-    // Rebalance as needed
-    [self rebalanceNode:node];
-    
-    return true; 
-}
-
-- (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
-{
-    if (!object || !node || node.data.count <= 0) {
-        return false;
-    }
-    
-    // If leaf node, simple remove
-    if (!node.children.count) 
-    {
-        if ([node.data containsObject:object]) 
-        {
-            [node.data removeObject:object];
-            
-            // Rebalance as needed
-            [self rebalanceNode:node];  
-            
-            return true;
-        } 
-        else {    // This shouldn't happen
-            NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
-            return false;
-        }
-    }
-    else    // Deal with replacing separator
-    {
-        int index = [node indexOfDataObject:object];
-        if (index == NSNotFound) {
-            NSLog(@"Warning! Could not find index of object for removal: %@", object);
-            return false;
-        }
-        
-        // Replace with largest value from left subtree
-        NSTreeNode *child = [self getRightMostNode:node.children[index]];
-        id replacementObject = child.data[child.data.count - 1];
-        [node.data replaceObjectAtIndex:index withObject:replacementObject];
-        [child.data removeObjectAtIndex:child.data.count - 1];
-        
-        // Rebalance child node if needed
-        [self rebalanceNode:child];
-        
-        return true;
-    }
-}
-
-- (NSTreeNode *)getNodeThatContains:(id)object inBranch:(NSTreeNode *)node
-{
-    if (!object || !node || !node.data.count) {
-        return nil;
-    }
-    
-    // Search for item in node data
-    int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count) 
-                                 options:NSBinarySearchingInsertionIndex 
-                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                             return [obj1 compare:obj2];
-                         }];
-    
-    // If within bounds of data (note the <= count due to subtree indexing)
-    if (index >= 0 && index <= node.data.count) 
-    {
-        // Check if item is equal at index 
-        if (index < node.data.count && [node.data[index] isEqual:object]) {
-            return node;
-        }
-        
-        // If subtree doesn't exist at that index
-        if (index >= node.children.count) {
-            return nil;
-        }
-        
-        // Need to search subtree
-        return [self getNodeThatContains:object inBranch:node.children[index]];
-    } 
-    
-    return nil;
-}
-
-- (NSTreeNode *)getLeafNodeForObject:(id)object inNode:(NSTreeNode *)node
-{
-    if (!object || !node) {
-        return nil;
-    }
-    
-    // If there are children, go farther down
-    if (node.children.count)
-    {
-        // Search for item in node data
-        int index = [node.data indexOfObject:object 
-                               inSortedRange:NSMakeRange(0, node.data.count) 
-                                     options:NSBinarySearchingInsertionIndex 
-                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                 return [obj1 compare:obj2];
-                             }];
-        
-        // If within bounds of children
-        if (index >= 0 && index < node.children.count) {
-            return [self getLeafNodeForObject:object 
-                                       inNode:node.children[index]];  
-        } else {
-            NSLog(@"Warning: could not find leaf node for object: %@", object);
-            return nil;     // This shouldn't happen!
-        }
-    }
-    else {  // Found the node
-        return node;
-    }
-}
-
-- (NSTreeNode *)getLeftMostNode:(NSTreeNode *)node
-{
-    while (node.children.count) {
-        node = node.children[0];
-    }
-    
-    return node;
-}
-
-- (NSTreeNode *)getRightMostNode:(NSTreeNode *)node
-{
-    while (node.children.count) {
-        node = node.children[node.children.count-1];
-    }
-    
-    return node;
 }
 
 - (void)rebalanceNode:(NSTreeNode *)node

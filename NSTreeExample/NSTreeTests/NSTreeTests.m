@@ -120,19 +120,38 @@
     XCTAssertFalse([self.tree containsObject:@1], @"Shouldn't find number 1"); 
 }
 
-- (void)testAddMany
+- (void)testAdd10
 {
-    for (int i = 1; i <= 10; ++i) {
+    int addAmount = 10;
+    for (int i = 1; i <= addAmount; ++i) {
         [self.tree addObject:@(i)];
     }
-    XCTAssertEqual(self.tree.count, 10, @"Count is not 10");   
+    XCTAssertEqual(self.tree.count, addAmount, @"Count is not 10");   
     
     NSNumber *min = [self.tree minimum];
     NSNumber *max = [self.tree maximum]; 
     XCTAssertNotNil(min, @"Min is nil");
     XCTAssertNotNil(max, @"Max is nil");   
     XCTAssertEqual(min, @1, @"Min is not 1");
-    XCTAssertEqual(max, @10, @"Max is not 10"); 
+    XCTAssertEqual(max, @(addAmount), @"Max is not 10"); 
+    
+    NSLog(@"TREE: \n%@", [self.tree printTree]); 
+}
+
+- (void)testAdd100
+{
+    int addAmount = 100;
+    for (int i = 1; i <= addAmount; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    XCTAssertEqual(self.tree.count, addAmount, @"Count is not 100");   
+    
+    NSNumber *min = [self.tree minimum];
+    NSNumber *max = [self.tree maximum]; 
+    XCTAssertNotNil(min, @"Min is nil");
+    XCTAssertNotNil(max, @"Max is nil");   
+    XCTAssertEqual(min, @1, @"Min is not 1");
+    XCTAssertEqual(max, @(addAmount), @"Max is not 100"); 
     
     NSLog(@"TREE: \n%@", [self.tree printTree]); 
 }
@@ -161,7 +180,7 @@
     XCTAssertEqual(self.tree.count, 5, @"Count != 5");
 }
 
-- (void)testBulkLoad
+- (void)testBulkLoad10
 {
     NSMutableArray *data = [NSMutableArray new];
     for (int i = 1; i <= 10; ++i) {
@@ -171,10 +190,94 @@
     self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:data];
     
     XCTAssertTrue(self.tree, @"Tree does not exist");
-    XCTAssertEqual(self.tree.count, (int)data.count, @"Tree count not 10"); 
+    XCTAssertEqual(self.tree.count, (int)data.count, @"Tree count != data count"); 
     XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
     
     NSLog(@"TREE: \n%@", [self.tree printTree]);
+}
+
+- (void)testBulkLoad100
+{
+    NSMutableArray *data = [NSMutableArray new];
+    for (int i = 1; i <= 100; ++i) {
+        [data addObject:@(i)];
+    }
+    
+    self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:data];
+    
+    XCTAssertTrue(self.tree, @"Tree does not exist");
+    XCTAssertEqual(self.tree.count, (int)data.count, @"Tree count != data count"); 
+    XCTAssertEqual(self.tree.count, [self.tree trueCount], @"Truecount != count"); 
+    
+    NSLog(@"TREE: \n%@", [self.tree printTree]);
+}
+
+- (void)testTraverseInorder
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    NSLog(@"Tree: \n%@", [self.tree printTree]);  
+    
+    NSMutableArray *storage = [NSMutableArray new];
+    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
+        [(NSMutableArray *)extra addObject:data];
+        return true;
+    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmInorder];
+    
+    XCTAssertEqual((int)storage.count, self.tree.count, @"Tree count != traverse count");
+    NSLog(@"Traverse: %@", storage);
+}
+
+- (void)testTraversePreorder
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    NSLog(@"Tree: \n%@", [self.tree printTree]);   
+    
+    NSMutableArray *storage = [NSMutableArray new];
+    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
+        [(NSMutableArray *)extra addObject:data];
+        return true;
+    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmPreorder];
+    
+    XCTAssertEqual((int)storage.count, self.tree.count, @"Tree count != traverse count");
+    NSLog(@"Traverse: %@", storage);
+}
+
+- (void)testTraversePostorder
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    NSLog(@"Tree: \n%@", [self.tree printTree]); 
+    
+    NSMutableArray *storage = [NSMutableArray new];
+    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
+        [(NSMutableArray *)extra addObject:data];
+        return true;
+    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmPostorder];
+    
+    XCTAssertEqual((int)storage.count, self.tree.count, @"Tree count != traverse count");
+    NSLog(@"Traverse: %@", storage);
+}
+
+- (void)testTraverseBFS
+{
+    for (int i = 1; i <= 10; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    NSLog(@"Tree: \n%@", [self.tree printTree]);
+    
+    NSMutableArray *storage = [NSMutableArray new];
+//    [self.tree traverse:^bool(NSTreeNode *node, id data, id extra) {
+//        [(NSMutableArray *)extra addObject:data];
+//        return true;
+//    } extraData:storage withAlgorithm:NSTreeTraverseAlgorithmBreadthFirst];
+    
+    XCTAssertEqual((int)storage.count, self.tree.count, @"Tree count != traverse count");
+    NSLog(@"Traverse: %@", storage);
 }
 
 
