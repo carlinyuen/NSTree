@@ -969,7 +969,7 @@
             [self rebuildCache];
         }
         
-        // Set flags
+        // Set flag to prevent cache changing
         self.fastEnumerating = true;
     }
    
