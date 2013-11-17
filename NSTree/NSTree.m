@@ -964,6 +964,11 @@
         // Track when mutations happen
         state->mutationsPtr = (unsigned long *)&_cacheOutdated;
         
+        // Build cache if does not exist
+        if (!self.cache) {
+            [self rebuildCache];
+        }
+        
         // Set flags
         self.fastEnumerating = true;
     }
@@ -971,19 +976,16 @@
     // Loop as long as more data is available
     if (state->state < self.count)
     {
-        // Keep track of # items returned, index for iterating
-        NSUInteger count = 0; 
-        
-        // Get current node, iterate and fill stackbuf
+        // Iterate and fill stackbuf
+        NSUInteger count = 0;  
+        state->itemsPtr = stackbuf;  
         while (state->state < self.count && (count < len))
         {
-            stackbuf[count] = [self objectAtIndex:state->state];
+            stackbuf[count++] = [self objectAtIndex:state->state];
             state->state++;
-            count++;
         }
         
         // Set items returned to stackbuf, return count of items
-        state->itemsPtr = stackbuf; 
         return count;
     }
     

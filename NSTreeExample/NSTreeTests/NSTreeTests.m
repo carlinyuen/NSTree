@@ -362,10 +362,13 @@
     // Fast Enum
     int i = 0;
     for (id object in self.tree) {
+        NSLog(@"%@", object);
         XCTAssertNotNil(object, @"Object nil in FE at index %i", i);
         XCTAssertEqual([object intValue], i + 1, @"Object not equal in FE at index %i", i); 
         i++;
     }
+    
+    XCTAssertEqual(i, addAmount, @"Didn't iterate through all elements");
 }
 
 
