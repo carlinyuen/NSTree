@@ -117,6 +117,10 @@
     @property (nonatomic, assign) int nodeCapacity;
     @property (nonatomic, assign) int nodeMinimum;
     @property (nonatomic, assign, readwrite) int count;
+    
+    // Cache and flag for quick access
+    @property (nonatomic, assign) bool treeChanged; 
+    @property (nonatomic, strong) NSArray *cache;
 @end
 
 
@@ -131,6 +135,7 @@
     if (self) {
         _nodeCapacity = DEFAULT_NODE_CAPACITY;
         _nodeMinimum = _nodeCapacity / 2;
+        _treeChanged = false;
         _root = [NSTreeNode new];
     }
     return self;
@@ -143,6 +148,7 @@
     if (self) {
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
+        _treeChanged = false; 
         _root = [NSTreeNode new]; 
     }
     return self;
@@ -155,6 +161,7 @@
     if (self) {
         _nodeCapacity = MAX(nodeCapacity, DEFAULT_NODE_CAPACITY);
         _nodeMinimum = _nodeCapacity / 2; 
+        _treeChanged = false;  
         _root = [self buildTreeWithNodeCapacity:_nodeCapacity withSortedObjects:data];
         _count = data.count;
     }
@@ -269,6 +276,7 @@
     if ([self addObject:object withChild:nil toNode:
          [self getLeafNodeForObject:object inNode:self.root]]) {
         self.count++;
+        self.treeChanged = true;
         return true;
     }
     return false;
@@ -284,6 +292,7 @@
     if ([self removeObject:object fromNode:
          [self getNodeThatContains:object inBranch:self.root]]) {
         self.count--;
+        self.treeChanged = true; 
         return true;
     }
     return false;
@@ -331,6 +340,38 @@
     return nil;
 }
 
+/** @brief Returns sorted array of tree contents */
+- (NSArray *)toArray
+{
+    // Check cache & rebuild if necessary
+    if (!self.cache || self.treeChanged) {
+        [self rebuildCache];
+    } 
+    
+    return self.cache;
+}
+
+/** @brief Rebuild cache for fast access, returns self for chaining */
+- (NSTree *)rebuildCache
+{
+    NSMutableArray *storage = [NSMutableArray new];
+    
+    // Traverse and add data into array in order
+    [self traverse:^bool(NSTreeNode *node, id data, id extra) {
+            [(NSMutableArray *)extra addObject:data];
+            return true;
+        } 
+        extraData:storage 
+        onTree:self.root 
+        withAlgorithm:NSTreeTraverseAlgorithmInorder];
+    
+    // Set cache, clear flag
+    self.cache = storage;
+    self.treeChanged = false;
+    
+    return self;
+}
+
 /** @brief Returns number of elements in tree */
 - (int)trueCount
 {
@@ -372,12 +413,22 @@
 /** @brief Returns object at index, or nil if none / out of bounds */
 - (id)objectAtIndex:(int)index
 {
+    // Insanity checks
     if (index < 0) {
         return nil;
     }
    
-    // TODO: Object at index
-    return nil;
+    // Check cache & rebuild if necessary
+    if (!self.cache || self.treeChanged) {
+        [self rebuildCache];
+    } 
+    
+    // Check index is within bounds
+    if (index >= self.cache.count) {
+        return nil;
+    }
+    
+    return self.cache[index];
 }
 
 /** @brief Traverse the tree in sorted order while executing block on every element
@@ -899,6 +950,7 @@ typedef enum {
     NSTreeFastEnumerationStateCurrentNodeIndex
 } NSTreeFastEnumerationState;
 
+// TODO: Proper fast enumeration
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id *)stackbuf count:(NSUInteger)len
 {
     // First-time setup

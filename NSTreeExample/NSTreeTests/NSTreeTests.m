@@ -280,5 +280,48 @@
     NSLog(@"Traverse: %@", storage);
 }
 
+- (void)testCache
+{
+    int addAmount = 10;
+    for (int i = 1; i <= addAmount; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    
+    NSArray *cache = [self.tree toArray];
+    XCTAssertEqual((int)cache.count, self.tree.count, @"Tree count != cache count"); 
+    XCTAssertEqual((int)cache.count, addAmount, @"Cache count != 10");  
+    for (id object in cache) { // Check object contains 
+        XCTAssertTrue([self.tree containsObject:object], @"Object not in tree: %@", object);
+    }
+    
+    // Add new object
+    [self.tree addObject:@11];
+    
+    // Check cache is refreshed properly
+    cache = [self.tree toArray];
+    XCTAssertEqual((int)cache.count, self.tree.count, @"Tree count != cache count"); 
+    XCTAssertEqual((int)cache.count, addAmount + 1, @"Cache count != 11");   
+    for (id object in cache) { // Check object contains 
+        XCTAssertTrue([self.tree containsObject:object], @"Object not in tree: %@", object);
+    }
+    XCTAssertTrue([self.tree containsObject:@11], @"11 not in tree"); 
+}
+
+- (void)testObjectAtIndex
+{
+    int addAmount = 10;
+    for (int i = 1; i <= addAmount; ++i) {
+        [self.tree addObject:@(i)];
+    }
+    
+    // Check objects exist and are equal
+    for (int i = 0; i < addAmount; ++i) 
+    {
+        NSNumber *object = [self.tree objectAtIndex:i];
+        XCTAssertNotNil(object, @"Object nil at index %i", i);
+        XCTAssertEqual([object intValue], i + 1, @"Object not equal at index %i", i);
+    }
+}
+
 
 @end

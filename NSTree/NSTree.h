@@ -78,6 +78,12 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
 
     /** @brief Returns maximum element, or nil if none */
     - (id)maximum;
+   
+    /** @brief Returns sorted array of tree contents */
+    - (NSArray *)toArray;
+    
+    /** @brief Rebuild cache for fast access, returns self for chaining */
+    - (NSTree *)rebuildCache;
 
     /** @brief Returns number of elements in tree */
     - (int)trueCount;
