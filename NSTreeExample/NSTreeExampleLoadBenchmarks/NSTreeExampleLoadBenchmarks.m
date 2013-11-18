@@ -32,17 +32,14 @@
     [super setUp];
     
     // Setup data
-    if (!self.data10)
-    {
-        self.data10 = [NSMutableArray new];
-        self.data1000 = [NSMutableArray new]; 
-        self.data1000000 = [NSMutableArray new]; 
-        for (int i = 1; i <= 1000000; ++i) {
-            if (i <= 10) {[self.data10 addObject: @(i)];}
-            if (i <= 1000) {[self.data1000 addObject: @(i)];} 
-            [self.data1000000 addObject: @(i)];
-        }   
-    }
+    self.data10 = [NSMutableArray new];
+    self.data1000 = [NSMutableArray new]; 
+    self.data1000000 = [NSMutableArray new]; 
+    for (int i = 1; i <= 1000000; ++i) {
+        if (i <= 10) {[self.data10 addObject: @(i)];}
+        if (i <= 1000) {[self.data1000 addObject: @(i)];} 
+        [self.data1000000 addObject: @(i)];
+    }   
     
     // Trees
     self.tree3 = [[NSTree alloc] initWithNodeCapacity:3];   
