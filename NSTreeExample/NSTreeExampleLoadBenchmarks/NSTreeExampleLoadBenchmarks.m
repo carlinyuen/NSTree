@@ -79,6 +79,11 @@
     }
 }
 
+- (void)testLoad10ArrayBulk
+{
+    [self.array addObjectsFromArray:self.data10];
+}
+
 - (void)testLoad10Dict
 {
     for (id object in self.data10) {
@@ -103,6 +108,11 @@
     for (id object in self.data1000) {
         [self.array addObject:object];
     }
+}
+
+- (void)testLoad1000ArrayBulk
+{
+    [self.array addObjectsFromArray:self.data1000];
 }
 
 - (void)testLoad1000Dict
@@ -131,11 +141,18 @@
     }
 }
 
+- (void)testLoad1000000ArrayBulk
+{
+    [self.array addObjectsFromArray:self.data1000000];
+}
+
 - (void)testLoad1000000Dict
 {
     for (id object in self.data1000000) {
         [self.dict setObject:object forKey:[object description]];
     }
+    
+    
 }
 
 

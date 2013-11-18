@@ -80,9 +80,55 @@
     [super tearDown];
 }
 
-- (void)testExample
-{
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+- (void)testInsertTree3 {
+    id object = @(self.data10.count / 2.0);
+    [self.tree3 addObject:object];
+}
+
+- (void)testInsertArray10 {
+    id object = @(self.data10.count / 2.0);
+    [self.array10 insertObject:object atIndex:[self.array10 indexOfObject:object inSortedRange:NSMakeRange(0, self.array10.count - 1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }]];
+}
+
+- (void)testInsertDict10 {
+    id object = @(self.data10.count / 2.0);
+    [self.dict10 setObject:object forKey:[object description]];
+}
+
+- (void)testInsertTree30 {
+    id object = @(self.data1000.count / 2.0);
+    [self.tree30 addObject:object];
+}
+
+- (void)testInsertArray1000 {
+    id object = @(self.data1000.count / 2.0);
+    [self.array1000 insertObject:object atIndex:[self.array1000 indexOfObject:object inSortedRange:NSMakeRange(0, self.array1000.count - 1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }]];
+}
+
+- (void)testInsertDict1000 {
+    id object = @(self.data1000.count / 2.0);
+    [self.dict1000 setObject:object forKey:[object description]];
+}
+
+- (void)testInsertTree300 {
+    id object = @(self.data1000000.count / 2.0);
+    [self.dict1000000 setObject:object forKey:[object description]];
+}
+
+- (void)testInsertArray1000000 {
+    id object = @(self.data1000000.count / 2.0);
+    [self.array1000000 insertObject:object atIndex:[self.array1000000 indexOfObject:object inSortedRange:NSMakeRange(0, self.array1000000.count - 1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }]];
+}
+
+- (void)testInsertDict1000000 {
+    id object = @(self.data1000000.count / 2.0);
+    [self.dict1000000 setObject:object forKey:[object description]];
 }
 
 @end
