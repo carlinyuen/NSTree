@@ -789,12 +789,12 @@
             // Set current node's new parent, add as child to new parent
             node.parent = newRootNode;
             [newRootNode.children addObject:node];
+                       
+            // Set new root
+            self.root = newRootNode; 
             
             // Add data and new right branch to new parent
             [self addObject:object withChild:newRightNode toNode:newRootNode];
-            
-            // Set new root
-            self.root = newRootNode;
         }
 
 //        NSLog(@"Tree After: \n%@", [self printTree]); 
@@ -886,6 +886,7 @@
     // Sanity checks: need siblings or node to exist
     if (!node || (!node.previous && !node.next)) {
         NSLog(@"Warning! Merge called on node with no siblings!");
+        NSLog(@"Tree: \n%@", [self printTree]);
         return;
     }
     
