@@ -908,6 +908,7 @@
     // This shouldn't happen
     else {
         NSLog(@"Warning! Reached end of merge with no siblings!");
+        NSLog(@"Tree: \n%@", [self printTree]); 
         return;
     }
     
