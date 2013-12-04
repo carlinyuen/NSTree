@@ -782,7 +782,7 @@
         if (node.parent) {
             [self addObject:object withChild:newRightNode toNode:node.parent];
         }
-        else    // Root node, need to create new root
+        else if (node == self.root)    // Root node, need to create new root
         {
             NSTreeNode *newRootNode = [NSTreeNode new];
             
@@ -795,6 +795,10 @@
             
             // Add data and new right branch to new parent
             [self addObject:object withChild:newRightNode toNode:newRootNode];
+        }
+        else {
+            // This shouldn't happen
+            NSLog(@"Warning! Rebalancing node that doesn't have a parent and isn't the root!");
         }
 
 //        NSLog(@"Tree After: \n%@", [self printTree]); 
