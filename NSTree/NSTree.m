@@ -221,12 +221,6 @@
         parents = [NSMutableArray new]; 
         prev = nil; 
         
-        // Loop through and print children and pointers
-//        NSLog(@"Next Level");
-//        for (NSTreeNode *child in children) {
-//            NSLog(@"%p <- %p -> %p", child.previous, child, child.next);
-//        }
-        
         // Create parents using children
         for (int i = 0; i < children.count - 1; )
         {
