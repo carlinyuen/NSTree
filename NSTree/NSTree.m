@@ -92,7 +92,7 @@
 
 - (NSString *)description 
 {
-    return [[self.data valueForKey:@"description"] componentsJoinedByString:@", "];
+    return [NSString stringWithFormat:@"%p: %@", self, [[self.data valueForKey:@"description"] componentsJoinedByString:@", "]];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -198,9 +198,8 @@
         if (prev) {
             child.previous = prev;
             prev.next = child;
-        } else {
-            prev = child;
         }
+        prev = child;   // update previous
         
         // Fill it with max capacity + 1 data, except for last node
         int fillCount = nodeCapacity 
@@ -222,6 +221,12 @@
         parents = [NSMutableArray new]; 
         prev = nil; 
         
+        // Loop through and print children and pointers
+//        NSLog(@"Next Level");
+//        for (NSTreeNode *child in children) {
+//            NSLog(@"%p <- %p -> %p", child.previous, child, child.next);
+//        }
+        
         // Create parents using children
         for (int i = 0; i < children.count - 1; )
         {
@@ -230,9 +235,8 @@
             if (prev) {
                 parent.previous = prev; 
                 prev.next = parent;
-            } else {
-                prev = parent;
             }
+            prev = parent;  // update previous
             
             // Fill it with data & children
             int fillCount = nodeCapacity 
@@ -844,6 +848,7 @@
         || (direction && (!node.previous
             || node.previous.parent != node.parent 
             || !node.previous.data.count))) {
+        NSLog(@"Warning! Rotating on node without sibling in right direction: %@", node); 
         return;
     }
     

@@ -362,6 +362,29 @@
     // Fast Enum
     int i = 0;
     for (id object in self.tree) {
+        NSLog(@"%@", object);
+        XCTAssertNotNil(object, @"Object nil in FE at index %i", i);
+        XCTAssertEqual([object intValue], i + 1, @"Object not equal in FE at index %i", i); 
+        i++;
+    }
+    
+    XCTAssertEqual(i, addAmount, @"Didn't iterate through all elements");
+}
+
+
+- (void)testFastEnumerationBulk
+{
+    int addAmount = 100;
+    NSMutableArray *array = [NSMutableArray new];
+    for (int i = 1; i <= addAmount; ++i) {
+        [array addObject:@(i)];
+    }
+    self.tree = [[NSTree alloc] initWithNodeCapacity:NODE_CAPACITY withSortedObjects:array];
+     
+    // Fast Enum
+    int i = 0;
+    for (id object in self.tree) {
+        NSLog(@"%@", object);
         XCTAssertNotNil(object, @"Object nil in FE at index %i", i);
         XCTAssertEqual([object intValue], i + 1, @"Object not equal in FE at index %i", i); 
         i++;
