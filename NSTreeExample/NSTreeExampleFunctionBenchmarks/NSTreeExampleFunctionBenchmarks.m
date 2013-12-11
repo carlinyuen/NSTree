@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #include <stdlib.h>
+#import <CoreData/CoreData.h>
 
 #import "NSTree.h"
 
@@ -43,6 +44,8 @@ static NSMutableArray *insertCriteria1000000;
 static NSMutableArray *deleteCriteria10;
 static NSMutableArray *deleteCriteria1000;
 static NSMutableArray *deleteCriteria1000000;
+
+static NSManagedObjectContext *context;
 
 @implementation NSTreeExampleFunctionBenchmarks
 
@@ -109,6 +112,30 @@ static NSMutableArray *deleteCriteria1000000;
     for (id object in data1000000) {
         [dict1000000 setObject:object forKey:[object description]];
     } 
+    
+    // Setup CoreData
+    NSArray *bundles = [NSArray arrayWithObject:[NSBundle bundleForClass:[self class]]];
+    NSManagedObjectModel *mom = [NSManagedObjectModel mergedModelFromBundles:bundles];
+    XCTAssertNotNil(mom, @"ManangedObjectModel ist nil");
+    
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+    XCTAssertTrue([psc addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL] ? YES : NO, @"Should be able to add in-memory store");    
+    
+    context = [[NSManagedObjectContext alloc] init];
+    context.persistentStoreCoordinator = psc;
+    
+    NSManagedObject *mo;
+    for (id object in data1000000) {
+        mo = [NSEntityDescription 
+              insertNewObjectForEntityForName:@"Entity" 
+              inManagedObjectContext:context]; 
+        [mo setValue:object forKey:@"value"]; 
+    }
+    
+    NSError *error = nil;
+    if (![context save:&error]) {
+        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
+    }
 }
 
 + (void)tearDown
@@ -179,6 +206,21 @@ static NSMutableArray *deleteCriteria1000000;
     }
 }
 
+- (void)testInsertCoreData1000000 {
+    NSManagedObject *mo;
+    for (id object in insertCriteria1000000) {
+        mo = [NSEntityDescription 
+              insertNewObjectForEntityForName:@"Entity" 
+              inManagedObjectContext:context]; 
+        [mo setValue:object forKey:@"value"]; 
+    }
+    
+    NSError *error = nil;
+    if (![context save:&error]) {
+        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
+    }
+}
+
 
 #pragma mark - Deletion
 
@@ -233,6 +275,28 @@ static NSMutableArray *deleteCriteria1000000;
 - (void)testDeleteDict1000000 {
     for (id object in deleteCriteria1000000) {
         [dict1000000 removeObjectForKey:[object description]];  
+    }
+}
+
+- (void)testDeleteCoreData1000000 {
+    NSManagedObject *mo;
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria1000000 componentsJoinedByString:@" OR value == "]]; 
+    [fetch setPredicate:p]; 
+    NSError *error;
+    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]); 
+    }
+    
+    // Delete
+    NSLog(@"Results: %@", results);
+    for (id object in results) {
+        [context deleteObject:object];
+    }
+    
+    if (![context save:&error]) {
+        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]);
     }
 }
 
