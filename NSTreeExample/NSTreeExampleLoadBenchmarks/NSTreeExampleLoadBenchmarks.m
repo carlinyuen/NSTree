@@ -29,7 +29,7 @@
     
     // Setup data
     self.data = [NSMutableArray new]; 
-    for (int i = 1; i <= ; ++i) {
+    for (int i = 1; i <= 1000000; ++i) {
         [self.data addObject: @(i)];
     }   
     
@@ -56,7 +56,7 @@
 
 - (void)testLoadTree3Bulk
 {
-    self.tree3 = [[NSTree alloc] initWithNodeCapacity:300 withSortedObjects:self.data];
+    self.tree3 = [[NSTree alloc] initWithNodeCapacity:3 withSortedObjects:self.data];
 }
 
 - (void)testLoadTree30
@@ -68,7 +68,7 @@
 
 - (void)testLoadTree30Bulk
 {
-    self.tree30 = [[NSTree alloc] initWithNodeCapacity:300 withSortedObjects:self.data];
+    self.tree30 = [[NSTree alloc] initWithNodeCapacity:30 withSortedObjects:self.data];
 }
 
 - (void)testLoadTree300
