@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2214440518592D4B00A7AB59 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214440418592D4A00A7AB59 /* CoreData.framework */; };
-		2214440818592DD000A7AB59 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2214440618592DD000A7AB59 /* Model.xcdatamodeld */; };
+		22144409185936A000A7AB59 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214440418592D4A00A7AB59 /* CoreData.framework */; };
 		2222AE93180F494F0016C8DA /* NSTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2222AE92180F494F0016C8DA /* NSTree.m */; };
 		22771A12180F3FB800143CE7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A11180F3FB800143CE7 /* Foundation.framework */; };
 		22771A14180F3FB800143CE7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A13180F3FB800143CE7 /* CoreGraphics.framework */; };
@@ -59,7 +59,6 @@
 
 /* Begin PBXFileReference section */
 		2214440418592D4A00A7AB59 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		2214440718592DD000A7AB59 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		2222AE91180F494F0016C8DA /* NSTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSTree.h; path = ../../NSTree/NSTree.h; sourceTree = "<group>"; };
 		2222AE92180F494F0016C8DA /* NSTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTree.m; path = ../../NSTree/NSTree.m; sourceTree = "<group>"; };
 		22771A0E180F3FB800143CE7 /* NSTreeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSTreeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22144409185936A000A7AB59 /* CoreData.framework in Frameworks */,
 				22771A14180F3FB800143CE7 /* CoreGraphics.framework in Frameworks */,
 				22771A16180F3FB800143CE7 /* UIKit.framework in Frameworks */,
 				22771A12180F3FB800143CE7 /* Foundation.framework in Frameworks */,
@@ -244,7 +244,6 @@
 			children = (
 				228B42A0183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.m */,
 				228B429B183AC0210042DFD6 /* Supporting Files */,
-				2214440618592DD000A7AB59 /* Model.xcdatamodeld */,
 			);
 			path = NSTreeExampleFunctionBenchmarks;
 			sourceTree = "<group>";
@@ -441,7 +440,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				228B42A1183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.m in Sources */,
-				2214440818592DD000A7AB59 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -786,19 +784,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		2214440618592DD000A7AB59 /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2214440718592DD000A7AB59 /* Model.xcdatamodel */,
-			);
-			currentVersion = 2214440718592DD000A7AB59 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 22771A06180F3FB800143CE7 /* Project object */;
 }

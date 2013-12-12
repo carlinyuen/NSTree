@@ -114,28 +114,23 @@ static NSManagedObjectContext *context;
     } 
     
     // Setup CoreData
-    NSArray *bundles = [NSArray arrayWithObject:[NSBundle bundleForClass:[self class]]];
-    NSManagedObjectModel *mom = [NSManagedObjectModel mergedModelFromBundles:bundles];
-    XCTAssertNotNil(mom, @"ManangedObjectModel ist nil");
-    
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-    XCTAssertTrue([psc addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL] ? YES : NO, @"Should be able to add in-memory store");    
-    
-    context = [[NSManagedObjectContext alloc] init];
-    context.persistentStoreCoordinator = psc;
-    
-    NSManagedObject *mo;
-    for (id object in data1000000) {
-        mo = [NSEntityDescription 
-              insertNewObjectForEntityForName:@"Entity" 
-              inManagedObjectContext:context]; 
-        [mo setValue:object forKey:@"value"]; 
-    }
-    
-    NSError *error = nil;
-    if (![context save:&error]) {
-        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
-    }
+//    NSArray *bundles = [NSArray arrayWithObject:[NSBundle bundleForClass:[self class]]];
+//    NSManagedObjectModel *mom = [NSManagedObjectModel mergedModelFromBundles:bundles];
+//    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+//    context = [[NSManagedObjectContext alloc] init];
+//    context.persistentStoreCoordinator = psc;
+//    
+//    NSManagedObject *mo;
+//    for (id object in data1000000) {
+//        mo = [NSEntityDescription 
+//              insertNewObjectForEntityForName:@"Entity" 
+//              inManagedObjectContext:context]; 
+//        [mo setValue:object forKey:@"value"]; 
+//    }
+//    NSError *error = nil;
+//    if (![context save:&error]) {
+//        NSLog(@"Populating CoreData Failed");
+//    }
 }
 
 + (void)tearDown
@@ -207,18 +202,25 @@ static NSManagedObjectContext *context;
 }
 
 - (void)testInsertCoreData1000000 {
-    NSManagedObject *mo;
-    for (id object in insertCriteria1000000) {
-        mo = [NSEntityDescription 
-              insertNewObjectForEntityForName:@"Entity" 
-              inManagedObjectContext:context]; 
-        [mo setValue:object forKey:@"value"]; 
-    }
-    
-    NSError *error = nil;
-    if (![context save:&error]) {
-        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
-    }
+//    NSManagedObject *mo;
+//    for (id object in insertCriteria1000000) {
+//        mo = [NSEntityDescription 
+//              insertNewObjectForEntityForName:@"Entity" 
+//              inManagedObjectContext:context]; 
+//        [mo setValue:object forKey:@"value"]; 
+//    }
+//    
+//    NSError *error = nil;
+//    if (![context save:&error]) {
+//        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
+//    }
+//     
+//    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
+//    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
+//    if (error) {
+//        XCTFail(@"CoreData Fetch Failed: %@, %@", error, [error userInfo]); 
+//    }
+//    NSLog(@"Results: %@", results); 
 }
 
 
@@ -279,25 +281,24 @@ static NSManagedObjectContext *context;
 }
 
 - (void)testDeleteCoreData1000000 {
-    NSManagedObject *mo;
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria1000000 componentsJoinedByString:@" OR value == "]]; 
-    [fetch setPredicate:p]; 
-    NSError *error;
-    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]); 
-    }
-    
-    // Delete
-    NSLog(@"Results: %@", results);
-    for (id object in results) {
-        [context deleteObject:object];
-    }
-    
-    if (![context save:&error]) {
-        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]);
-    }
+//    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
+//    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria1000000 componentsJoinedByString:@" OR value == "]]; 
+//    [fetch setPredicate:p]; 
+//    NSError *error;
+//    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
+//    if (error) {
+//        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]); 
+//    }
+//    NSLog(@"Results: %@", results); 
+//    
+//    // Delete
+//    for (id object in results) {
+//        [context deleteObject:object];
+//    }
+//    
+//    if (![context save:&error]) {
+//        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]);
+//    }
 }
 
 
