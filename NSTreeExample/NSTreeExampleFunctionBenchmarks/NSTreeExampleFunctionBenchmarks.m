@@ -202,9 +202,13 @@ static NSManagedObjectContext *moc;
 }
 
 - (void)testDeleteCoreData {
+    NSMutableArray *predicates = [NSMutableArray new];
+    for (id object in deleteCriteria) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
+    }
+    
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria componentsJoinedByString:@" OR value == "]]; 
-    [fetch setPredicate:p]; 
+    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]]; 
     NSError *error;
     NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
     if (error) {
@@ -264,9 +268,13 @@ static NSManagedObjectContext *moc;
 }
 
 - (void)testSearchCoreData {
+    NSMutableArray *predicates = [NSMutableArray new];
+    for (id object in deleteCriteria) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
+    }
+    
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [searchCriteria componentsJoinedByString:@" OR value == "]]; 
-    [fetch setPredicate:p]; 
+    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]]; 
     NSError *error;
     NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
     if (error) {
