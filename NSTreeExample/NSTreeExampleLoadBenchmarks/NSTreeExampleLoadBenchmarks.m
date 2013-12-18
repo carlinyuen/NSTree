@@ -55,7 +55,7 @@
     [attr setName:@"value"];
     [attr setAttributeType:NSInteger32AttributeType];
     [attr setOptional:false];
-//    [attr setIndexed:true];   // Wow this makes it super slow (88s)
+    [attr setIndexed:true];
     [attr setDefaultValue:@0];
     [runEntity setProperties:@[attr]];
     
@@ -79,6 +79,14 @@
 
 - (void)tearDown
 {
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSError *error = nil;
+    NSArray *results = [self.moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Fetching from Core Data Failed: %@", error); 
+    }
+    NSLog(@"Results: %i", results.count); 
+
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
@@ -149,16 +157,8 @@
     }
     NSError *error = nil;
     if (![self.moc save:&error]) {
-        NSLog(@"Populating CoreData Failed");
+        NSLog(@"Populating CoreData Failed: %@", error);
     }
-    
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    error = nil;
-    NSArray *results = [self.moc executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        XCTFail(@"CoreData Fetch Failed: %@, %@", error, [error userInfo]); 
-    }
-    NSLog(@"Results: %@", results); 
 }
 
 

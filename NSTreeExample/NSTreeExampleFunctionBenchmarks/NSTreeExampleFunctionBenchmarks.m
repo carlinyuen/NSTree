@@ -101,12 +101,20 @@ static NSManagedObjectContext *moc;
     }
     error = nil;
     if (![moc save:&error]) {
-        NSLog(@"Populating CoreData Failed");
+        NSLog(@"Error populating core data: %@", error); 
     }
 }
 
 + (void)tearDown
 {
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSError *error = nil;
+    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Fetching from Core Data Failed: %@", error); 
+    }
+    NSLog(@"Results: %i", results.count); 
+
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
@@ -146,25 +154,17 @@ static NSManagedObjectContext *moc;
 }
 
 - (void)testInsertCoreData {
-//    NSManagedObject *mo;
-//    for (id object in insertCriteria1000000) {
-//        mo = [NSEntityDescription 
-//              insertNewObjectForEntityForName:@"Entity" 
-//              inManagedObjectContext:context]; 
-//        [mo setValue:object forKey:@"value"]; 
-//    }
-//    
-//    NSError *error = nil;
-//    if (![context save:&error]) {
-//        XCTFail(@"CoreData Insert Failed: %@, %@", error, [error userInfo]);
-//    }
-//     
-//    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
-//    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
-//    if (error) {
-//        XCTFail(@"CoreData Fetch Failed: %@, %@", error, [error userInfo]); 
-//    }
-//    NSLog(@"Results: %@", results); 
+    NSManagedObject *mo;
+    for (id object in insertCriteria) {
+        mo = [NSEntityDescription 
+              insertNewObjectForEntityForName:@"Entry" 
+              inManagedObjectContext:moc]; 
+        [mo setValue:object forKey:@"value"]; 
+    }
+    NSError *error = nil;
+    if (![moc save:&error]) {
+        NSLog(@"Populating CoreData Failed: %@", error);
+    }
 }
 
 
