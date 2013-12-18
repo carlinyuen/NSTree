@@ -55,7 +55,7 @@
     [attr setName:@"value"];
     [attr setAttributeType:NSInteger32AttributeType];
     [attr setOptional:false];
-    [attr setIndexed:true];
+//    [attr setIndexed:true];   // Wow this makes it super slow (88s)
     [attr setDefaultValue:@0];
     [runEntity setProperties:@[attr]];
     
