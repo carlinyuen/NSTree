@@ -63,7 +63,7 @@ static NSManagedObjectContext *moc;
         [dict setObject:object forKey:[object description]];
     } 
     
-    // Setup CoreData Entity - simple entry:value
+    // Setup CoreData - simple Entity entry:value
     NSEntityDescription *runEntity = [[NSEntityDescription alloc] init];
     [runEntity setName:@"Entry"];
     [runEntity setManagedObjectClassName:@"Entry"];

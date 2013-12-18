@@ -137,6 +137,7 @@
 		22771A05180F3FB800143CE7 = {
 			isa = PBXGroup;
 			children = (
+				22771A43180F407C00143CE7 /* NSTree */,
 				22771A17180F3FB800143CE7 /* NSTreeExample */,
 				22771A30180F3FB900143CE7 /* NSTreeTests */,
 				228B4284183ABFC50042DFD6 /* NSTreeExampleLoadBenchmarks */,
@@ -176,7 +177,6 @@
 				22771A21180F3FB800143CE7 /* AppDelegate.m */,
 				22771A23180F3FB800143CE7 /* Images.xcassets */,
 				22771A18180F3FB800143CE7 /* Supporting Files */,
-				22771A43180F407C00143CE7 /* NSTree */,
 			);
 			name = NSTreeExample;
 			path = NSTree;
@@ -217,7 +217,7 @@
 				2222AE91180F494F0016C8DA /* NSTree.h */,
 				2222AE92180F494F0016C8DA /* NSTree.m */,
 			);
-			name = NSTree;
+			path = NSTree;
 			sourceTree = "<group>";
 		};
 		228B4284183ABFC50042DFD6 /* NSTreeExampleLoadBenchmarks */ = {
