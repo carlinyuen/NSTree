@@ -71,7 +71,8 @@ static NSManagedObjectContext *moc;
     NSAttributeDescription *attr= [[NSAttributeDescription alloc] init];
     [attr setName:@"value"];
     [attr setAttributeType:NSInteger32AttributeType];
-    [attr setOptional:NO];
+    [attr setOptional:false];
+    [attr setIndexed:true];
     [attr setDefaultValue:@0];
     [runEntity setProperties:@[attr]];
     
