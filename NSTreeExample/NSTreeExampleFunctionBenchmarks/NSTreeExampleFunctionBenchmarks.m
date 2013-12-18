@@ -201,24 +201,24 @@ static NSManagedObjectContext *moc;
 }
 
 - (void)testDeleteCoreData {
-//    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entity"]; 
-//    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria componentsJoinedByString:@" OR value == "]]; 
-//    [fetch setPredicate:p]; 
-//    NSError *error;
-//    NSArray *results = [context executeFetchRequest:fetch error:&error]; 
-//    if (error) {
-//        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]); 
-//    }
-//    NSLog(@"Results: %@", results); 
-//    
-//    // Delete
-//    for (id object in results) {
-//        [context deleteObject:object];
-//    }
-//    
-//    if (![context save:&error]) {
-//        XCTFail(@"CoreData Delete Failed: %@, %@", error, [error userInfo]);
-//    }
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [deleteCriteria componentsJoinedByString:@" OR value == "]]; 
+    [fetch setPredicate:p]; 
+    NSError *error;
+    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Error fetching criteria: %@", error);
+    }
+    NSLog(@"Results: %i", results.count); 
+    
+    // Delete
+    for (id object in results) {
+        [moc deleteObject:object];
+    }
+    
+    if (![moc save:&error]) {
+        NSLog(@"Error deleting from core data: %@", error); 
+    }
 }
 
 
@@ -252,6 +252,18 @@ static NSManagedObjectContext *moc;
     for (id object in searchCriteria) {
         [dict objectForKey:[object description]];  
     }
+}
+
+- (void)testSearchCoreData {
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"value == %@", [searchCriteria componentsJoinedByString:@" OR value == "]]; 
+    [fetch setPredicate:p]; 
+    NSError *error;
+    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Error fetching criteria: %@", error);
+    }
+    NSLog(@"Results: %i", results.count); 
 }
 
 @end
