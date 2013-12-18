@@ -54,7 +54,8 @@
     NSAttributeDescription *attr= [[NSAttributeDescription alloc] init];
     [attr setName:@"value"];
     [attr setAttributeType:NSInteger32AttributeType];
-    [attr setOptional:NO];
+    [attr setOptional:false];
+    [attr setIndexed:true];
     [attr setDefaultValue:@0];
     [runEntity setProperties:@[attr]];
     
@@ -150,6 +151,14 @@
     if (![self.moc save:&error]) {
         NSLog(@"Populating CoreData Failed");
     }
+    
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    error = nil;
+    NSArray *results = [self.moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        XCTFail(@"CoreData Fetch Failed: %@, %@", error, [error userInfo]); 
+    }
+    NSLog(@"Results: %@", results); 
 }
 
 
