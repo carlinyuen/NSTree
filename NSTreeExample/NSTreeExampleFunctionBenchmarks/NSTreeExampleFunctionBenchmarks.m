@@ -104,18 +104,18 @@ static NSManagedObjectContext *moc;
     if (![moc save:&error]) {
         NSLog(@"Error populating core data: %@", error); 
     }
-}
-
-+ (void)tearDown
-{
+    
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    NSError *error = nil;
+    error = nil;
     NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
     if (error) {
         NSLog(@"Fetching from Core Data Failed: %@", error); 
     }
-    NSLog(@"Results: %i", results.count); 
+    NSLog(@"Core Data Entry Count: %i", results.count); 
+}
 
++ (void)tearDown
+{
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
@@ -220,6 +220,14 @@ static NSManagedObjectContext *moc;
     if (![moc save:&error]) {
         NSLog(@"Error deleting from core data: %@", error); 
     }
+    
+    fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    error = nil;
+    results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Fetching from Core Data Failed: %@", error); 
+    }
+    NSLog(@"Core Data Entry Count: %i", results.count); 
 }
 
 
@@ -264,7 +272,7 @@ static NSManagedObjectContext *moc;
     if (error) {
         NSLog(@"Error fetching criteria: %@", error);
     }
-    NSLog(@"Results: %i", results.count); 
+    NSLog(@"Search Results: %i", results.count); 
 }
 
 @end

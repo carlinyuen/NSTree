@@ -79,14 +79,6 @@
 
 - (void)tearDown
 {
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    NSError *error = nil;
-    NSArray *results = [self.moc executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        NSLog(@"Fetching from Core Data Failed: %@", error); 
-    }
-    NSLog(@"Results: %i", results.count); 
-
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
