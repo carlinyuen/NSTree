@@ -13,8 +13,11 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 1000000 
-    #define NUM_CRITERIA 10
+    // # objects to preload structure with
+    #define NUM_ELEMENTS 1000
+    
+    // # objects to search / insert / delete
+    #define NUM_CRITERIA 100 
 
     #define TREE 1
     #define ARRAY 1
@@ -24,9 +27,9 @@
 @interface NSTreeExampleFunctionBenchmarks : XCTestCase
 @end
 
-static NSTree *tree3;
-static NSTree *tree30;
-static NSTree *tree300; 
+static NSTree *tree3;       // Tree of node capacity 3
+static NSTree *tree30;      // Tree of node capacity 30
+static NSTree *tree300;     // Tree of node capacity 300
 static NSMutableArray *array; 
 static NSMutableDictionary *dict; 
 static NSMutableArray *data; 
@@ -145,7 +148,7 @@ static NSManagedObjectContext *moc;
     }
     
     // End timer
-    NSLog(@"Setup Time Completion: %f", [startDate timeIntervalSinceNow]);
+    NSLog(@"Setup Time Completion: %f", -[startDate timeIntervalSinceNow]);
 }
 
 + (void)tearDown
@@ -266,7 +269,6 @@ static NSManagedObjectContext *moc;
 - (void)testDeleteDictBulk {
     if (!DICT) return;
     [dict removeObjectsForKeys:deleteCriteria];
-    NSLog(@"Delete Bulk Dict Count: %i", dict.count);
 }
 
 - (void)testDeleteCoreData {
