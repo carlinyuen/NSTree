@@ -221,6 +221,11 @@ static NSManagedObjectContext *moc;
         for (id object in results) {
             [moc deleteObject:object];
         }
+               
+        // This is incredibly slow on coredata and will take forever
+        if (searchCriteria.count > 5) {
+            break;
+        } 
     }
     
     if (![moc save:&error]) {
@@ -274,6 +279,11 @@ static NSManagedObjectContext *moc;
         [results addObjectsFromArray:temp];
         if (error) {
             NSLog(@"Error fetching criteria: %@", error);
+        }
+        
+        // This is incredibly slow on coredata and will take forever
+        if (searchCriteria.count > 5) {
+            break;
         }
     }
 }
