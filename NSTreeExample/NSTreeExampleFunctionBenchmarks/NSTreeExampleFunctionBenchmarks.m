@@ -62,14 +62,17 @@ static NSManagedObjectContext *moc;
 
     // Data Structures
     if (TREE) {
+        NSLog(@"Creating Trees");
         tree3 = [[NSTree alloc] initWithNodeCapacity:3 withSortedObjects:data];   
         tree30 = [[NSTree alloc] initWithNodeCapacity:30 withSortedObjects:data];  
         tree300 = [[NSTree alloc] initWithNodeCapacity:300 withSortedObjects:data];  
     }
     if (ARRAY) {
+        NSLog(@"Creating Array"); 
         array = [[NSMutableArray alloc] initWithArray:data];
     }
     if (DICT) {
+        NSLog(@"Creating Dict");  
         dict = [NSMutableDictionary new]; 
         for (id object in data) {
             [dict setObject:object forKey:[object description]];
@@ -77,6 +80,7 @@ static NSManagedObjectContext *moc;
     }
     
     if (CORE) {
+        NSLog(@"Creating Core Data");   
         // Setup CoreData - simple Entity entry:value
         NSEntityDescription *runEntity = [[NSEntityDescription alloc] init];
         [runEntity setName:@"Entry"];
@@ -139,47 +143,49 @@ static NSManagedObjectContext *moc;
     [super tearDown];
 }
 
+
 #pragma mark - Insertion
 
+#ifdef TREE
 - (void)testInsertTree3 {
-    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree3 addObject:object];
     }
 }
 
 - (void)testInsertTree30 {
-    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree30 addObject:object];
     }
 }
 
 - (void)testInsertTree300 {
-    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree300 addObject:object];
     }
 }
+#endif
 
+#ifdef ARRAY
 - (void)testInsertArray {
-    if (!ARRAY) return;
     for (id object in insertCriteria) {
         [array insertObject:object atIndex:[array indexOfObject:object inSortedRange:NSMakeRange(0, array.count - 1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1 compare:obj2];
         }]];
     }
 }
+#endif
 
+#ifdef DICT
 - (void)testInsertDict {
-    if (!DICT) return;
     for (id object in insertCriteria) {
         [dict setObject:object forKey:[object description]];
     }
 }
+#endif
 
+#ifdef CORE
 - (void)testInsertCoreData {
-    if (!CORE) return;
     NSManagedObject *mo;
     for (id object in insertCriteria) {
         mo = [NSEntityDescription 
@@ -192,59 +198,59 @@ static NSManagedObjectContext *moc;
         NSLog(@"Populating CoreData Failed: %@", error);
     }
 }
+#endif
 
 
 #pragma mark - Deletion
 
+#ifdef TREE
 - (void)testDeleteTree3 {
-    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree3 removeObject:object];
     }
 }
 
 - (void)testDeleteTree30 {
-    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree30 removeObject:object];
     }
 }
 
 - (void)testDeleteTree300 {
-    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree300 removeObject:object];
     }
 }
+#endif
 
+#ifdef ARRAY
 - (void)testDeleteArrayBulk {
-    if (!ARRAY) return;
     [array removeObjectsInArray:deleteCriteria];
 }
 
 - (void)testDeleteArray {
-    if (!ARRAY) return;
     for (id object in deleteCriteria) {
         [array removeObject:object];
     }
 }
+#endif
 
+#ifdef DICT
 - (void)testDeleteDict {
-    if (!DICT) return;
     for (id object in deleteCriteria) {
         [dict removeObjectForKey:[object description]];  
     }
 }
 
 - (void)testDeleteDictBulk {
-    if (!DICT) return;
     [dict removeObjectsForKeys:deleteCriteria];
     NSLog(@"Delete Bulk Dict Count: %i", dict.count);
 }
+#endif
 
+#ifdef CORE
 // This is really slow if done with multiple deleteCriteria
 - (void)testDeleteCoreData {
-    if (!CORE) return;
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
     NSError *error; 
     NSArray *results;
@@ -272,48 +278,50 @@ static NSManagedObjectContext *moc;
         NSLog(@"Error deleting from core data: %@", error); 
     }
 }
+#endif
 
 
 #pragma mark - Search
 
+#ifdef TREE
 - (void)testSearchTree3 {
-    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree3 containsObject:object];
     }
 }
 
 - (void)testSearchTree30 {
-    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree30 containsObject:object];
     }
 }
 
 - (void)testSearchTree300 {
-    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree300 containsObject:object];
     }
 }
+#endif
 
+#ifdef ARRAY
 - (void)testSearchArray {
-    if (!ARRAY) return;
     for (id object in searchCriteria) {
         [array containsObject:object];
     }
 }
+#endif
 
+#ifdef DICT
 - (void)testSearchDict {
-    if (!DICT) return;
     for (id object in searchCriteria) {
         [dict objectForKey:[object description]];  
     }
 }
+#endif
 
+#ifdef CORE
 // Extremely slow when doing on a lot of items
 - (void)testSearchCoreData {
-    if (!CORE) return;
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
     NSError *error; 
     NSMutableArray *results = [NSMutableArray new];
@@ -333,5 +341,6 @@ static NSManagedObjectContext *moc;
         }
     }
 }
+#endif
 
 @end
