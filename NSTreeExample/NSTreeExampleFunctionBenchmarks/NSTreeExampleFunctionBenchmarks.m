@@ -14,6 +14,7 @@
 #import "NSTree.h"
 
     #define NUM_ELEMENTS 1000000 
+    #define NUM_CRITERIA 10
 
     #define TREE 1
     #define ARRAY 0
@@ -52,8 +53,7 @@ static NSManagedObjectContext *moc;
     searchCriteria = [NSMutableArray new];  
     insertCriteria = [NSMutableArray new];  
     deleteCriteria = [NSMutableArray new]; 
-    int numCriteria = MAX(1, NUM_ELEMENTS / 1000);
-    for (int i = 0; i < numCriteria; ++i) {
+    for (int i = 0; i < NUM_CRITERIA; ++i) {
        [searchCriteria addObject:@(arc4random() % data.count)];
        [insertCriteria addObject:@(arc4random() % data.count)];  
        [deleteCriteria addObject:@(arc4random() % data.count)];   
