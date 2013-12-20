@@ -56,6 +56,7 @@ static NSManagedObjectContext *moc;
     }
     
     // Criteria
+    NSLog(@"# to Search / Delete / Insert: %i", NUM_CRITERIA);
     searchCriteria = [NSMutableArray new];  
     insertCriteria = [NSMutableArray new];  
     deleteCriteria = [NSMutableArray new]; 
@@ -372,7 +373,6 @@ static NSManagedObjectContext *moc;
             NSLog(@"Error fetching criteria: %@", error);
         }
     }
-    NSLog(@"Results: %i", results.count);
 }
 
 - (void)testSearchCoreDataBulk {
@@ -388,7 +388,6 @@ static NSManagedObjectContext *moc;
     if (error) {
         NSLog(@"Error fetching criteria: %@", error);
     }
-    NSLog(@"Results: %i", results.count);
 }
 
 @end

@@ -27,29 +27,30 @@ Unit tests are available to see the details of testing the creation / load time
 of the various data structures from empty, as well as insertion / deletion
 / search within preloaded data structures. Sample output:
 
-	2013-12-20 06:24:06.407 NSTreeExample[64553:a0b] Application windows are expected to have a root view controller at the end of application launch
-	Test Suite 'All tests' started at 2013-12-20 11:24:06 +0000
-	Test Suite 'NSTreeExampleFunctionBenchmarks.xctest' started at 2013-12-20 11:24:06 +0000
-	2013-12-20 06:24:06.467 NSTreeExample[64553:a0b] Creating Trees
-	2013-12-20 06:24:06.472 NSTreeExample[64553:a0b] Tree3 Count: 1000
-	2013-12-20 06:24:06.473 NSTreeExample[64553:a0b] Tree30 Count: 1000
-	2013-12-20 06:24:06.474 NSTreeExample[64553:a0b] Tree300 Count: 1000
-	2013-12-20 06:24:06.474 NSTreeExample[64553:a0b] Creating Array
-	2013-12-20 06:24:06.475 NSTreeExample[64553:a0b] Array Count: 1000
-	2013-12-20 06:24:06.476 NSTreeExample[64553:a0b] Creating Dict
-	2013-12-20 06:24:06.485 NSTreeExample[64553:a0b] Dict Count: 1000
-	2013-12-20 06:24:06.486 NSTreeExample[64553:a0b] Creating Core Data
-	2013-12-20 06:24:06.551 NSTreeExample[64553:a0b] Core Data Entry Count: 1000
-	2013-12-20 06:24:06.552 NSTreeExample[64553:a0b] Setup Time Completion: 0.085851
-	Test Suite 'NSTreeExampleFunctionBenchmarks' started at 2013-12-20 11:24:06 +0000
+	2013-12-20 06:27:26.667 NSTreeExample[64628:a0b] Application windows are expected to have a root view controller at the end of application launch
+	Test Suite 'All tests' started at 2013-12-20 11:27:26 +0000
+	Test Suite 'NSTreeExampleFunctionBenchmarks.xctest' started at 2013-12-20 11:27:26 +0000
+	2013-12-20 06:27:26.725 NSTreeExample[64628:a0b] # to Search / Delete / Insert: 100
+	2013-12-20 06:27:26.727 NSTreeExample[64628:a0b] Creating Trees
+	2013-12-20 06:27:26.732 NSTreeExample[64628:a0b] Tree3 Count: 1000
+	2013-12-20 06:27:26.733 NSTreeExample[64628:a0b] Tree30 Count: 1000
+	2013-12-20 06:27:26.734 NSTreeExample[64628:a0b] Tree300 Count: 1000
+	2013-12-20 06:27:26.735 NSTreeExample[64628:a0b] Creating Array
+	2013-12-20 06:27:26.735 NSTreeExample[64628:a0b] Array Count: 1000
+	2013-12-20 06:27:26.736 NSTreeExample[64628:a0b] Creating Dict
+	2013-12-20 06:27:26.744 NSTreeExample[64628:a0b] Dict Count: 1000
+	2013-12-20 06:27:26.745 NSTreeExample[64628:a0b] Creating Core Data
+	2013-12-20 06:27:26.855 NSTreeExample[64628:a0b] Core Data Entry Count: 1000
+	2013-12-20 06:27:26.856 NSTreeExample[64628:a0b] Setup Time Completion: 0.130921
+	Test Suite 'NSTreeExampleFunctionBenchmarks' started at 2013-12-20 11:27:26 +0000
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteArray]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteArray]' passed (0.015 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteArray]' passed (0.016 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteArrayBulk]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteArrayBulk]' passed (0.000 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreData]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreData]' passed (0.036 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreData]' passed (0.039 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreDataBulk]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreDataBulk]' passed (0.006 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteCoreDataBulk]' passed (0.007 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteDict]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteDict]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteDictBulk]' started.
@@ -59,7 +60,7 @@ of the various data structures from empty, as well as insertion / deletion
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteTree30]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteTree30]' passed (0.002 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteTree300]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteTree300]' passed (0.007 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testDeleteTree300]' passed (0.013 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertArray]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertArray]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertCoreData]' started.
@@ -67,19 +68,17 @@ of the various data structures from empty, as well as insertion / deletion
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertDict]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertDict]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree3]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree3]' passed (0.004 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree3]' passed (0.005 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree30]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree30]' passed (0.002 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree300]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree300]' passed (0.002 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testInsertTree300]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchArray]' started.
-	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchArray]' passed (0.007 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchArray]' passed (0.008 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreData]' started.
-	2013-12-20 06:24:06.671 NSTreeExample[64553:a0b] Results: 101
-	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreData]' passed (0.025 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreData]' passed (0.026 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreDataBulk]' started.
-	2013-12-20 06:24:06.679 NSTreeExample[64553:a0b] Results: 96
-	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreDataBulk]' passed (0.007 seconds).
+	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchCoreDataBulk]' passed (0.006 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchDict]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchDict]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchTree3]' started.
@@ -88,7 +87,10 @@ of the various data structures from empty, as well as insertion / deletion
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchTree30]' passed (0.001 seconds).
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchTree300]' started.
 	Test Case '-[NSTreeExampleFunctionBenchmarks testSearchTree300]' passed (0.001 seconds).
-	Test Suite 'NSTreeExampleFunctionBenchmarks' finished at 201Program ended with exit code: 0
+	Test Suite 'NSTreeExampleFunctionBenchmarks' finished at 2013-12-20 11:27:27 +0000.
+	Executed 22 tests, with 0 failures (0 unexpected) in 0.140 (0.155) seconds
+	2013-12-20 06:27:27.013 NSTreeExample[64628:a0b] Successful cleanup of Core Data Store
+	Test Suite 'NSTreeExampleFunctionBenchmarks.Program ended with exit code: 0
 
 ### License
 MIT
