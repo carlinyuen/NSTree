@@ -13,10 +13,9 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 1000000    // This is extremely slow on CoreData functions
-//    #define NUM_ELEMENTS 1000
+    #define NUM_ELEMENTS 1000000 
 
-    #define TREE 0
+    #define TREE 1
     #define ARRAY 0
     #define DICT 0
     #define CORE 1
@@ -79,7 +78,8 @@ static NSManagedObjectContext *moc;
         } 
     }
     
-    if (CORE) {
+    if (CORE) 
+    {
         NSLog(@"Creating Core Data");   
         // Setup CoreData - simple Entity entry:value
         NSEntityDescription *runEntity = [[NSEntityDescription alloc] init];
@@ -98,15 +98,15 @@ static NSManagedObjectContext *moc;
         mom = [[NSManagedObjectModel alloc] init]; 
         [mom setEntities:@[runEntity]]; 
         
-        // Persistent Store - use in-memory
+        // Persistent Store - use sqlite because in-mem is too slow
         NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
         NSError *error = nil;
     //    [psc addPersistentStoreWithType:NSInMemoryStoreType
     //        configuration:nil URL:nil options:nil error:&error]; 
         NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent: @"NSTreeExampleFunctionBenchmarks.sqlite"];
-        NSURL *url = [NSURL fileURLWithPath:path];
         [psc addPersistentStoreWithType:NSSQLiteStoreType 
-            configuration:nil URL:url options:nil error:&error];
+            configuration:nil URL:[NSURL fileURLWithPath:path] 
+            options:nil error:&error];
         if (error) {
             NSLog(@"Error creating persistent store: %@", error);
         }
@@ -139,53 +139,63 @@ static NSManagedObjectContext *moc;
 
 + (void)tearDown
 {
+    if (CORE)
+    {
+        // Cleanup Core Data
+        NSError *error;
+        [[NSFileManager defaultManager] removeItemAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent: @"NSTreeExampleFunctionBenchmarks.sqlite"] error:&error];
+        if (error) {
+            NSLog(@"ERROR : Deleting Core Data Store : %@", error);
+        } else {
+            NSLog(@"Successful cleanup of Core Data Store");
+        }
+    }
+
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-
 #pragma mark - Insertion
 
-#ifdef TREE
 - (void)testInsertTree3 {
+    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree3 addObject:object];
     }
 }
 
 - (void)testInsertTree30 {
+    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree30 addObject:object];
     }
 }
 
 - (void)testInsertTree300 {
+    if (!TREE) return;
     for (id object in insertCriteria) {
         [tree300 addObject:object];
     }
 }
-#endif
 
-#ifdef ARRAY
 - (void)testInsertArray {
+    if (!ARRAY) return;
     for (id object in insertCriteria) {
         [array insertObject:object atIndex:[array indexOfObject:object inSortedRange:NSMakeRange(0, array.count - 1) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1 compare:obj2];
         }]];
     }
 }
-#endif
 
-#ifdef DICT
 - (void)testInsertDict {
+    if (!DICT) return;
     for (id object in insertCriteria) {
         [dict setObject:object forKey:[object description]];
     }
 }
-#endif
 
-#ifdef CORE
 - (void)testInsertCoreData {
+    if (!CORE) return;
     NSManagedObject *mo;
     for (id object in insertCriteria) {
         mo = [NSEntityDescription 
@@ -198,59 +208,58 @@ static NSManagedObjectContext *moc;
         NSLog(@"Populating CoreData Failed: %@", error);
     }
 }
-#endif
 
 
 #pragma mark - Deletion
 
-#ifdef TREE
 - (void)testDeleteTree3 {
+    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree3 removeObject:object];
     }
 }
 
 - (void)testDeleteTree30 {
+    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree30 removeObject:object];
     }
 }
 
 - (void)testDeleteTree300 {
+    if (!TREE) return;
     for (id object in deleteCriteria) {
         [tree300 removeObject:object];
     }
 }
-#endif
 
-#ifdef ARRAY
 - (void)testDeleteArrayBulk {
+    if (!ARRAY) return;
     [array removeObjectsInArray:deleteCriteria];
 }
 
 - (void)testDeleteArray {
+    if (!ARRAY) return;
     for (id object in deleteCriteria) {
         [array removeObject:object];
     }
 }
-#endif
 
-#ifdef DICT
 - (void)testDeleteDict {
+    if (!DICT) return;
     for (id object in deleteCriteria) {
         [dict removeObjectForKey:[object description]];  
     }
 }
 
 - (void)testDeleteDictBulk {
+    if (!DICT) return;
     [dict removeObjectsForKeys:deleteCriteria];
     NSLog(@"Delete Bulk Dict Count: %i", dict.count);
 }
-#endif
 
-#ifdef CORE
-// This is really slow if done with multiple deleteCriteria
 - (void)testDeleteCoreData {
+    if (!CORE) return;
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
     NSError *error; 
     NSArray *results;
@@ -261,67 +270,83 @@ static NSManagedObjectContext *moc;
         if (error) {
             NSLog(@"Error fetching criteria: %@", error);
         }
-        NSLog(@"Results: %@", results); 
          
         // Delete
         for (id object in results) {
             [moc deleteObject:object];
         }
-               
-        // This is incredibly slow on coredata and will take forever
-        if (searchCriteria.count > 5) {
-            break;
-        } 
     }
     
     if (![moc save:&error]) {
         NSLog(@"Error deleting from core data: %@", error); 
     }
 }
-#endif
+
+- (void)testDeleteCoreDataBulk {
+    if (!CORE) return;
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSMutableArray *predicates = [NSMutableArray new];
+    for (id object in deleteCriteria) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
+    }
+    NSError *error;  
+    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]];
+    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Error fetching criteria: %@", error);
+    }
+    else  // Delete
+    {
+        for (id object in results) {
+            [moc deleteObject:object];
+        } 
+           
+        if (![moc save:&error]) {
+            NSLog(@"Error deleting from core data: %@", error); 
+        } 
+    }
+}
 
 
 #pragma mark - Search
 
-#ifdef TREE
 - (void)testSearchTree3 {
+    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree3 containsObject:object];
     }
 }
 
 - (void)testSearchTree30 {
+    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree30 containsObject:object];
     }
 }
 
 - (void)testSearchTree300 {
+    if (!TREE) return;
     for (id object in searchCriteria) {
         [tree300 containsObject:object];
     }
 }
-#endif
 
-#ifdef ARRAY
 - (void)testSearchArray {
+    if (!ARRAY) return;
     for (id object in searchCriteria) {
         [array containsObject:object];
     }
 }
-#endif
 
-#ifdef DICT
 - (void)testSearchDict {
+    if (!DICT) return;
     for (id object in searchCriteria) {
         [dict objectForKey:[object description]];  
     }
 }
-#endif
 
-#ifdef CORE
-// Extremely slow when doing on a lot of items
 - (void)testSearchCoreData {
+    if (!CORE) return;
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
     NSError *error; 
     NSMutableArray *results = [NSMutableArray new];
@@ -329,18 +354,28 @@ static NSManagedObjectContext *moc;
     for (id object in searchCriteria) {
         [fetch setPredicate:[NSPredicate predicateWithFormat:@"value == %@", object]];
         temp = [moc executeFetchRequest:fetch error:&error]; 
-        NSLog(@"Fetched: %@", temp);
         [results addObjectsFromArray:temp];
         if (error) {
             NSLog(@"Error fetching criteria: %@", error);
         }
-        
-        // This is incredibly slow on coredata and will take forever
-        if (searchCriteria.count > 5) {
-            break;
-        }
     }
+    NSLog(@"Results: %i", results.count);
 }
-#endif
+
+- (void)testSearchCoreDataBulk {
+    if (!CORE) return;
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    NSMutableArray *predicates = [NSMutableArray new];
+    for (id object in searchCriteria) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
+    }
+    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]];
+    NSError *error;  
+    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Error fetching criteria: %@", error);
+    }
+    NSLog(@"Results: %i", results.count);
+}
 
 @end
