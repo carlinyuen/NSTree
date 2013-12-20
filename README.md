@@ -14,6 +14,18 @@ Keywords: iOS, tree, algorithms, data structures, b-trees, unit tests.
  - Easy way to print out tree representations for debugging.
  - Maintains cache of data in an NSArray for quick lookups using objectAtIndex.
 
+## TODO
+ - Build in some file management for persistent storage.
+ - More thoroughly test out node capacity vs tree size performance.
+ - Add features to make tree more practical as a storage system.
+
+## Interesting Things I Learned
+ - Core Data is super slow when using in-memory store, use SQLite store instead.
+ - Significant performance boost when using bulk methods on NSArray and NSDict
+   for adding & removal.
+ - Tree node capacity to total number of elements ratio is important to performance.
+   So far, with limited testing, keeping it on the order of 1:1000 seems ok?
+
 ## Benchmarks
 On par with Core Data and generic NSArray for performance in terms of insertion,
 search, and deletion (note that we are requiring sorted order), especially when
