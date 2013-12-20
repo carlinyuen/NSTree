@@ -13,7 +13,8 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 1000000
+    #define NUM_ELEMENTS 1000000    // This is extremely slow on CoreData functions
+//    #define NUM_ELEMENTS 1000
 
 @interface NSTreeExampleFunctionBenchmarks : XCTestCase
 @end
@@ -47,7 +48,8 @@ static NSManagedObjectContext *moc;
     searchCriteria = [NSMutableArray new];  
     insertCriteria = [NSMutableArray new];  
     deleteCriteria = [NSMutableArray new]; 
-    for (int i = 0; i < NUM_ELEMENTS / 1000; ++i) {
+    int numCriteria = MAX(1, NUM_ELEMENTS / 1000);
+    for (int i = 0; i < numCriteria; ++i) {
        [searchCriteria addObject:@(arc4random() % data.count)];
        [insertCriteria addObject:@(arc4random() % data.count)];  
        [deleteCriteria addObject:@(arc4random() % data.count)];   
@@ -201,37 +203,29 @@ static NSManagedObjectContext *moc;
     }
 }
 
+// This is really slow if done with multiple deleteCriteria
 - (void)testDeleteCoreData {
-    NSMutableArray *predicates = [NSMutableArray new];
-    for (id object in deleteCriteria) {
-        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
-    }
-    
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]]; 
-    NSError *error;
-    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        NSLog(@"Error fetching criteria: %@", error);
-    }
-    NSLog(@"Results: %i", results.count); 
-    
-    // Delete
-    for (id object in results) {
-        [moc deleteObject:object];
+    NSError *error; 
+    NSArray *results;
+    for (id object in deleteCriteria) {
+        [fetch setPredicate:[NSPredicate predicateWithFormat:@"value == %@", object]];
+         
+        results = [moc executeFetchRequest:fetch error:&error]; 
+        if (error) {
+            NSLog(@"Error fetching criteria: %@", error);
+        }
+        NSLog(@"Results: %@", results); 
+         
+        // Delete
+        for (id object in results) {
+            [moc deleteObject:object];
+        }
     }
     
     if (![moc save:&error]) {
         NSLog(@"Error deleting from core data: %@", error); 
     }
-    
-    fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    error = nil;
-    results = [moc executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        NSLog(@"Fetching from Core Data Failed: %@", error); 
-    }
-    NSLog(@"Core Data Entry Count: %i", results.count); 
 }
 
 
@@ -267,20 +261,21 @@ static NSManagedObjectContext *moc;
     }
 }
 
+// Extremely slow when doing on a lot of items
 - (void)testSearchCoreData {
-    NSMutableArray *predicates = [NSMutableArray new];
-    for (id object in deleteCriteria) {
-        [predicates addObject:[NSPredicate predicateWithFormat:@"value == %@", object]];
-    }
-    
     NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
-    [fetch setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]]; 
-    NSError *error;
-    NSArray *results = [moc executeFetchRequest:fetch error:&error]; 
-    if (error) {
-        NSLog(@"Error fetching criteria: %@", error);
+    NSError *error; 
+    NSMutableArray *results = [NSMutableArray new];
+    NSArray *temp;
+    for (id object in searchCriteria) {
+        [fetch setPredicate:[NSPredicate predicateWithFormat:@"value == %@", object]];
+        temp = [moc executeFetchRequest:fetch error:&error]; 
+        NSLog(@"Fetched: %@", temp);
+        [results addObjectsFromArray:temp];
+        if (error) {
+            NSLog(@"Error fetching criteria: %@", error);
+        }
     }
-    NSLog(@"Search Results: %i", results.count); 
 }
 
 @end
