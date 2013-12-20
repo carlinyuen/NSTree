@@ -42,6 +42,9 @@ static NSManagedObjectContext *moc;
 + (void)setUp
 {
     [super setUp];
+    
+    // For timing purposes
+    NSDate *startDate = [NSDate date];
      
     // Setup data
     data = [NSMutableArray new]; 
@@ -65,10 +68,14 @@ static NSManagedObjectContext *moc;
         tree3 = [[NSTree alloc] initWithNodeCapacity:3 withSortedObjects:data];   
         tree30 = [[NSTree alloc] initWithNodeCapacity:30 withSortedObjects:data];  
         tree300 = [[NSTree alloc] initWithNodeCapacity:300 withSortedObjects:data];  
+        NSLog(@"Tree3 Count: %i", tree3.count);  
+        NSLog(@"Tree30 Count: %i", tree30.count);   
+        NSLog(@"Tree300 Count: %i", tree300.count);   
     }
     if (ARRAY) {
         NSLog(@"Creating Array"); 
         array = [[NSMutableArray alloc] initWithArray:data];
+        NSLog(@"Array Count: %i", array.count); 
     }
     if (DICT) {
         NSLog(@"Creating Dict");  
@@ -76,6 +83,7 @@ static NSManagedObjectContext *moc;
         for (id object in data) {
             [dict setObject:object forKey:[object description]];
         } 
+        NSLog(@"Dict Count: %i", dict.count);
     }
     
     if (CORE) 
@@ -135,6 +143,9 @@ static NSManagedObjectContext *moc;
         }
         NSLog(@"Core Data Entry Count: %i", results.count); 
     }
+    
+    // End timer
+    NSLog(@"Setup Time Completion: %f", [startDate timeIntervalSinceNow]);
 }
 
 + (void)tearDown
