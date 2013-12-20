@@ -17,8 +17,8 @@
     #define NUM_CRITERIA 10
 
     #define TREE 1
-    #define ARRAY 0
-    #define DICT 0
+    #define ARRAY 1
+    #define DICT 1
     #define CORE 1
 
 @interface NSTreeExampleFunctionBenchmarks : XCTestCase
