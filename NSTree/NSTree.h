@@ -54,6 +54,7 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
 
 @interface NSTree : NSObject<NSFastEnumeration, NSCopying>
     @property (nonatomic, assign, readonly) int count;
+    @property (nonatomic, assign, readonly) int nodeCapacity; 
     @property (nonatomic, assign, readonly) bool cacheOutdated;  
 
     /** @brief Create tree with a certain number of allowable children */

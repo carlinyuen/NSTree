@@ -31,6 +31,11 @@
 		228B4299183AC0210042DFD6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
 		228B429F183AC0210042DFD6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 228B429D183AC0210042DFD6 /* InfoPlist.strings */; };
 		228B42A1183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.m in Sources */ = {isa = PBXBuildFile; fileRef = 228B42A0183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.m */; };
+		22CC7B35186463BC0096D0CE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 228B4269183A5D9F0042DFD6 /* XCTest.framework */; };
+		22CC7B36186463BC0096D0CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A11180F3FB800143CE7 /* Foundation.framework */; };
+		22CC7B37186463BC0096D0CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
+		22CC7B3D186463BC0096D0CE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 22CC7B3B186463BC0096D0CE /* InfoPlist.strings */; };
+		22CC7B3F186463BC0096D0CE /* NSTreeExampleCapacityRatios.m in Sources */ = {isa = PBXBuildFile; fileRef = 22CC7B3E186463BC0096D0CE /* NSTreeExampleCapacityRatios.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +54,13 @@
 			remoteInfo = NSTreeExample;
 		};
 		228B42A3183AC0210042DFD6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22771A06180F3FB800143CE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22771A0D180F3FB800143CE7;
+			remoteInfo = NSTreeExample;
+		};
+		22CC7B41186463BC0096D0CE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 22771A06180F3FB800143CE7 /* Project object */;
 			proxyType = 1;
@@ -87,6 +99,11 @@
 		228B429E183AC0210042DFD6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		228B42A0183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSTreeExampleFunctionBenchmarks.m; sourceTree = "<group>"; };
 		228B42A2183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTreeExampleFunctionBenchmarks-Prefix.pch"; sourceTree = "<group>"; };
+		22CC7B34186463BC0096D0CE /* NSTreeExampleCapacityRatios.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NSTreeExampleCapacityRatios.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		22CC7B3A186463BC0096D0CE /* NSTreeExampleCapacityRatios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTreeExampleCapacityRatios-Info.plist"; sourceTree = "<group>"; };
+		22CC7B3C186463BC0096D0CE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		22CC7B3E186463BC0096D0CE /* NSTreeExampleCapacityRatios.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSTreeExampleCapacityRatios.m; sourceTree = "<group>"; };
+		22CC7B40186463BC0096D0CE /* NSTreeExampleCapacityRatios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTreeExampleCapacityRatios-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +148,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		22CC7B31186463BC0096D0CE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22CC7B35186463BC0096D0CE /* XCTest.framework in Frameworks */,
+				22CC7B37186463BC0096D0CE /* UIKit.framework in Frameworks */,
+				22CC7B36186463BC0096D0CE /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -142,6 +169,7 @@
 				22771A30180F3FB900143CE7 /* NSTreeTests */,
 				228B4284183ABFC50042DFD6 /* NSTreeExampleLoadBenchmarks */,
 				228B429A183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks */,
+				22CC7B38186463BC0096D0CE /* NSTreeExampleCapacityRatios */,
 				22771A10180F3FB800143CE7 /* Frameworks */,
 				22771A0F180F3FB800143CE7 /* Products */,
 			);
@@ -154,6 +182,7 @@
 				22771A29180F3FB900143CE7 /* NSTreeExampleTests.xctest */,
 				228B4280183ABFC40042DFD6 /* NSTreeExampleLoadBenchmarks.xctest */,
 				228B4296183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.xctest */,
+				22CC7B34186463BC0096D0CE /* NSTreeExampleCapacityRatios.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -258,6 +287,25 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		22CC7B38186463BC0096D0CE /* NSTreeExampleCapacityRatios */ = {
+			isa = PBXGroup;
+			children = (
+				22CC7B3E186463BC0096D0CE /* NSTreeExampleCapacityRatios.m */,
+				22CC7B39186463BC0096D0CE /* Supporting Files */,
+			);
+			path = NSTreeExampleCapacityRatios;
+			sourceTree = "<group>";
+		};
+		22CC7B39186463BC0096D0CE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				22CC7B3A186463BC0096D0CE /* NSTreeExampleCapacityRatios-Info.plist */,
+				22CC7B3B186463BC0096D0CE /* InfoPlist.strings */,
+				22CC7B40186463BC0096D0CE /* NSTreeExampleCapacityRatios-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -332,6 +380,24 @@
 			productReference = 228B4296183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		22CC7B33186463BC0096D0CE /* NSTreeExampleCapacityRatios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22CC7B43186463BC0096D0CE /* Build configuration list for PBXNativeTarget "NSTreeExampleCapacityRatios" */;
+			buildPhases = (
+				22CC7B30186463BC0096D0CE /* Sources */,
+				22CC7B31186463BC0096D0CE /* Frameworks */,
+				22CC7B32186463BC0096D0CE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				22CC7B42186463BC0096D0CE /* PBXTargetDependency */,
+			);
+			name = NSTreeExampleCapacityRatios;
+			productName = NSTreeExampleCapacityRatios;
+			productReference = 22CC7B34186463BC0096D0CE /* NSTreeExampleCapacityRatios.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -348,6 +414,9 @@
 						TestTargetID = 22771A0D180F3FB800143CE7;
 					};
 					228B4295183AC0210042DFD6 = {
+						TestTargetID = 22771A0D180F3FB800143CE7;
+					};
+					22CC7B33186463BC0096D0CE = {
 						TestTargetID = 22771A0D180F3FB800143CE7;
 					};
 				};
@@ -368,6 +437,7 @@
 				22771A28180F3FB900143CE7 /* NSTreeExampleTests */,
 				228B427F183ABFC40042DFD6 /* NSTreeExampleLoadBenchmarks */,
 				228B4295183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks */,
+				22CC7B33186463BC0096D0CE /* NSTreeExampleCapacityRatios */,
 			);
 		};
 /* End PBXProject section */
@@ -403,6 +473,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				228B429F183AC0210042DFD6 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22CC7B32186463BC0096D0CE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22CC7B3D186463BC0096D0CE /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +521,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		22CC7B30186463BC0096D0CE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22CC7B3F186463BC0096D0CE /* NSTreeExampleCapacityRatios.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -460,6 +546,11 @@
 			isa = PBXTargetDependency;
 			target = 22771A0D180F3FB800143CE7 /* NSTreeExample */;
 			targetProxy = 228B42A3183AC0210042DFD6 /* PBXContainerItemProxy */;
+		};
+		22CC7B42186463BC0096D0CE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22771A0D180F3FB800143CE7 /* NSTreeExample */;
+			targetProxy = 22CC7B41186463BC0096D0CE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -492,6 +583,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				228B429E183AC0210042DFD6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		22CC7B3B186463BC0096D0CE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				22CC7B3C186463BC0096D0CE /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -735,6 +834,50 @@
 			};
 			name = Release;
 		};
+		22CC7B44186463BC0096D0CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NSTreeExampleCapacityRatios/NSTreeExampleCapacityRatios-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "NSTreeExampleCapacityRatios/NSTreeExampleCapacityRatios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		22CC7B45186463BC0096D0CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NSTreeExampleCapacityRatios/NSTreeExampleCapacityRatios-Prefix.pch";
+				INFOPLIST_FILE = "NSTreeExampleCapacityRatios/NSTreeExampleCapacityRatios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -782,6 +925,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		22CC7B43186463BC0096D0CE /* Build configuration list for PBXNativeTarget "NSTreeExampleCapacityRatios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22CC7B44186463BC0096D0CE /* Debug */,
+				22CC7B45186463BC0096D0CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

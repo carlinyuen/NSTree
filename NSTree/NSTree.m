@@ -114,8 +114,8 @@
 
 @interface NSTree()
     @property (nonatomic, strong) NSTreeNode *root;
-    @property (nonatomic, assign) int nodeCapacity;
     @property (nonatomic, assign) int nodeMinimum;
+    @property (nonatomic, assign, readwrite) int nodeCapacity; 
     @property (nonatomic, assign, readwrite) int count;
     
     // Cache and flag for quick access
