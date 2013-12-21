@@ -60,11 +60,11 @@
 - (NSUInteger)indexOfDataObject:(id)object
 {
     return [self.data indexOfObject:object 
-                      inSortedRange:NSMakeRange(0, self.data.count) 
-                            options:NSBinarySearchingFirstEqual
-                    usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                        return [obj1 compare:obj2];
-                    }];
+        inSortedRange:NSMakeRange(0, self.data.count) 
+        options:NSBinarySearchingFirstEqual
+        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
 }
 
 /** @brief Print entire tree */
@@ -551,7 +551,7 @@
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
     if (!object || !node || node.data.count <= 0) {
-        NSLog(@"Removing object: %@ fromNode: %@", object, node);
+        NSLog(@"Cannot remove object: %@ fromNode: %@", object, node);
         return false;
     }
     
@@ -645,12 +645,8 @@
         }
         
         // If item exists and is equal at index and no child with value exists, then use as return value
-        if (!child && index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
-            return node;
-        }
-               
-        if (!child) {
-            NSLog(@"Couldn't find %@ in %@", object, node);
+        if (index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
+            return (child) ? child : node;
         }
         
         return child;
