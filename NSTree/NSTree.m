@@ -886,9 +886,10 @@
 
     }
     
-    if (![node hasValidPointerStructure]) {
-        NSLog(@"Invalid pointer state on node: %@", node);
-    } 
+    // For debugging, check if has valid pointer structure
+//    if (![node hasValidPointerStructure]) {
+//        NSLog(@"Invalid pointer state on node: %@", node);
+//    } 
        
 //    NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);     
 }
