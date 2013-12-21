@@ -50,39 +50,39 @@
     [super tearDown];
 }
 
-- (void)testTreeInsert
-{
-    NSDate *start;
-    for (NSTree *tree in self.trees) {
-        NSLog(@"Inserting into tree with capcity: %i", tree.nodeCapacity);
-        start = [NSDate date];
-        for (id object in self.data) { 
-            [tree addObject:object];
-        }
-        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
-    }
-}
+//- (void)testTreeInsert
+//{
+//    NSDate *start;
+//    for (NSTree *tree in self.trees) {
+//        NSLog(@"Inserting into tree with capcity: %i", tree.nodeCapacity);
+//        start = [NSDate date];
+//        for (id object in self.data) { 
+//            [tree addObject:object];
+//        }
+//        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
+//    }
+//}
 
-- (void)testTreeSearch
-{
-    // Populate first
-    for (NSTree *tree in self.trees) {
-        for (id object in self.data) { 
-            [tree addObject:object];
-        }
-    }
-    
-    // Search
-    NSDate *start;
-    for (NSTree *tree in self.trees) {
-        NSLog(@"Searching tree with capcity: %i", tree.nodeCapacity);
-        start = [NSDate date];
-        for (id object in self.data) { 
-            [tree containsObject:object];
-        }
-        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
-    }
-}
+//- (void)testTreeSearch
+//{
+//    // Populate first
+//    for (NSTree *tree in self.trees) {
+//        for (id object in self.data) { 
+//            [tree addObject:object];
+//        }
+//    }
+//    
+//    // Search
+//    NSDate *start;
+//    for (NSTree *tree in self.trees) {
+//        NSLog(@"Searching tree with capcity: %i", tree.nodeCapacity);
+//        start = [NSDate date];
+//        for (id object in self.data) { 
+//            [tree containsObject:object];
+//        }
+//        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
+//    }
+//}
 
 - (void)testTreeDelete
 {

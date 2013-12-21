@@ -294,7 +294,7 @@
     }
     
     if ([self removeObject:object fromNode:
-         [self getNodeThatContains:object inBranch:self.root]]) {
+         [self getLowestNodeThatContains:object inBranch:self.root]]) {
         self.count--;
         self.cacheOutdated = true; 
         return true;
@@ -526,6 +526,8 @@
         return false;
     }
     
+    NSLog(@"Removing object %@ from node %@", object, node);
+    
     // If leaf node, simple remove
     if (!node.children.count) 
     {
@@ -551,11 +553,11 @@
             return false;
         }
         
-        // Replace with largest value from left subtree
-        NSTreeNode *child = [self getRightMostNode:node.children[index]];
-        id replacementObject = child.data[child.data.count - 1];
+        // Replace with smallest value from right subtree
+        NSTreeNode *child = [self getLeftMostNode:node.children[index + 1]];
+        id replacementObject = child.data[0];
         [node.data replaceObjectAtIndex:index withObject:replacementObject];
-        [child.data removeObjectAtIndex:child.data.count - 1];
+        [child.data removeObjectAtIndex:0];
         
         // Rebalance child node if needed
         [self rebalanceNode:child];
@@ -587,13 +589,40 @@
             return node;
         }
         
-        // If subtree doesn't exist at that index
-        if (index >= node.children.count) {
-            return nil;
-        }
-        
         // Need to search subtree
         return [self getNodeThatContains:object inBranch:node.children[index]];
+    } 
+    
+    return nil;
+}
+
+/** @brief Returns the lowest node that contains the given object using standard comparison rules, starting from given node branch. */
+- (NSTreeNode *)getLowestNodeThatContains:(id)object inBranch:(NSTreeNode *)node
+{
+    if (!object || !node || !node.data.count) {
+        return nil;
+    }
+    
+    // Search for item in node data
+    int index = [node.data indexOfObject:object 
+                           inSortedRange:NSMakeRange(0, node.data.count) 
+                                 options:NSBinarySearchingInsertionIndex 
+                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                             return [obj1 compare:obj2];
+                         }];
+    
+    // If within bounds of data (note the <= count due to subtree indexing)
+    if (index >= 0 && index <= node.data.count) 
+    {
+        // Search subtree (don't cut short because it's worth deleting from leaf node to prevent restructuring)
+        NSTreeNode *child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
+        
+        // If item exists and is equal at index and no child with value exists, then use as return value
+        if (index < node.data.count && [node.data[index] isEqual:object] && !child) {
+            return node;
+        }
+        
+        return child;
     } 
     
     return nil;
@@ -745,11 +774,12 @@
 
 - (void)rebalanceNode:(NSTreeNode *)node
 {
+    NSLog(@"Tree State: \n%@", [self printTree]);  
+        
     // If node is at capacity, need to split
     if (node.data.count > self.nodeCapacity)
     {
 //        NSLog(@"Rebalance Node with Max Capacity: %@", node);
-//        NSLog(@"Tree Before: \n%@", [self printTree]);
 
         // Create right node to be efficient about removing from arrays
         NSTreeNode *newRightNode = [[NSTreeNode alloc] initWithParent:node.parent];
@@ -806,7 +836,6 @@
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
         NSLog(@"Rebalance Node with Min Capacity: %@", node); 
-        NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.parent == node.parent
@@ -825,7 +854,7 @@
             [self mergeSiblingWithNode:node];
         }
 
-        NSLog(@"Tree After: \n%@", [self printTree]);   
+        NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);   
     }
 }
 
