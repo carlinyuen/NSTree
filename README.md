@@ -1,8 +1,8 @@
 NSTree
 ======
 
-B-Tree data structure implementation for iOS without using CFTree. 
-Keywords: iOS, tree, algorithms, data structures, b-trees, unit tests.
+B-Tree data structure implementation for iOS / objective-c without using CFTree. Can be used as a storage mechanism or to index large sets of data. Performs fairly well compared to Core Data and regular NSArrays.
+Keywords: iOS, tree, algorithms, data structures, binary, b-trees, core data, storage, unit tests, benchmarks.
 
 ## Features
  - Customizable Node Capacity (max # children per node).
