@@ -16,11 +16,11 @@ Keywords: iOS, tree, algorithms, data structures, b-trees, unit tests.
 
 ## TODO
  - Build in some file management for persistent storage.
- - More thoroughly test out node capacity vs tree size performance.
  - Add features to make tree more practical as a storage system.
 
 ## Interesting Things I Learned
- - Core Data is super slow when using in-memory store, use SQLite store instead.
+ - Core Data is super slow when using in-memory store, use SQLite store instead
+   (strangely enough, the sqlite version is still slow in the LoadBenchmarks).
  - Significant performance boost when using bulk methods on NSArray and NSDict
    for adding & removal.
  - Tree node capacity to total number of elements ratio is important to performance.
