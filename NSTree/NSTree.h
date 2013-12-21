@@ -26,6 +26,9 @@
     
     /** @brief Print entire tree */
     - (NSString *)printTree;
+    
+    /** @brief Prints and checks for pointer discrepancies in children, returns TRUE if all children have appropriate pointers to each other and their parent. Does not include the childrens' children. */
+    - (bool)hasValidPointerStructure;
 
 @end
 

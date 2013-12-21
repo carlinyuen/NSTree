@@ -67,6 +67,7 @@
                     }];
 }
 
+/** @brief Print entire tree */
 - (NSString *)printTree
 {
     return [self printTreeNode:self indent:1];
@@ -88,6 +89,39 @@
     }
     
     return string;
+}
+
+/** @brief Prints and checks for pointer discrepancies in children, returns TRUE if all children have appropriate pointers to each other and their parent. Does not include the childrens' children. */
+- (bool)hasValidPointerStructure
+{
+    bool valid = true;
+    NSTreeNode *prev, *next;
+    
+    // Trivial case
+    if (!self.children.count) {
+        return true;
+    }
+    
+    // Iterate through children to check pointers
+    for (prev = self.children[0], next = prev.next; next; prev = next, next = next.next)
+    {
+        if (prev.parent != self) {
+            valid = false;
+            NSLog(@"Child with wrong parent pointer: %@", prev);
+        }
+        
+        if (next.previous != prev) {
+            valid = false;
+            NSLog(@"Siblings with wrong pointers: %@ <-> %@", prev, next);
+        }
+    }
+    
+    if (prev.parent != self) {
+        valid = false;
+        NSLog(@"Child with wrong parent pointer: %@", prev);
+    } 
+        
+    return valid;
 }
 
 - (NSString *)description 
@@ -493,19 +527,14 @@
         if (sibling) {
             child.next = sibling.next;
             child.previous = sibling;
-            sibling.next = child;
+            child.previous.next = child;
+            if (child.next) {
+                child.next.previous = child;
+            }
         } 
-        else    // This shouldn't happen, but check other side
+        else    // This shouldn't happen
         {
             NSLog(@"Warning! Checking next sibling pointer while adding child: %@", child);
-            if (node.children.count < index + 2) {
-                sibling = node.children[index + 2];
-                if (sibling) {
-                    child.previous = sibling.previous;
-                    child.next = sibling;
-                    sibling.previous = child;
-                }
-            }
         }
     }
     
@@ -523,12 +552,10 @@
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
     if (!object || !node || node.data.count <= 0) {
-        NSLog(@"Warning: Tried to remove with nil object or node! %@ from %@", object, node);
         return false;
     }
     
     NSLog(@"Removing object %@ from node %@", object, node);
-    NSLog(@"Tree Count: %i", self.count);
     
     // Get index to remove from
     int index = [node indexOfDataObject:object];
@@ -826,14 +853,12 @@
             // This shouldn't happen
             NSLog(@"Warning! Rebalancing node that doesn't have a parent and isn't the root!");
         }
-
-//        NSLog(@"Tree After: \n%@", [self printTree]); 
     }
 
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
-        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
+//        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.parent == node.parent
@@ -852,8 +877,13 @@
             [self mergeSiblingWithNode:node];
         }
 
-        NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);   
     }
+    
+    if (![node hasValidPointerStructure]) {
+        NSLog(@"Invalid pointer state on node: %@", node);
+    } 
+       
+    NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);     
 }
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
