@@ -33,11 +33,15 @@
     for (int i = 1; i <= NUM_ELEMENTS; ++i) {
         [self.data addObject: @(arc4random() % NUM_ELEMENTS)];
     }   
+    NSLog(@"Data count: %i", self.data.count);
     
     // Setup trees
+    self.trees = [NSMutableArray new];
     for (int i = 3; i <= NUM_ELEMENTS; i *= 10) {
+        NSLog(@"Capacity: %i", i);
         [self.trees addObject:[[NSTree alloc] initWithNodeCapacity:i]];
     }
+    NSLog(@"# trees: %i", self.trees.count);
 }
 
 - (void)tearDown
