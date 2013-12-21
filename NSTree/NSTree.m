@@ -554,7 +554,7 @@
         return false;
     }
     
-    NSLog(@"Removing object %@ from node %@", object, node);
+//    NSLog(@"Removing object %@ from node %@", object, node);
     
     // Get index to remove from
     int index = [node indexOfDataObject:object];
@@ -798,7 +798,7 @@
 
 - (void)rebalanceNode:(NSTreeNode *)node
 {
-    NSLog(@"Tree State: \n%@", [self printTree]);  
+//    NSLog(@"Tree State: \n%@", [self printTree]);  
         
     // If node is at capacity, need to split
     if (node.data.count > self.nodeCapacity)
@@ -882,12 +882,12 @@
         NSLog(@"Invalid pointer state on node: %@", node);
     } 
        
-    NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);     
+//    NSLog(@"Tree After operation on node: %@ \n%@", node, [self printTree]);     
 }
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
 {
-    NSLog(@"Rotate node %@ %@", node, (direction ? @"Right" : @"Left"));
+//    NSLog(@"Rotate node %@ %@", node, (direction ? @"Right" : @"Left"));
 
     // Can't rotate if no node, no siblings in direction to rotate, 
     //  or no data in sibling, or siblings not from same parent
@@ -940,7 +940,7 @@
 
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
-    NSLog(@"Merge on node: %@", node);
+//    NSLog(@"Merge on node: %@", node);
     
     // Sanity checks: need siblings or node to exist
     if (!node || (!node.previous && !node.next)) {
