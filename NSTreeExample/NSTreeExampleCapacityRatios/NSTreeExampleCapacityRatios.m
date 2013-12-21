@@ -37,11 +37,10 @@
     
     // Setup trees
     self.trees = [NSMutableArray new];
-//    for (int i = 3; i <= NUM_ELEMENTS; i *= 10) {
-//        NSLog(@"Capacity: %i", i);
-//        [self.trees addObject:[[NSTree alloc] initWithNodeCapacity:i]];
-//    }
-    [self.trees addObject:[[NSTree alloc] initWithNodeCapacity:300]]; 
+    for (int i = 3; i <= NUM_ELEMENTS; i *= 10) {
+        NSLog(@"Capacity: %i", i);
+        [self.trees addObject:[[NSTree alloc] initWithNodeCapacity:i]];
+    }
     NSLog(@"# trees: %i", self.trees.count);
 }
 

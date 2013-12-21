@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 /*  IMPORTANT NOTES
-    Objects you store in the NSTree must implement a compare: function, see Apple developer docs for an example in NSNumber <https://developer.apple.com/library/mac/documentation/cocoa/reference/foundation/classes/nsnumber_class/Reference/Reference.html#//apple_ref/occ/instm/NSNumber/compare:>.
+    Objects you store in the NSTree must implement a compare: function, see Apple developer docs for an example in NSNumber <https://developer.apple.com/library/mac/documentation/cocoa/reference/foundation/classes/nsnumber_class/Reference/Reference.html#//apple_ref/occ/instm/NSNumber/compare:>. I use compare instead of isE
 */
 
 @interface NSTreeNode : NSObject<NSCopying>

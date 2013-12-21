@@ -505,11 +505,11 @@
    
     // Find index where we should put it, and add it
     int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count) 
-                                 options:NSBinarySearchingInsertionIndex 
-                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                             return [obj1 compare:obj2];
-                         }];
+        inSortedRange:NSMakeRange(0, node.data.count) 
+        options:NSBinarySearchingInsertionIndex 
+        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
     [node.data insertObject:object atIndex:index];
     
     // Add child if exists, need to add right after data insertion
@@ -599,11 +599,12 @@
     
     // Search for item in node data
     int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count) 
-                                 options:NSBinarySearchingInsertionIndex 
-                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                             return [obj1 compare:obj2];
-                         }];
+        inSortedRange:NSMakeRange(0, node.data.count) 
+        options:NSBinarySearchingInsertionIndex 
+            | NSBinarySearchingFirstEqual
+        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
     
     // If within bounds of data (note the <= count due to subtree indexing)
     if (index >= 0 && index <= node.data.count) 
@@ -627,15 +628,16 @@
         return nil;
     }
     
-    NSLog(@"Get: %@ in %@", object, node);
+//    NSLog(@"Get: %@ in %@", object, node);
     
     // Search for item in node data
     int index = [node.data indexOfObject:object 
-                           inSortedRange:NSMakeRange(0, node.data.count) 
-                                 options:NSBinarySearchingInsertionIndex 
-                         usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                             return [obj1 compare:obj2];
-                         }];
+        inSortedRange:NSMakeRange(0, node.data.count) 
+        options:NSBinarySearchingInsertionIndex 
+            | NSBinarySearchingFirstEqual
+        usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
     
     // If within bounds of data (note the <= count due to subtree indexing)
     if (index >= 0 && index <= node.data.count) 
@@ -644,13 +646,11 @@
         NSTreeNode *child = nil;
         if (node.children.count) {
             child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
-        } else {
-            NSLog(@"End Branch");
         }
         
         // If item exists and is equal at index and no child with value exists, then use as return value
-        if (!child && index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
-            return node;
+        if (index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
+            return (child) ? child : node;
         }
         
         return child;
@@ -671,11 +671,12 @@
     {
         // Search for item in node data
         int index = [node.data indexOfObject:object 
-                               inSortedRange:NSMakeRange(0, node.data.count) 
-                                     options:NSBinarySearchingInsertionIndex 
-                             usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                 return [obj1 compare:obj2];
-                             }];
+            inSortedRange:NSMakeRange(0, node.data.count) 
+            options:NSBinarySearchingInsertionIndex 
+                | NSBinarySearchingFirstEqual 
+            usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                return [obj1 compare:obj2];
+            }];
         
         // If within bounds of children
         if (index >= 0 && index < node.children.count) {
