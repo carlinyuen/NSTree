@@ -10,6 +10,11 @@
 		2214440518592D4B00A7AB59 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214440418592D4A00A7AB59 /* CoreData.framework */; };
 		22144409185936A000A7AB59 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214440418592D4A00A7AB59 /* CoreData.framework */; };
 		2222AE93180F494F0016C8DA /* NSTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2222AE92180F494F0016C8DA /* NSTree.m */; };
+		2239E98C18656E28002C0552 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 228B4269183A5D9F0042DFD6 /* XCTest.framework */; };
+		2239E98D18656E28002C0552 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A11180F3FB800143CE7 /* Foundation.framework */; };
+		2239E98E18656E28002C0552 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
+		2239E99418656E28002C0552 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2239E99218656E28002C0552 /* InfoPlist.strings */; };
+		2239E99618656E28002C0552 /* NSTreeExampleCustomObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 2239E99518656E28002C0552 /* NSTreeExampleCustomObjects.m */; };
 		22771A12180F3FB800143CE7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A11180F3FB800143CE7 /* Foundation.framework */; };
 		22771A14180F3FB800143CE7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A13180F3FB800143CE7 /* CoreGraphics.framework */; };
 		22771A16180F3FB800143CE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22771A15180F3FB800143CE7 /* UIKit.framework */; };
@@ -39,6 +44,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2239E99818656E28002C0552 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22771A06180F3FB800143CE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22771A0D180F3FB800143CE7;
+			remoteInfo = NSTreeExample;
+		};
 		22771A2E180F3FB900143CE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 22771A06180F3FB800143CE7 /* Project object */;
@@ -73,6 +85,11 @@
 		2214440418592D4A00A7AB59 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		2222AE91180F494F0016C8DA /* NSTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSTree.h; path = ../../NSTree/NSTree.h; sourceTree = "<group>"; };
 		2222AE92180F494F0016C8DA /* NSTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTree.m; path = ../../NSTree/NSTree.m; sourceTree = "<group>"; };
+		2239E98B18656E27002C0552 /* NSTreeExampleCustomObjects.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NSTreeExampleCustomObjects.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2239E99118656E28002C0552 /* NSTreeExampleCustomObjects-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NSTreeExampleCustomObjects-Info.plist"; sourceTree = "<group>"; };
+		2239E99318656E28002C0552 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2239E99518656E28002C0552 /* NSTreeExampleCustomObjects.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSTreeExampleCustomObjects.m; sourceTree = "<group>"; };
+		2239E99718656E28002C0552 /* NSTreeExampleCustomObjects-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTreeExampleCustomObjects-Prefix.pch"; sourceTree = "<group>"; };
 		22771A0E180F3FB800143CE7 /* NSTreeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSTreeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22771A11180F3FB800143CE7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		22771A13180F3FB800143CE7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -107,6 +124,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2239E98818656E27002C0552 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2239E98C18656E28002C0552 /* XCTest.framework in Frameworks */,
+				2239E98E18656E28002C0552 /* UIKit.framework in Frameworks */,
+				2239E98D18656E28002C0552 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22771A0B180F3FB800143CE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -161,6 +188,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2239E98F18656E28002C0552 /* NSTreeExampleCustomObjects */ = {
+			isa = PBXGroup;
+			children = (
+				2239E99518656E28002C0552 /* NSTreeExampleCustomObjects.m */,
+				2239E99018656E28002C0552 /* Supporting Files */,
+			);
+			path = NSTreeExampleCustomObjects;
+			sourceTree = "<group>";
+		};
+		2239E99018656E28002C0552 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2239E99118656E28002C0552 /* NSTreeExampleCustomObjects-Info.plist */,
+				2239E99218656E28002C0552 /* InfoPlist.strings */,
+				2239E99718656E28002C0552 /* NSTreeExampleCustomObjects-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		22771A05180F3FB800143CE7 = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +216,7 @@
 				228B4284183ABFC50042DFD6 /* NSTreeExampleLoadBenchmarks */,
 				228B429A183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks */,
 				22CC7B38186463BC0096D0CE /* NSTreeExampleCapacityRatios */,
+				2239E98F18656E28002C0552 /* NSTreeExampleCustomObjects */,
 				22771A10180F3FB800143CE7 /* Frameworks */,
 				22771A0F180F3FB800143CE7 /* Products */,
 			);
@@ -183,6 +230,7 @@
 				228B4280183ABFC40042DFD6 /* NSTreeExampleLoadBenchmarks.xctest */,
 				228B4296183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks.xctest */,
 				22CC7B34186463BC0096D0CE /* NSTreeExampleCapacityRatios.xctest */,
+				2239E98B18656E27002C0552 /* NSTreeExampleCustomObjects.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -309,6 +357,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2239E98A18656E27002C0552 /* NSTreeExampleCustomObjects */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2239E99C18656E28002C0552 /* Build configuration list for PBXNativeTarget "NSTreeExampleCustomObjects" */;
+			buildPhases = (
+				2239E98718656E27002C0552 /* Sources */,
+				2239E98818656E27002C0552 /* Frameworks */,
+				2239E98918656E27002C0552 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2239E99918656E28002C0552 /* PBXTargetDependency */,
+			);
+			name = NSTreeExampleCustomObjects;
+			productName = NSTreeExampleCustomObjects;
+			productReference = 2239E98B18656E27002C0552 /* NSTreeExampleCustomObjects.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		22771A0D180F3FB800143CE7 /* NSTreeExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22771A3A180F3FB900143CE7 /* Build configuration list for PBXNativeTarget "NSTreeExample" */;
@@ -407,6 +473,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Carlin Creations";
 				TargetAttributes = {
+					2239E98A18656E27002C0552 = {
+						TestTargetID = 22771A0D180F3FB800143CE7;
+					};
 					22771A28180F3FB900143CE7 = {
 						TestTargetID = 22771A0D180F3FB800143CE7;
 					};
@@ -438,11 +507,20 @@
 				228B427F183ABFC40042DFD6 /* NSTreeExampleLoadBenchmarks */,
 				228B4295183AC0210042DFD6 /* NSTreeExampleFunctionBenchmarks */,
 				22CC7B33186463BC0096D0CE /* NSTreeExampleCapacityRatios */,
+				2239E98A18656E27002C0552 /* NSTreeExampleCustomObjects */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2239E98918656E27002C0552 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2239E99418656E28002C0552 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22771A0C180F3FB800143CE7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -487,6 +565,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2239E98718656E27002C0552 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2239E99618656E28002C0552 /* NSTreeExampleCustomObjects.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22771A0A180F3FB800143CE7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -532,6 +618,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2239E99918656E28002C0552 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22771A0D180F3FB800143CE7 /* NSTreeExample */;
+			targetProxy = 2239E99818656E28002C0552 /* PBXContainerItemProxy */;
+		};
 		22771A2F180F3FB900143CE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 22771A0D180F3FB800143CE7 /* NSTreeExample */;
@@ -555,6 +646,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		2239E99218656E28002C0552 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2239E99318656E28002C0552 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		22771A1A180F3FB800143CE7 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -598,6 +697,50 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2239E99A18656E28002C0552 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NSTreeExampleCustomObjects/NSTreeExampleCustomObjects-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "NSTreeExampleCustomObjects/NSTreeExampleCustomObjects-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		2239E99B18656E28002C0552 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NSTreeExample.app/NSTreeExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NSTreeExampleCustomObjects/NSTreeExampleCustomObjects-Prefix.pch";
+				INFOPLIST_FILE = "NSTreeExampleCustomObjects/NSTreeExampleCustomObjects-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 		22771A38180F3FB900143CE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -881,6 +1024,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2239E99C18656E28002C0552 /* Build configuration list for PBXNativeTarget "NSTreeExampleCustomObjects" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2239E99A18656E28002C0552 /* Debug */,
+				2239E99B18656E28002C0552 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		22771A09180F3FB800143CE7 /* Build configuration list for PBXProject "NSTreeExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -933,6 +1084,7 @@
 				22CC7B45186463BC0096D0CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
