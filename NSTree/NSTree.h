@@ -79,7 +79,7 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
 
     /** @brief Remove object from tree
         @param object An id that must implement compare: function
-        @return bool FALSE if not in tree
+        @return bool FALSE if not found or not removed
     */ 
     - (bool)removeObject:(id)object;
 
