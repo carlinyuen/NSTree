@@ -12,7 +12,7 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 100000
+    #define NUM_ELEMENTS 1000000
     
 @interface NSTreeExampleCapacityRatios : XCTestCase
 
