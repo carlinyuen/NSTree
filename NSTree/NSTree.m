@@ -105,22 +105,21 @@
     // Iterate through children to check pointers
     for (prev = self.children[0], next = prev.next; next; prev = next, next = next.next)
     {
-        if (prev.parent != self) {
-            valid = false;
-            NSLog(@"Child with wrong parent pointer: %@", prev);
-        }
-        
         if (next.previous != prev) {
             valid = false;
             NSLog(@"Siblings with wrong pointers: %@ <-> %@", prev, next);
         }
     }
     
-    if (prev.parent != self) {
-        valid = false;
-        NSLog(@"Child with wrong parent pointer: %@", prev);
-    } 
-        
+    // Iterate through children and check parent pointers
+    for (int i = 0; i < self.children.count; ++i)
+    {
+        if (((NSTreeNode *)self.children[i]).parent != self) {
+            valid = false;
+            NSLog(@"Child with wrong parent pointer: %@", prev);
+        }
+    }
+    
     return valid;
 }
 
