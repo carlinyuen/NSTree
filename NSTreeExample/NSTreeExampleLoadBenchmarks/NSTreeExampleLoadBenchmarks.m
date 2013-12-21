@@ -45,6 +45,9 @@
     self.tree300 = [[NSTree alloc] initWithNodeCapacity:300];  
     self.array = [NSMutableArray new];
     self.dict = [NSMutableDictionary new]; 
+       
+    // For timing purposes
+    NSDate *startDate = [NSDate date]; 
     
     // Setup CoreData - simple Entity entry:value
     NSEntityDescription *runEntity = [[NSEntityDescription alloc] init];
@@ -62,7 +65,7 @@
     // Managed Object Model
     self.mom = [[NSManagedObjectModel alloc] init]; 
     [self.mom setEntities:@[runEntity]]; 
-    
+      
     // Persistent Store - use sqlite because in-mem is too slow
     NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.mom];
     NSError *error = nil;
@@ -79,6 +82,9 @@
     // Managed Object Context
     self.moc = [[NSManagedObjectContext alloc] init];
     self.moc.persistentStoreCoordinator = psc;
+     
+    // End timer
+    NSLog(@"Setup Time Completion: %f", -[startDate timeIntervalSinceNow]); 
 }
 
 - (void)tearDown
@@ -164,6 +170,14 @@
     if (![self.moc save:&error]) {
         NSLog(@"Populating CoreData Failed: %@", error);
     }
+ 
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] initWithEntityName:@"Entry"]; 
+    error = nil;
+    NSArray *results = [self.moc executeFetchRequest:fetch error:&error]; 
+    if (error) {
+        NSLog(@"Fetching from Core Data Failed: %@", error); 
+    }
+    NSLog(@"Core Data Entry Count: %i", results.count); 
 }
 
 
