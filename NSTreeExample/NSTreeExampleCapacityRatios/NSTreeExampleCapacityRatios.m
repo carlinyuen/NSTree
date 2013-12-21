@@ -98,12 +98,13 @@
     for (NSTree *tree in self.trees) {
         NSLog(@"Deleting from tree with capcity: %i", tree.nodeCapacity);
         start = [NSDate date];
+        NSLog(@"Remove Count: %i", self.data.count);
         for (id object in self.data) { 
             [tree removeObject:object];
         }
         NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
         NSLog(@"Tree Count: %i", tree.count); 
-        NSLog(@"Tree: %@\n", [tree printTree]);  
+        NSLog(@"Tree: \n%@\n", [tree printTree]);  
     }
 }
 

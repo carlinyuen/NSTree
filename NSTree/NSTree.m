@@ -523,36 +523,31 @@
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
     if (!object || !node || node.data.count <= 0) {
+        NSLog(@"Warning: Tried to remove with nil object or node! %@ from %@", object, node);
         return false;
     }
     
     NSLog(@"Removing object %@ from node %@", object, node);
+    NSLog(@"Tree Count: %i", self.count);
+    
+    // Get index to remove from
+    int index = [node indexOfDataObject:object];
+    if (index == NSNotFound) {
+        NSLog(@"Warning! Could not find index of object for removal: %@", object);
+        return false;
+    }
     
     // If leaf node, simple remove
     if (!node.children.count) 
     {
-        if ([node.data containsObject:object]) 
-        {
-            [node.data removeObject:object];
-            
-            // Rebalance as needed
-            [self rebalanceNode:node];  
-            
-            return true;
-        } 
-        else {    // This shouldn't happen
-            NSLog(@"Warning! Removing object from node that doesn't contain the object: %@", object);
-            return false;
-        }
+        // If we use removeObject:(id) it removes all occurrences
+        [node.data removeObjectAtIndex:index];
+        
+        // Rebalance as needed
+        [self rebalanceNode:node];  
     }
     else    // Deal with replacing separator
     {
-        int index = [node indexOfDataObject:object];
-        if (index == NSNotFound) {
-            NSLog(@"Warning! Could not find index of object for removal: %@", object);
-            return false;
-        }
-        
         // Replace with smallest value from right subtree
         NSTreeNode *child = [self getLeftMostNode:node.children[index + 1]];
         id replacementObject = child.data[0];
@@ -561,9 +556,9 @@
         
         // Rebalance child node if needed
         [self rebalanceNode:child];
-        
-        return true;
     }
+    
+    return true; 
 }
 
 /** @brief Returns the first node that contains the given object using standard comparison rules, starting from given node branch. */
@@ -615,10 +610,13 @@
     if (index >= 0 && index <= node.data.count) 
     {
         // Search subtree (don't cut short because it's worth deleting from leaf node to prevent restructuring)
-        NSTreeNode *child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
+        NSTreeNode *child = nil;
+        if (node.children.count) {
+            child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
+        }
         
         // If item exists and is equal at index and no child with value exists, then use as return value
-        if (index < node.data.count && [node.data[index] isEqual:object] && !child) {
+        if (!child && index < node.data.count && [node.data[index] isEqual:object]) {
             return node;
         }
         
@@ -860,7 +858,7 @@
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
 {
-    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
+    NSLog(@"Rotate node %@ %@", node, (direction ? @"Right" : @"Left"));
 
     // Can't rotate if no node, no siblings in direction to rotate, 
     //  or no data in sibling, or siblings not from same parent
