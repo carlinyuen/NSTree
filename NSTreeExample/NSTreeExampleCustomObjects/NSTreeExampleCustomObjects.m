@@ -10,8 +10,8 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 1000000
-    #define NODE_CAPACITY 3000
+    #define NUM_ELEMENTS 10000
+    #define NODE_CAPACITY 300
     #define NAME_LENGTH 8
     
 @interface NSTreeCustomObject : NSObject
@@ -76,6 +76,8 @@
         [self.tree addObject:object];
     }
     NSLog(@"Completed in %f", -[start timeIntervalSinceNow]); 
+    
+    NSLog(@"Tree: \n%@", [self.tree printTree]);
 
     // Delete
     NSLog(@"Deleting from tree");
