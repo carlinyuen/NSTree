@@ -8,8 +8,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import <CoreData/CoreData.h>
-
 #import "NSTree.h"
 
     #define NUM_ELEMENTS 1000000

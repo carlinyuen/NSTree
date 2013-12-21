@@ -15,8 +15,8 @@
 @interface NSTreeNode : NSObject<NSCopying>
 
     @property (nonatomic, weak) NSTreeNode *parent;
-    @property (nonatomic, strong) NSTreeNode *previous;
-    @property (nonatomic, strong) NSTreeNode *next;
+    @property (nonatomic, weak) NSTreeNode *previous;
+    @property (nonatomic, weak) NSTreeNode *next;
     @property (nonatomic, strong) NSMutableArray *data;
     @property (nonatomic, strong) NSMutableArray *children;
 

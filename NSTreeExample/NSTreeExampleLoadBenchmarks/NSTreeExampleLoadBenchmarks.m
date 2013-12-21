@@ -63,11 +63,15 @@
     self.mom = [[NSManagedObjectModel alloc] init]; 
     [self.mom setEntities:@[runEntity]]; 
     
-    // Persistent Store - use in-memory
+    // Persistent Store - use sqlite because in-mem is too slow
     NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.mom];
     NSError *error = nil;
-    [psc addPersistentStoreWithType:NSInMemoryStoreType
-        configuration:nil URL:nil options:nil error:&error];
+//    [psc addPersistentStoreWithType:NSInMemoryStoreType
+//        configuration:nil URL:nil options:nil error:&error]; 
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent: @"NSTreeExampleLoadBenchmarks.sqlite"];
+    [psc addPersistentStoreWithType:NSSQLiteStoreType 
+        configuration:nil URL:[NSURL fileURLWithPath:path] 
+        options:nil error:&error];
     if (error) {
         NSLog(@"Error creating persistent store: %@", error);
     }
@@ -79,6 +83,15 @@
 
 - (void)tearDown
 {
+    // Cleanup Core Data
+    NSError *error;
+    [[NSFileManager defaultManager] removeItemAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent: @"NSTreeExampleLoadBenchmarks.sqlite"] error:&error];
+    if (error) {
+        NSLog(@"ERROR : Deleting Core Data Store : %@", error);
+    } else {
+        NSLog(@"Successful cleanup of Core Data Store");
+    }
+    
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
