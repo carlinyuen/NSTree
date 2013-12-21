@@ -65,6 +65,44 @@
 
 - (void)testTreeSearch
 {
+    // Populate first
+    for (NSTree *tree in self.trees) {
+        for (id object in self.data) { 
+            [tree addObject:object];
+        }
+    }
+    
+    // Search
+    NSDate *start;
+    for (NSTree *tree in self.trees) {
+        NSLog(@"Searching tree with capcity: %i", tree.nodeCapacity);
+        start = [NSDate date];
+        for (id object in self.data) { 
+            [tree containsObject:object];
+        }
+        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
+    }
+}
+
+- (void)testTreeDelete
+{
+    // Populate first
+    for (NSTree *tree in self.trees) {
+        for (id object in self.data) { 
+            [tree addObject:object];
+        }
+    }
+    
+    // Delete
+    NSDate *start;
+    for (NSTree *tree in self.trees) {
+        NSLog(@"Deleting from tree with capcity: %i", tree.nodeCapacity);
+        start = [NSDate date];
+        for (id object in self.data) { 
+            [tree removeObject:object];
+        }
+        NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
+    }
 }
 
 @end
