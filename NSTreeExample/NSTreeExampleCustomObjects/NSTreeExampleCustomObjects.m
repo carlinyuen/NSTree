@@ -15,13 +15,18 @@
     #define NAME_LENGTH 8
     
 @interface NSTreeCustomObject : NSObject
-    @property (nonatomic, copy) NSUInteger userID; 
+    @property (nonatomic, assign) NSUInteger userID; 
     @property (nonatomic, strong) NSString *userName;
     - (NSComparisonResult)compare:(id)obj;
 @end
 @implementation NSTreeCustomObject
 - (NSComparisonResult)compare:(id)obj {
-    return [self.userName compare:obj];
+    NSComparisonResult result = [self.userName compare:[obj userName]];
+    if (result == NSOrderedSame) {
+        return [[NSNumber numberWithInteger:self.userID] 
+            compare:[NSNumber numberWithInteger:[obj userID]]];
+    }
+    return result;
 }
 @end
     
@@ -73,7 +78,7 @@
     NSLog(@"Completed in %f", -[start timeIntervalSinceNow]); 
 
     // Delete
-    NSLog(@"Deleting from tree", self.tree);
+    NSLog(@"Deleting from tree");
     start = [NSDate date];
     for (id object in self.data) { 
         [self.tree removeObject:object];
