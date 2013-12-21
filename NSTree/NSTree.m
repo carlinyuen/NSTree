@@ -95,28 +95,30 @@
 - (bool)hasValidPointerStructure
 {
     bool valid = true;
-    NSTreeNode *prev, *next;
+    NSTreeNode *current, *next;
     
     // Trivial case
     if (!self.children.count) {
         return true;
     }
     
-    // Iterate through children to check pointers
-    for (prev = self.children[0], next = prev.next; next; prev = next, next = next.next)
-    {
-        if (next.previous != prev) {
-            valid = false;
-            NSLog(@"Siblings with wrong pointers: %@ <-> %@", prev, next);
-        }
-    }
-    
-    // Iterate through children and check parent pointers
+    // Iterate through children and check pointers
     for (int i = 0; i < self.children.count; ++i)
     {
-        if (((NSTreeNode *)self.children[i]).parent != self) {
+        current = self.children[i];  
+               
+        if (current.parent != self) {
             valid = false;
-            NSLog(@"Child with wrong parent pointer: %@", prev);
+            NSLog(@"Child with wrong parent pointer: %@", current);
+        }
+        
+        if (i + i < self.children.count) {
+            next = self.children[i + 1];  
+            if (next.previous != current
+                || current.next != next) {
+                valid = false;
+                NSLog(@"Siblings with wrong pointers: %@ <-> %@", current, next);
+            }
         }
     }
     
@@ -645,8 +647,8 @@
         }
         
         // If item exists and is equal at index and no child with value exists, then use as return value
-        if (index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
-            return (child) ? child : node;
+        if (!child && index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
+            return node;
         }
         
         return child;
