@@ -329,7 +329,7 @@
     }
     
     if ([self removeObject:object fromNode:
-         [self getLowestNodeThatContains:object inBranch:self.root]]) {
+         [self getFirstNodeThatContains:object inBranch:self.root]]) {
         self.count--;
         self.cacheOutdated = true; 
         return true;
@@ -344,7 +344,7 @@
         return false;
     }
     
-    return ([self getNodeThatContains:object inBranch:self.root] != nil); 
+    return ([self getFirstNodeThatContains:object inBranch:self.root] != nil); 
 }
 
 /** @brief Returns true if tree is empty */
@@ -591,7 +591,7 @@
 }
 
 /** @brief Returns the first node that contains the given object using standard comparison rules, starting from given node branch. */
-- (NSTreeNode *)getNodeThatContains:(id)object inBranch:(NSTreeNode *)node
+- (NSTreeNode *)getFirstNodeThatContains:(id)object inBranch:(NSTreeNode *)node
 {
     if (!object || !node || !node.data.count) {
         return nil;
@@ -615,7 +615,7 @@
         }
         
         // Need to search subtree
-        return [self getNodeThatContains:object inBranch:node.children[index]];
+        return [self getFirstNodeThatContains:object inBranch:node.children[index]];
     } 
     
     return nil;
