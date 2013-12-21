@@ -28,6 +28,9 @@
     }
     return result;
 }
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ #%i", self.userName, self.userID];
+}
 @end
     
 @interface NSTreeExampleCustomObjects : XCTestCase
