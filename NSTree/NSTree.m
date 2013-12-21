@@ -644,6 +644,8 @@
         NSTreeNode *child = nil;
         if (node.children.count) {
             child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
+        } else {
+            NSLog(@"End Branch");
         }
         
         // If item exists and is equal at index and no child with value exists, then use as return value

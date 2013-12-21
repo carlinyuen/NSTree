@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+/*  IMPORTANT NOTES
+    Objects you store in the NSTree must implement a compare: function, see Apple developer docs for an example in NSNumber <https://developer.apple.com/library/mac/documentation/cocoa/reference/foundation/classes/nsnumber_class/Reference/Reference.html#//apple_ref/occ/instm/NSNumber/compare:>.
+*/
+
 @interface NSTreeNode : NSObject<NSCopying>
+
     @property (nonatomic, weak) NSTreeNode *parent;
-    @property (nonatomic, weak) NSTreeNode *previous;
-    @property (nonatomic, weak) NSTreeNode *next;
+    @property (nonatomic, strong) NSTreeNode *previous;
+    @property (nonatomic, strong) NSTreeNode *next;
     @property (nonatomic, strong) NSMutableArray *data;
     @property (nonatomic, strong) NSMutableArray *children;
 
