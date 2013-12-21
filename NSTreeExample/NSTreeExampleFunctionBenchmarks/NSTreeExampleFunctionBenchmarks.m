@@ -14,7 +14,7 @@
 #import "NSTree.h"
 
     // # objects to preload structure with
-    #define NUM_ELEMENTS 1000
+    #define NUM_ELEMENTS 100000
     
     // # objects to search / insert / delete
     #define NUM_CRITERIA 100 

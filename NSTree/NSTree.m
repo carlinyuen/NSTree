@@ -553,7 +553,6 @@
 - (bool)removeObject:(id)object fromNode:(NSTreeNode *)node
 {
     if (!object || !node || node.data.count <= 0) {
-        NSLog(@"Cannot remove object: %@ fromNode: %@", object, node);
         return false;
     }
     
@@ -614,8 +613,10 @@
             return node;
         }
         
-        // Need to search subtree
-        return [self getFirstNodeThatContains:object inBranch:node.children[index]];
+        // If has children, need to search subtree
+        if (node.children.count) {
+            return [self getFirstNodeThatContains:object inBranch:node.children[index]];
+        }
     } 
     
     return nil;
