@@ -12,7 +12,7 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 100
+    #define NUM_ELEMENTS 10000 
     
 @interface NSTreeExampleCapacityRatios : XCTestCase
 
@@ -99,11 +99,13 @@
         NSLog(@"Deleting from tree with capcity: %i", tree.nodeCapacity);
         start = [NSDate date];
         for (id object in self.data) { 
-            [tree removeObject:object];
+            if (![tree removeObject:object]) {
+                NSLog(@"Could not remove: %@", object);
+            }
         }
         NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
-        XCTAssertEqual(tree.count, 0, @"Tree count %i not 0!", tree.count);
-        XCTAssertEqual(0, [tree trueCount], @"True count %i not 0!", [tree trueCount]); 
+        XCTAssertEqual(tree.count, 0, @"%i Tree count %i not 0!", tree.nodeCapacity, tree.count);
+        XCTAssertEqual([tree trueCount], 0, @"%i True count %i not 0!", tree.nodeCapacity, [tree trueCount]); 
     }
     
 }

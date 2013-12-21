@@ -66,13 +66,22 @@ typedef bool (^NSTreeTraverseBlock)(NSTreeNode *node, id data, id extra);
     /** @brief Create tree with a certain number of allowable children using the given sorted array of objects as its base data */
     - (id)initWithNodeCapacity:(int)nodeCapacity withSortedObjects:(NSArray *)data;
 
-    /** @brief Add object to tree, true if successful */
+    /** @brief Add object to tree
+        @param object An id that must implement compare: function
+        @return bool TRUE if successful
+    */
     - (bool)addObject:(id)object;
 
-    /** @brief Remove object from tree, returns false if not in tree */
+    /** @brief Remove object from tree
+        @param object An id that must implement compare: function
+        @return bool FALSE if not in tree
+    */ 
     - (bool)removeObject:(id)object;
 
-    /** @brief Search for object in tree, returns false if not found */
+    /** @brief Search for object in tree
+        @param object An id that must implement compare: function 
+        @return bool FALSE if not found
+        */
     - (bool)containsObject:(id)object;
 
     /** @brief Returns true if tree is empty */

@@ -606,7 +606,7 @@
     if (index >= 0 && index <= node.data.count) 
     {
         // Check if item is equal at index 
-        if (index < node.data.count && [node.data[index] isEqual:object]) {
+        if (index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
             return node;
         }
         
@@ -624,6 +624,8 @@
         return nil;
     }
     
+    NSLog(@"Get: %@ in %@", object, node);
+    
     // Search for item in node data
     int index = [node.data indexOfObject:object 
                            inSortedRange:NSMakeRange(0, node.data.count) 
@@ -635,14 +637,14 @@
     // If within bounds of data (note the <= count due to subtree indexing)
     if (index >= 0 && index <= node.data.count) 
     {
-        // Search subtree (don't cut short because it's worth deleting from leaf node to prevent restructuring)
+        // Search subtree (don't terminate early on find because it's worth finding and deleting from leaf node to prevent restructuring)
         NSTreeNode *child = nil;
         if (node.children.count) {
             child = [self getLowestNodeThatContains:object inBranch:node.children[index]];
         }
         
         // If item exists and is equal at index and no child with value exists, then use as return value
-        if (!child && index < node.data.count && [node.data[index] isEqual:object]) {
+        if (!child && index < node.data.count && [node.data[index] compare:object] == NSOrderedSame) {
             return node;
         }
         
