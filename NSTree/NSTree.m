@@ -805,8 +805,8 @@
     // If node is below min capacity (and not the root), need to join
     else if (node != self.root && node.data.count < self.nodeMinimum)
     {
-//        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
-//        NSLog(@"Tree Before: \n%@", [self printTree]);  
+        NSLog(@"Rebalance Node with Min Capacity: %@", node); 
+        NSLog(@"Tree Before: \n%@", [self printTree]);  
            
         // If right sibling has more than min elements, rotate left
         if (node.next && node.next.parent == node.parent
@@ -825,13 +825,13 @@
             [self mergeSiblingWithNode:node];
         }
 
-//        NSLog(@"Tree After: \n%@", [self printTree]);   
+        NSLog(@"Tree After: \n%@", [self printTree]);   
     }
 }
 
 - (void)rotateNode:(NSTreeNode *)node toRight:(bool)direction
 {
-//    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
+    NSLog(@"Rotate %@", (direction ? @"Right" : @"Left"));
 
     // Can't rotate if no node, no siblings in direction to rotate, 
     //  or no data in sibling, or siblings not from same parent
@@ -884,7 +884,7 @@
 
 - (void)mergeSiblingWithNode:(NSTreeNode *)node
 {
-//    NSLog(@"Merge on node: %@", node);
+    NSLog(@"Merge on node: %@", node);
     
     // Sanity checks: need siblings or node to exist
     if (!node || (!node.previous && !node.next)) {

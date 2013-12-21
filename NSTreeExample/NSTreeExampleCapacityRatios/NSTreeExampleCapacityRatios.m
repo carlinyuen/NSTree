@@ -12,7 +12,7 @@
 
 #import "NSTree.h"
 
-    #define NUM_ELEMENTS 100
+    #define NUM_ELEMENTS 10
     
 @interface NSTreeExampleCapacityRatios : XCTestCase
 
@@ -102,6 +102,8 @@
             [tree removeObject:object];
         }
         NSLog(@"Completed in %f", -[start timeIntervalSinceNow]);
+        NSLog(@"Tree Count: %i", tree.count); 
+        NSLog(@"Tree: %@\n", [tree printTree]);  
     }
 }
 
