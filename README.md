@@ -4,6 +4,8 @@ NSTree
 B-Tree data structure implementation for iOS / objective-c without using CFTree. Can be used as a storage mechanism or to index large sets of data. Performs fairly well compared to Core Data and regular NSArrays.
 Keywords: iOS, tree, algorithms, data structures, binary, b-trees, core data, storage, unit tests, benchmarks.
 
+Note: working on a database layer that uses the NSTree; feel free to check it out and contribute to it here: [NSTreeDatabase](https://github.com/carlinyuen/NSTreeDatabase).
+
 ## Features
  - Customizable Node Capacity (max # children per node).
  - Binary Search within Nodes for faster data search.
